@@ -1,0 +1,23 @@
+{
+  "name": "r-hotel-ota-be",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/retvenssoftwares/R-Hotel-OTA-BE.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/retvenssoftwares/R-Hotel-OTA-BE/issues"
+  },
+  "homepage": "https://github.com/retvenssoftwares/R-Hotel-OTA-BE#readme",
+  "dependencies": {
+    "express": "^4.18.2"
+  }
+}
