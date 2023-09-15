@@ -28,11 +28,7 @@ module.exports = async (req, res) => {
                     'Password must be at least 8 characters long and contain at least one uppercase letter, one lowercase letter, one special character, and one number',
             });
         }
-        // Check if the email already exists in the database
-        const existingpwd = await signup.findOne({ password });
-        if (existingpwd) {
-            return res.status(409).json({ error: 'pwd already exists' });
-        }
+      
         // Create a new user using the Mongoose model
         const newUser = new signup({
             email,
@@ -46,7 +42,7 @@ module.exports = async (req, res) => {
         // Save the new user to the database
         const savedUser = await newUser.save();
 
-        res.status(201).json({ message: 'User registered successfully', user: savedUser });
+        res.status(201).json({ message: 'User registered successfully', email: savedUser.email,firstName:savedUser.firstName,lastName:savedUser.lastName,id:savedUser._id});
     } catch (error) {
         res.status(500).json({ error: 'Internal server error' });
     }
