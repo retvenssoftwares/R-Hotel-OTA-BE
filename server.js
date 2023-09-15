@@ -5,6 +5,16 @@ const mongoose = require('mongoose');
 const port = process.env.PORT || 8000;
 
 app.use(bodyParser.json());
+
+
+//
+const registration = require('./routers/Onboarding/signUpRouter');
+
+
+app.use(registration);
+
+
+
 mongoose
     .connect(process.env.DATABASE, {
         useNewUrlParser: true,
