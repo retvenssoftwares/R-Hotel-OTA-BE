@@ -1,5 +1,5 @@
 const { Router } = require('express');
-const registration = require('../../controllers/Onboarding/signUp');
+const registration = require('../../controllers/accountCreation/signUp');
 const app = Router();
 
 app.post('/signUp',registration);

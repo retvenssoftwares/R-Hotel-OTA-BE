@@ -7,12 +7,14 @@ const port = process.env.PORT || 8000;
 app.use(bodyParser.json());
 
 
-//
-const registration = require('./routers/Onboarding/signUpRouter');
+//Onboarding
+const registration = require('./routers/accountCreation/signUpRouter');
+const login = require('./routers/accountCreation/loginRouter');
 
 
+///
+app.use(login);
 app.use(registration);
-
 
 
 mongoose

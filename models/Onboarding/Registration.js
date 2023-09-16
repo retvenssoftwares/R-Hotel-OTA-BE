@@ -1,7 +1,12 @@
 const mongoose = require('mongoose');
-
+const randomstring = require("randomstring");
 ///hotel owner's schema
 const UserSchema = new mongoose.Schema({
+    userId:{
+       default:randomstring.generate(8),
+        type:String
+    },
+    
     email: {
         type: String,
         default: "",
@@ -10,11 +15,12 @@ const UserSchema = new mongoose.Schema({
     },
 
     password: [{
+        pwd:{
        
         default: "",
-        type: String, 
-    
+        type: String,
         required: true
+        },
     }],
 
     firstName:{
@@ -28,6 +34,11 @@ const UserSchema = new mongoose.Schema({
     phoneNumber:{
         default:"",
         type:String
+    },
+    sessionId:{
+        default:"",
+        type:String
+        
     },
 
      date:{

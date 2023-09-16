@@ -1,12 +1,15 @@
 const express = require('express');
 const router = express.Router();
 const signup = require('../../models/Onboarding/Registration'); // Import the Mongoose model
+const crypto = require("crypto");
+const randomstring = require("randomstring");
+const iv = process.env.iv;
 
 // Create a POST route for user registration
 module.exports = async (req, res) => {
     try {
         // Get user data from the request body
-        const { email, password, firstName, lastName, phoneNumber, date } = req.body;
+        const { email, pwd, firstName, lastName, phoneNumber, date } = req.body;
 
 
         // Validate email format using a regular expression
@@ -20,9 +23,36 @@ module.exports = async (req, res) => {
             return res.status(409).json({ error: 'Email already exists' });
         }
 
+        const genVariable = req.body.genVariable;
+
+        const namePrefix = firstName.slice(0, 4);
+        const phoneSuffix = phoneNumber.slice(-4);
+
+          // Create the variable by concatenating namePrefix and dobSuffix
+    const generatedVariable = namePrefix + phoneSuffix;
+
+    if(genVariable!==generatedVariable){
+        return res.status(400).json({message:"invalid genvariable"})
+    }
+
+    // this is the key which will be used for encryption and decryption the password
+    const key = process.env.key;
+
+    function encrypt(text) {
+        const cipher = crypto.createCipheriv(
+          "aes-256-cbc",
+          Buffer.from(key, "hex"),
+          Buffer.from(iv)
+        );
+        let encrypted = cipher.update(text, "utf8", "hex");
+        encrypted += cipher.final("hex");
+        return encrypted;
+      }
+  
+      const encryptedPassword = encrypt(pwd);
         // Ensure that the password meets your criteria (minimum 8 characters with uppercase, lowercase, special character, and number)
         const passwordRegex = /^(?=.*\d)(?=.*[!@#$%^&*])(?=.*[a-z])(?=.*[A-Z]).{8,}$/;
-        if (!passwordRegex.test(password)) {
+        if (!passwordRegex.test(pwd)) {
             return res.status(400).json({
                 error:
                     'Password must be at least 8 characters long and contain at least one uppercase letter, one lowercase letter, one special character, and one number',
@@ -32,7 +62,7 @@ module.exports = async (req, res) => {
         // Create a new user using the Mongoose model
         const newUser = new signup({
             email,
-            password,
+            password: { pwd: encryptedPassword },
             firstName,
             lastName,
             phoneNumber,
