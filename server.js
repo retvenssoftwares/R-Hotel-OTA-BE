@@ -1,10 +1,15 @@
+require('dotenv').config();
+const cors = require('cors')
 const bodyParser = require('body-parser');
 const app = require('express')();
-require('dotenv').config();
+
 const mongoose = require('mongoose');
 const port = process.env.PORT || 8000;
 
 app.use(bodyParser.json());
+app.use(cors({
+    origin: '*'
+}));
 
 
 //Onboarding
@@ -27,6 +32,6 @@ mongoose
         console.log(err, "mongo_error");
     });
 
-    app.listen(port, () => {
-        console.log(`Server is running on port ${port}`);
-    });
+app.listen(port, () => {
+    console.log(`Server is running on port ${port}`);
+});

@@ -74,6 +74,7 @@ module.exports = async (req, res) => {
 
         res.status(201).json({ message: 'User registered successfully', email: savedUser.email,firstName:savedUser.firstName,lastName:savedUser.lastName,id:savedUser._id});
     } catch (error) {
+        console.log(error)
         res.status(500).json({ error: 'Internal server error' });
     }
 };
