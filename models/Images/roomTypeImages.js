@@ -12,7 +12,7 @@ const roomTypeImagesSchema = new mongoose.Schema({
         {
             imageId: {type: String, default:''},
             image: { type: String, default: '' },
-            displayStatus: {type:String, default: '' },
+            displayStatus: {type:String, default: '1' },
             imageDescription: {type: String, default: ''}
         }
     ]

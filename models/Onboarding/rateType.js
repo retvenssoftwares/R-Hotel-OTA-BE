@@ -16,7 +16,7 @@ const rateDetails = new mongoose.Schema({
         default:"",
         type:String
       }
-    }],
+    }],       
     description:{
         default: "",
         type: String
