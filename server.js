@@ -19,11 +19,15 @@ const login = require('./routers/accountCreation/loginRouter');
 //Amenities
 const getAmenities = require('./routers/Amenities/getAmenitiesRouter')
 
+//Images
+const propertyImages = require('./routers/Images/propertyImagesRouter')
+
 
 ///
 app.use(login);
 app.use(registration);
-app.use(getAmenities)
+app.use(getAmenities);
+app.use(propertyImages);
 
 
 mongoose
