@@ -61,6 +61,7 @@ module.exports = async (req, res) => {
       
         // Create a new user using the Mongoose model
         const newUser = new signup({
+            userId:randomstring.generate(8),
             email,
             password: { pwd: encryptedPassword },
             firstName,

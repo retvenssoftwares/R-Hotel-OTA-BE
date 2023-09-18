@@ -7,13 +7,16 @@ userId:{
     type:String
 },
 propertyId:{
-    default:randomstring.generate(8),
+   default:"",
     type:String
 
 },
+date:{
+    type:String
+},
 country:{
     default:"",
-    type:this.toString
+    type:String
 },
 propertyAddress:{
     default:"",
@@ -41,11 +44,20 @@ longitude:{
     default:"",
     type:String
 },
+
 propertyName:{
     default:"",
     type:String,
 },
-starRating:{
+rating:{
+    default:"",
+    type:String,
+},
+propertyManagement:{
+    default:"",
+    type:String,
+},
+management:{
     default:"",
     type:String,
 },
@@ -57,27 +69,27 @@ amenities:[{
 
 }],
 
-checkInTime:{
-    from:{
+checkInTime:[{
+    checkInFrom:{
         default:"",
         type:String
     },
-    until:{
+    checkInUntil:{
         default:"",
         type:String
     },
-},
+}],
 
-checkOutTime:{
-    from:{
+checkOutTime:[{
+    checkOutFrom:{
         default:"",
         type:String
     },
-    until:{
+    checkOutUntil:{
         default:"",
         type:String
     },
-},
+}],
 
 ///breakfast
 serveBreakfast:{
@@ -88,7 +100,7 @@ isBreakfastIncluded:{
     default:"",
     type:String,
 },
-breakFastPricePerPerson:{
+breakfastPricePerPerson:{
     default:"",
     type:String
 },
@@ -121,8 +133,22 @@ parkingType:{
  parkingPrice:{
     default:"",
     type:String
- }
+ },
 
+ //
+ allowChildren:{
+    default:"",
+    type:String
+ },
+
+ allowPets:{
+    default:"",
+    type:String
+ },
+ petsCharge:{
+    default:"",
+    type:String
+ },
 })
 
 const property = mongoose.model('property', propertySchema);

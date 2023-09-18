@@ -3,7 +3,7 @@ const randomstring = require("randomstring");
 ///hotel owner's schema
 const UserSchema = new mongoose.Schema({
     userId:{
-       default:randomstring.generate(8),
+       default:"",
         type:String
     },
     
