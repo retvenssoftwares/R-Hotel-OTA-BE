@@ -16,10 +16,14 @@ app.use(cors({
 const registration = require('./routers/accountCreation/signUpRouter');
 const login = require('./routers/accountCreation/loginRouter');
 
+//Amenities
+const getAmenities = require('./routers/Amenities/getAmenitiesRouter')
+
 
 ///
 app.use(login);
 app.use(registration);
+app.use(getAmenities)
 
 
 mongoose

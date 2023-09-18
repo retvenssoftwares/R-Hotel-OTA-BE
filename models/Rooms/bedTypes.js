@@ -22,7 +22,6 @@ const bedTypeSchema = new mongoose.Schema({
 
   modifiedDate : [{ type: String, default: "", required: false }]
 
-
 });
 
 const bedTypes = mongoose.model("bedtypes", bedTypeSchema)

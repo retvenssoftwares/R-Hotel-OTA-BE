@@ -10,6 +10,8 @@ const amenitySchema = new mongoose.Schema({
 
   amenityType: { type: String, default: "", required: false },
 
+  amenityCategory: { type: String, default: "", required: false},
+
   amenityCharges: { type: String, default: "", required: false },
 
   amenityDescription: { type: String, default: "", required: false },
