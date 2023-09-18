@@ -1,0 +1,1 @@
+const amenities = require('../../models/Amenities/amenities')
