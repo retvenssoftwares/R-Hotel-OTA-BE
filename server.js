@@ -16,6 +16,9 @@ app.use(cors({
 const registration = require('./routers/accountCreation/signUpRouter');
 const login = require('./routers/accountCreation/loginRouter');
 
+//Amenities
+const getAmenities = require('./routers/Amenities/getAmenitiesRouter')
+
 
 //Onboarding
 const property =require('./routers/Onboarding/addPropertyRouter');
@@ -31,6 +34,7 @@ const country =require('./routers/location/getAllcountryrouter')
 //accountCreation
 app.use(login);
 app.use(registration);
+app.use(getAmenities)
 
 
 //Onboarding
