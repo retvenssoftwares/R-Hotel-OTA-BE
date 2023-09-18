@@ -14,6 +14,8 @@ const bedTypeSchema = new mongoose.Schema({
 
   bedTypeSortCode : { type: String, default: "", required: false, unique: true },
 
+  numberOfOccupants: {type: String, default: ""},
+
   createdBy : { type: String, default: "", required: false },
 
   modifiedBy : [{ type: String, default: "", required: false }],
