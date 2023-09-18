@@ -22,18 +22,6 @@ module.exports= async (req, res) => {
             amenities,
             checkInTime,
             checkOutTime,
-            serveBreakfast,
-            isBreakfastIncluded,
-            breakfastPricePerPerson,
-            breakfastType,
-            parkingAvailable,
-            reserveParkingSpot,
-            parkingLocation,
-            parkingType,
-            parkingPrice,
-            allowChildren,
-            allowPets,
-            petsCharge
         } = req.body;
 
         // Create an object with the updated data
@@ -53,18 +41,6 @@ module.exports= async (req, res) => {
             amenities,
             checkInTime,
             checkOutTime,
-            serveBreakfast,
-            isBreakfastIncluded,
-            breakfastPricePerPerson,
-            breakfastType,
-            parkingAvailable,
-            reserveParkingSpot,
-            parkingLocation,
-            parkingType,
-            parkingPrice,
-            allowChildren,
-            allowPets,
-            petsCharge
         };
 
         // Find the property by propertyId and update it

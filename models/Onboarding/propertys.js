@@ -91,64 +91,15 @@ checkOutTime:[{
     },
 }],
 
-///breakfast
-serveBreakfast:{
-    default:"",
-    type:String
-},
-isBreakfastIncluded:{
-    default:"",
-    type:String,
-},
-breakfastPricePerPerson:{
-    default:"",
-    type:String
-},
-breakfastType:[{
-    breakFastID:{
+
+////
+ roomType:[{
+    roomTypeId:{
         default:"",
         type:String
     }
-}],
-////
+ }]
 
-//parking
-parkingAvailable:{
-    default:"",
-    type:String
-},
-
-reserveParkingSpot:{
-    default:"",
-    type:String
-},
-parkingLocation:{
-    default:"",
-    type:String
-},
-parkingType:{
-    default:"",
-    type:String
-},
- parkingPrice:{
-    default:"",
-    type:String
- },
-
- //
- allowChildren:{
-    default:"",
-    type:String
- },
-
- allowPets:{
-    default:"",
-    type:String
- },
- petsCharge:{
-    default:"",
-    type:String
- },
 })
 
 const property = mongoose.model('property', propertySchema);

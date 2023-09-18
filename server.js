@@ -18,8 +18,15 @@ const login = require('./routers/accountCreation/loginRouter');
 
 
 //Onboarding
-const property =require('./routers/Onboarding/addPropertyRouter')
-const updateproperty =require('./routers/Onboarding/patchPropertyDetailsRouter')
+const property =require('./routers/Onboarding/addPropertyRouter');
+const updateproperty =require('./routers/Onboarding/patchPropertyDetailsRouter');
+//const postRoom =require('./routers/Onboarding/addRoomRouter');
+const addRoom =require('./routers/Onboarding/addRoomRouter')
+const  patchRoom =require('./routers/Onboarding/patchAddRoomRouter')
+
+//location
+const country =require('./routers/location/getAllcountryrouter')
+
 
 //accountCreation
 app.use(login);
@@ -27,8 +34,13 @@ app.use(registration);
 
 
 //Onboarding
-app.use(property)
-app.use(updateproperty)
+app.use(property);
+app.use(updateproperty);
+app.use(patchRoom);
+app.use(addRoom)
+
+//location
+app.use(country)
 
 mongoose
     .connect(process.env.DATABASE, {
