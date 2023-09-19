@@ -34,6 +34,7 @@ const updateproperty =require('./routers/Onboarding/patchPropertyDetailsRouter')
 const addRoom =require('./routers/Onboarding/addRoomRouter')
 const  patchRoom =require('./routers/Onboarding/patchAddRoomRouter')
 const addRateType =require('./routers/Onboarding/addRateTypeRouter')
+const addRatePlan =require('./routers/Onboarding/addRatePlanRouter')
 
 //location
 const country =require('./routers/location/getAllcountryrouter')
@@ -56,6 +57,7 @@ app.use(updateproperty);
 app.use(patchRoom);
 app.use(addRoom)
 app.use(addRateType)
+app.use(addRatePlan)
 
 //location
 app.use(country)
