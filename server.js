@@ -15,6 +15,7 @@ app.use(cors({
 //accountCreation
 const registration = require('./routers/accountCreation/signUpRouter');
 const login = require('./routers/accountCreation/loginRouter');
+const logout = require('./routers/accountCreation/logOutRouter')
 
 //Amenities
 const getAmenities = require('./routers/Amenities/getAmenitiesRouter')
@@ -42,6 +43,7 @@ const country =require('./routers/location/getAllcountryrouter')
 
 //accountCreation
 app.use(login);
+app.use(logout);
 app.use(registration);
 app.use(propertyImages);
 app.use(editImageDescription);
