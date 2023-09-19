@@ -11,7 +11,7 @@ const uploadRoomDetails = async (req, res) => {
   upload.fields([
     // { name: 'hotel_cover_photo', maxCount: 1 },
     { name: 'hotelImages', maxCount: 6 },
-    { name: 'roomTypeImages',  maxCount: 6 },
+    { name: 'roomTypeImages', maxCount: 6 },
     // { name: 'hotel_logo', maxCount: 1 }
   ])(req, res, async (err) => {
     try {
@@ -19,13 +19,14 @@ const uploadRoomDetails = async (req, res) => {
       const propertyId = req.body.propertyId
       const roomTypeId = req.body.roomTypeId
       const findHotel = await hotelImagesModel.findOne({ propertyId: propertyId })
-      const findRoomTypes = await roomImagesModel.findOne({roomTypeId: roomTypeId});
+      const findRoomTypes = await roomImagesModel.findOne({ roomTypeId: roomTypeId });
       if (!findHotel) {
         return res.status(404).json({ error: 'Hotel not found' });
-      } 
+      }
 
-      let hotel_images = [];
+
       if (req.files['hotelImages']) {
+        const uploadedImageIds = [];
         for (const hotel_image of req.files['hotelImages']) {
           const hotel_image_id = randomstring.generate(10); // Generate a unique ID
           const hotel_image_params = {
@@ -44,19 +45,23 @@ const uploadRoomDetails = async (req, res) => {
             displayStatus: '1',
             imageDescription: ''
           };
+
+          uploadedImageIds.push(hotel_image_id);
           findHotel.propertyImages.push(imageDetails);
-        //   console.log("1")
+          //   console.log("1")
         }
         // console.log("2")
         await findHotel.save();
         res.status(200).json({
-            message: "Hotel images successfully updated",
-            propertyId: findHotel.propertyId
-          });
+          message: "Hotel images successfully updated",
+          propertyId: findHotel.propertyId,
+          imageData: uploadedImageIds
+        });
       }
 
-    //   console.log('3')
-    if (req.files['roomTypeImages']) {
+      //   console.log('3')
+      if (req.files['roomTypeImages']) {
+        const uploadedImageIds = [];
         for (const hotel_image of req.files['roomTypeImages']) {
           const hotel_image_id = randomstring.generate(10); // Generate a unique ID
           const hotel_image_params = {
@@ -75,16 +80,19 @@ const uploadRoomDetails = async (req, res) => {
             displayStatus: '1',
             imageDescription: ''
           };
+
+          uploadedImageIds.push(hotel_image_id);
           findRoomTypes.roomTypeImages.push(imageDetails);
-        //   console.log("1")
+          //   console.log("1")
         }
         // console.log("2")
         await findRoomTypes.save();
         res.status(200).json({
-            message: "Room type images successfully updated",
-            propertyId: findHotel.propertyId,
-            roomTypeId: findRoomTypes.roomTypeId
-          });
+          message: "Room type images successfully updated",
+          propertyId: findHotel.propertyId,
+          roomTypeId: findRoomTypes.roomTypeId,
+          imageData: uploadedImageIds
+        });
       }
 
 
@@ -94,15 +102,15 @@ const uploadRoomDetails = async (req, res) => {
 
       // Similarly, iterate over the properties of the rateplan object and push them to the rate_plan array
 
-      
 
-     
+
+
     }
     catch (err) {
       console.log(err);
       return res.status(500).json({ message: "Internal Server Error" });
     }
-  }); // Added missing closing bracket for upload.fields
+  });
 }
 
 module.exports = uploadRoomDetails;

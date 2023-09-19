@@ -21,6 +21,7 @@ const getAmenities = require('./routers/Amenities/getAmenitiesRouter')
 
 //Images
 const propertyImages = require('./routers/Images/propertyImagesRouter')
+const editImageDescription = require('./routers/Images/editDescriptionRouter')
 
 
 ///
@@ -28,6 +29,7 @@ app.use(login);
 app.use(registration);
 app.use(getAmenities);
 app.use(propertyImages);
+app.use(editImageDescription);
 
 
 mongoose
