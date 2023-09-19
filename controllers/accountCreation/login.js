@@ -2,7 +2,7 @@ require('dotenv')
 const crypto = require('crypto')
 const randomstring = require('randomstring')
 //models
-const admin = require("../../models/Onboarding/Registration");
+const admin = require("../../models/Onboarding/registration");
 const key = process.env.key
 const IV_LENGTH = process.env.iv
 //
