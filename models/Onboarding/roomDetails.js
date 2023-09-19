@@ -9,7 +9,7 @@ const roomDetails = new mongoose.Schema({
     }],
     guestStayInRoom : {type:String , default:""},
     roomSize : {type:String , default:""},
-    smoking:{tye:String , default:""},
+    smoking:{type:String , default:""},
     generalAmenities:[{
         amenitiesId : {type:String , default:""}
     }],
