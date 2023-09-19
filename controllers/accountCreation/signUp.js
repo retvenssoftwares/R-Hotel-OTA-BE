@@ -1,6 +1,6 @@
 const express = require('express');
 const router = express.Router();
-const signup = require('../../models/Onboarding/registration'); // Import the Mongoose model
+const signup = require('../../models/Onboarding/registrations'); // Import the Mongoose model
 const crypto = require("crypto");
 const randomstring = require("randomstring");
 const iv = process.env.iv;
@@ -61,6 +61,7 @@ module.exports = async (req, res) => {
       
         // Create a new user using the Mongoose model
         const newUser = new signup({
+            userId:randomstring.generate(8),
             email,
             password: { pwd: encryptedPassword },
             firstName,
