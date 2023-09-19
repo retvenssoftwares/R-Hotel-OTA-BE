@@ -3,7 +3,7 @@ const router = express.Router();
 const Property = require('../../models/Onboarding/propertys'); // Import the Mongoose model
 const RoomType = require("../../models/Onboarding/roomTypeDetails");
 const roomImage = require("../../models/Images/roomTypeImages");
-const admin = require("../../models/Onboarding/Registration");
+const admin = require("../../models/Onboarding/registration");
 const randomstring = require("randomstring");
 
 
