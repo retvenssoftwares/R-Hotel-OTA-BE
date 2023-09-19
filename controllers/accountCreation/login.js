@@ -29,7 +29,7 @@ module.exports = async (req, res) => {
     }
 
     const decryptedPassword = decryptPassword(savedPassword)
-    // console.log(decryptedPassword)
+    console.log(decryptedPassword)
 
     if (passwd !== decryptedPassword || !userProfile) {
         return res.status(404).json({ message: 'Invalid credentials' })
@@ -39,7 +39,8 @@ module.exports = async (req, res) => {
         return res.status(400).json({ message: "Invalid Genvariable" });
     }
     else {
-        await admin.updateOne({ email: email }, {$set: {sessionId: randomstring.generate(64)}})
-        return res.status(200).json({ message: "login successful" })
+        const session =  randomstring.generate(64);
+        const userlogin = await admin.updateOne({ email: email }, {$set: {sessionId:session}})
+        return res.status(200).json({ message: "login successful",sessionId:session})
     }
 }

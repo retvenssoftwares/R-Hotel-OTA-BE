@@ -41,6 +41,12 @@ const UserSchema = new mongoose.Schema({
         
     },
 
+    Property:[{
+    propertyId:{
+        type:String,
+        default:""
+    }
+    }],
      date:{
         type:String
      }

@@ -3,6 +3,9 @@ const randomstring = require("randomstring")
 
 const rateDetails = new mongoose.Schema({
 
+    propertyId: {
+        type: String,
+    },
     rateTypeId: {
         default: "",
         type: String
@@ -12,7 +15,7 @@ const rateDetails = new mongoose.Schema({
         type: String
     },
     inclusion:[{
-      inclusionType:{
+      inclusionId:{
         default:"",
         type:String
       }
@@ -37,6 +40,22 @@ const rateDetails = new mongoose.Schema({
         default: "",
         type: String
     },
+    startDate:{
+        type: String,
+        default: ""
+
+    },
+    priceIncrease:{
+        type: String,
+        default: ""
+    },
+
+    endDate:{
+        type: String,
+        default: ""
+
+    },
+
     date: {
         type: String,
         default: ""

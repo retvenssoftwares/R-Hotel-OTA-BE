@@ -6,10 +6,17 @@ const roomDetails = new mongoose.Schema({
     propertyId: {
         type: String,
     },
+    userId:{
+        default:"",
+        type:String
+    },
+    description:{
+        default: "",
+        type: String
+    },
     numberOfRooms: { type: String, default: "" },
     bedType: [{
         bedTypeId: { type: String, default: "" },
-        numberOfBeds: { type: String, default: "" }
     }],
     roomSize: { type: String, default: "" },
     smoking: { type: String, default: "" },
@@ -17,6 +24,10 @@ const roomDetails = new mongoose.Schema({
         amenitiesId: { type: String, default: "" }
     }],
     baseAdult: {
+        default: "",
+        type: String
+    },
+    baseChild: {
         default: "",
         type: String
     },

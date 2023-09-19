@@ -9,6 +9,7 @@ module.exports= async (req, res) => {
         // Get the updated data from the request body
         const {
             baseAdult,
+            baseChild,
             maxAdult,
             maxChild,
             maxOccupancy,
@@ -22,6 +23,7 @@ module.exports= async (req, res) => {
         const updatedroomData = {
             
             baseAdult,
+            baseChild,
             maxAdult,
             maxChild,
             maxOccupancy,
