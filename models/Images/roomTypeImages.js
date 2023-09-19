@@ -2,7 +2,7 @@ const mongoose = require("mongoose");
 const randomstring = require("randomstring");
 
 
-const roomTypeImagesSchema = new mongoose.Schema({
+const roomTypeImagesSchema = mongoose.Schema({
 
     propertyId: { type: String, default: '', unique: false },
 
@@ -12,7 +12,7 @@ const roomTypeImagesSchema = new mongoose.Schema({
         {
             imageId: {type: String, default:''},
             image: { type: String, default: '' },
-            displayStatus: {type:String, default: '' },
+            displayStatus: {type:String, default: '1' },
             imageDescription: {type: String, default: ''}
         }
     ]
