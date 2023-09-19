@@ -1,6 +1,6 @@
 const express = require('express');
 const router = express.Router();
-const signup = require('../../models/Onboarding/registration'); // Import the Mongoose model
+const signup = require('../../models/Onboarding/registrations'); // Import the Mongoose model
 const crypto = require("crypto");
 const randomstring = require("randomstring");
 const iv = process.env.iv;
