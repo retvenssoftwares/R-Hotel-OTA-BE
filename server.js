@@ -24,6 +24,7 @@ const fetchAmenityName = require('./routers/Amenities/fetchAmenityNameRouter')
 
 //Images
 const propertyImages = require('./routers/Images/propertyImagesRouter')
+const editImageDescription = require('./routers/Images/editDescriptionRouter')
 
 
 //Onboarding
@@ -42,6 +43,7 @@ const country =require('./routers/location/getAllcountryrouter')
 app.use(login);
 app.use(registration);
 app.use(propertyImages);
+app.use(editImageDescription);
 
 //Amenity
 app.use(getAmenities);

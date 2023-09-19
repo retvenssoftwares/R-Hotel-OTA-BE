@@ -2,7 +2,7 @@ const mongoose = require("mongoose");
 const randomstring = require("randomstring");
 
 
-const propertyImageSchema = new mongoose.Schema({
+const propertyImageSchema = mongoose.Schema({
 
     propertyId: { type: String, default: '', unique: false },
 
