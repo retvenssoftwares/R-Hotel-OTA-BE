@@ -20,8 +20,8 @@ const logout = require('./routers/accountCreation/logOutRouter')
 //Amenities
 const getAmenities = require('./routers/Amenities/getAmenitiesRouter')
 const fetchAmenityType = require('./routers/Amenities/fetchAmenityTypeRouter')
-//const getAmenities = require('./routers/Amenities/getAmenitiesRouter')
 const fetchAmenityName = require('./routers/Amenities/fetchAmenityNameRouter')
+const patchAmenityProperty = require('./routers/Amenities/patchAmenityPropertyRouter')
 
 //Inclusions
 const getInclusionsByType = require('./routers/Inclusions/getInclusionsByTypeRouter')
@@ -37,6 +37,8 @@ const updateproperty =require('./routers/Onboarding/patchPropertyDetailsRouter')
 //const postRoom =require('./routers/Onboarding/addRoomRouter');
 const addRoom =require('./routers/Onboarding/addRoomRouter')
 const  patchRoom =require('./routers/Onboarding/patchAddRoomRouter')
+//const addRateType =require('./routers/Onboarding/addRateTypeRouter')
+const addRatePlan =require('./routers/Onboarding/addRatePlanRouter')
 const addRateType =require('./routers/Onboarding/addRateTypeRouter');
 const selectAmenitiesInRoom = require('./routers/Onboarding/selectAmenitiesInRoomTypeRouter')
 
@@ -55,6 +57,7 @@ app.use(editImageDescription);
 app.use(getAmenities);
 app.use(fetchAmenityType)
 app.use(fetchAmenityName)
+app.use(patchAmenityProperty)
 
 //inclusions
 app.use(getInclusionsByType)
@@ -65,6 +68,7 @@ app.use(updateproperty);
 app.use(patchRoom);
 app.use(addRoom)
 app.use(addRateType)
+app.use(addRatePlan)
 app.use(selectAmenitiesInRoom)
 
 //location
