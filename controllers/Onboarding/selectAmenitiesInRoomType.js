@@ -31,14 +31,14 @@ module.exports = async (req, res) => {
                 existingAmenity.isSelected = 'false';
             }
         }
-    
+
 
         // Save the updated room type document
         const updatedRoomType = await roomType.save();
 
-    return res.status(200).json(updatedRoomType);
-} catch (error) {
-    console.error(error);
-    return res.status(500).json({ message: "Internal Server Error" });
-}
+        return res.status(200).json(updatedRoomType);
+    } catch (error) {
+        console.error(error);
+        return res.status(500).json({ message: "Internal Server Error" });
+    }
 }
