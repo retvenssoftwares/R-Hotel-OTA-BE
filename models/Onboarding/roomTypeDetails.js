@@ -21,7 +21,8 @@ const roomDetails = new mongoose.Schema({
     roomSize: { type: String, default: "" },
     smoking: { type: String, default: "" },
     generalAmenities: [{
-        amenitiesId: { type: String, default: "" }
+        amenitiesId: { type: String, default: "" },
+        isSelected: {type: String, default: ''}
     }],
     baseAdult: {
         default: "",
