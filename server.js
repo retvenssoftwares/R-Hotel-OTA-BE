@@ -55,11 +55,13 @@ const editImageDescription = require('./routers/Images/editDescriptionRouter')
 
 
 //Onboarding
-const property = require('./routers/Onboarding/addPropertyRouter');
-const updateproperty = require('./routers/Onboarding/patchPropertyDetailsRouter');
+const property =require('./routers/Onboarding/addPropertyRouter');
+const getProperty =require('./routers/Onboarding/getPropertyRouter');
+const updateproperty =require('./routers/Onboarding/patchPropertyDetailsRouter');
 //const postRoom =require('./routers/Onboarding/addRoomRouter');
-const addRoom = require('./routers/Onboarding/addRoomRouter')
-const patchRoom = require('./routers/Onboarding/patchAddRoomRouter')
+const addRoom =require('./routers/Onboarding/addRoomRouter')
+const fetchRoom =require('./routers/Onboarding/getRoomRouter')
+const  patchRoom =require('./routers/Onboarding/patchAddRoomRouter')
 //const addRateType =require('./routers/Onboarding/addRateTypeRouter')
 const addRatePlan = require('./routers/Onboarding/addRatePlanRouter')
 const addRateType = require('./routers/Onboarding/addRateTypeRouter');
@@ -96,6 +98,7 @@ app.use(fetchRoomTypeList)
 
 //Onboarding
 app.use(property);
+app.use(getProperty)
 app.use(updateproperty);
 app.use(patchRoom);
 app.use(addRoom)
@@ -103,6 +106,7 @@ app.use(addRateType)
 app.use(addRatePlan)
 app.use(selectAmenitiesInRoom);
 app.use(getAllUserProperties)
+app.use(fetchRoom)
 
 //location
 app.use(country)

@@ -65,7 +65,7 @@ module.exports = async (req, res) => {
         // Notify connected clients about the new amenity
         req.io.emit('newProperty', savedProperty);
 
-        res.status(201).json({ message: 'Property added  successfully' });
+        res.status(201).json({ message: 'Property added  successfully',propertyId:savedProperty.propertyId});
     } catch (error) {
         console.log(error)
         res.status(500).json({ error: 'Internal server error' });
