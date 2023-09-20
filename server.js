@@ -20,8 +20,8 @@ const logout = require('./routers/accountCreation/logOutRouter')
 //Amenities
 const getAmenities = require('./routers/Amenities/getAmenitiesRouter')
 const fetchAmenityType = require('./routers/Amenities/fetchAmenityTypeRouter')
-//const getAmenities = require('./routers/Amenities/getAmenitiesRouter')
 const fetchAmenityName = require('./routers/Amenities/fetchAmenityNameRouter')
+const patchAmenityProperty = require('./routers/Amenities/patchAmenityPropertyRouter')
 
 //Images
 const propertyImages = require('./routers/Images/propertyImagesRouter')
@@ -52,6 +52,7 @@ app.use(editImageDescription);
 app.use(getAmenities);
 app.use(fetchAmenityType)
 app.use(fetchAmenityName)
+app.use(patchAmenityProperty)
 
 //Onboarding
 app.use(property);

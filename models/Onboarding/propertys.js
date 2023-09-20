@@ -65,6 +65,10 @@ amenities:[{
     amenitiesID:{
         default:"",
         type:String
+    },
+    isSelected:{
+        default:"",
+        type:String
     }
 
 }],
