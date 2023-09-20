@@ -2,7 +2,7 @@ const roomTypeModel = require('../../models/Onboarding/roomTypeDetails');
 
 module.exports = async (req, res) => {
     try {
-        const { amenityIds } = req.body; // Assuming you receive an array of amenityIds in the request body
+        const { amenityIds } = req.body; //  amenityIds in the request body
 
         // Find the room type by roomTypeId
         const roomType = await roomTypeModel.findOne({ roomTypeId: req.params.roomTypeId });
