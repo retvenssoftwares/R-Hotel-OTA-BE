@@ -3,7 +3,7 @@ const router = express.Router();
 const Property = require("../../models/Onboarding/propertys");
 const RateType = require("../../models/Onboarding/rateType");
 const RoomType = require("../../models/Onboarding/roomTypeDetails");
-const ratePlan = require("../../models/Onboarding/");
+const ratePlan = require("../../models/Onboarding/ratePlan");
 const admin = require("../../models/Onboarding/registrations");
 const randomstring = require("randomstring");
 
