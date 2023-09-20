@@ -3,7 +3,7 @@ const router = express.Router();
 const Property = require("../../models/Onboarding/propertys");
 const RateType = require("../../models/Onboarding/rateType");
 const RoomType = require("../../models/Onboarding/roomTypeDetails");
-const ratePlan = require("../../models/Onboarding/ratePlan");
+const ratePlan = require("../../models/Onboarding/");
 const admin = require("../../models/Onboarding/registrations");
 const randomstring = require("randomstring");
 
@@ -12,7 +12,7 @@ const randomstring = require("randomstring");
 module.exports = async (req, res) => {
     try {
         // Get user data from the request body
-        const {userId,propertyId, roomTypeId, rateTypeId, name, inclusion, rateType, roomType, taxIncluded, refundable, startDate,endDate, SessionId,date} = req.body;
+        const {userId,propertyId, roomTypeId, rateTypeId, name, inclusion, basePrice, roomType, taxIncluded, refundable, startDate,endDate, SessionId,date} = req.body;
 
         const userProfile = await admin.findOne({ userId: userId })
         const room = await RoomType.findOne({ roomTypeId: roomTypeId });
@@ -26,13 +26,13 @@ module.exports = async (req, res) => {
         }
         // Create a new user using the Mongoose model
         const newplan = new ratePlan({
-            ratePlanId: randomstring.generate(8),
+            rateTypeId: randomstring.generate(8),
             propertyId,
             roomTypeId,
             rateTypeId,
             name,
             inclusion,
-            rateType,
+            basePrice ,
             roomType,
             taxIncluded,
             refundable,

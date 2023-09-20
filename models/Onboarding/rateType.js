@@ -6,7 +6,7 @@ const rateDetails = new mongoose.Schema({
     propertyId: {
         type: String,
     },
-    rateTypeId: {
+    ratePlanId: {
         default: "",
         type: String
     },
@@ -16,6 +16,10 @@ const rateDetails = new mongoose.Schema({
     },
     inclusion:[{
       inclusionId:{
+        default:"",
+        type:String
+      },
+      isSelected:{
         default:"",
         type:String
       }

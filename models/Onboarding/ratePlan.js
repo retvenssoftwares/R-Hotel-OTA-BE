@@ -1,7 +1,7 @@
 const mongoose = require("mongoose")
 
 const ratePlanSchema = new mongoose.Schema({
-ratePlanId:{
+rateTypeId:{
     type:String,
     default:"",
 },
@@ -26,7 +26,7 @@ inclusion:[{
     }
 
 }],
-rateType:{
+basePrice:{
     type:String,
     default:"",
 },

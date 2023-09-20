@@ -25,7 +25,7 @@ module.exports = async (req, res) => {
         }
         // Create a new user using the Mongoose model
         const newroom = new RateType({
-            rateTypeId: randomstring.generate(8),
+            ratePlanId: randomstring.generate(8),
             propertyId,
             roomTypeId,
             inclusion,

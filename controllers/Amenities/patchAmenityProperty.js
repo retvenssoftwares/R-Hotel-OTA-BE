@@ -43,7 +43,7 @@ module.exports = async (req, res) => {
     // Save the updated property document
     await property.save();
 
-    res.status(200).json({ message: 'Amenities updated successfully', property });
+    res.status(200).json({ message: 'Amenities updated successfully' });
   } catch (error) {
     console.error(error);
     res.status(500).json({ message: 'Internal server error' });

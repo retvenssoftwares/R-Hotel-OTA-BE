@@ -25,6 +25,7 @@ const patchAmenityProperty = require('./routers/Amenities/patchAmenityPropertyRo
 
 //Inclusions
 const getInclusionsByType = require('./routers/Inclusions/getInclusionsByTypeRouter')
+const inclusionRateType = require('./routers/Inclusions/patchInclusionRateTypeRouter')
 
 //Images
 const propertyImages = require('./routers/Images/propertyImagesRouter')
@@ -61,6 +62,7 @@ app.use(patchAmenityProperty)
 
 //inclusions
 app.use(getInclusionsByType)
+app.use(inclusionRateType)
 
 //Onboarding
 app.use(property);
