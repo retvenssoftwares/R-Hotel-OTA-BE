@@ -1,6 +1,6 @@
 const express = require('express');
 const router = express.Router();
-const roomType = require('../../models/Onboarding/roomTypeDetails'); // Import the Mongoose model
+const RoomType = require('../../models/Onboarding/roomTypeDetails'); // Import the Mongoose model
 
 module.exports= async (req, res) => {
     try {
@@ -8,6 +8,13 @@ module.exports= async (req, res) => {
 
         // Get the updated data from the request body
         const {
+            description,
+            numberOfRooms, 
+            bedType,
+             roomSize, 
+             smoking, 
+             roomType, 
+             roomName,
             baseAdult,
             baseChild,
             maxAdult,
@@ -21,7 +28,13 @@ module.exports= async (req, res) => {
 
         // Create an object with the updated data
         const updatedroomData = {
-            
+            description,
+            numberOfRooms, 
+            bedType,
+             roomSize, 
+             smoking, 
+             roomType, 
+             roomName,
             baseAdult,
             baseChild,
             maxAdult,
@@ -34,7 +47,7 @@ module.exports= async (req, res) => {
         };
 
         // Find the property by propertyId and update it
-        const updatedRoom = await roomType.findOneAndUpdate(
+        const updatedRoom = await RoomType.findOneAndUpdate(
             { roomTypeId }, // Find by propertyId
             updatedroomData, // Update with the new data
             { new: true } // Return the updated document
@@ -43,7 +56,7 @@ module.exports= async (req, res) => {
         if (!updatedRoom) {
             return res.status(404).json({ error: 'roomtype not found' });
         }
-
+//
         res.status(200).json({ message: 'roomtype updated successfully' });
     } catch (error) {
         console.error(error);

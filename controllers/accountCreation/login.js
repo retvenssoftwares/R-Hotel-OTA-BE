@@ -15,7 +15,7 @@ module.exports = async (req, res) => {
         return res.status(404).json({ message: "User Profile Not Found" })
     }
 
-    const { firstName, phoneNumber, password } = userProfile;
+    const { firstName, phoneNumber, password,userId } = userProfile;
     let savedPassword = password[0].pwd
    
 
@@ -40,7 +40,7 @@ module.exports = async (req, res) => {
  
         const session =  randomstring.generate(64);
         const userlogin = await admin.updateOne({ email: email }, {$set: {sessionId:session}})
-        return res.status(200).json({ message: "login successful",sessionId:session})
+        return res.status(200).json({ message: "login successful",sessionId:session,userId:userId})
     } catch (error) {
         console.log(error)
         res.status(500).json({ error: 'Internal server error' });
