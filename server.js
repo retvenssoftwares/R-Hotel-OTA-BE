@@ -23,6 +23,9 @@ const fetchAmenityType = require('./routers/Amenities/fetchAmenityTypeRouter')
 const fetchAmenityName = require('./routers/Amenities/fetchAmenityNameRouter')
 const patchAmenityProperty = require('./routers/Amenities/patchAmenityPropertyRouter')
 
+//Inclusions
+const getInclusionsByType = require('./routers/Inclusions/getInclusionsByTypeRouter')
+
 //Images
 const propertyImages = require('./routers/Images/propertyImagesRouter')
 const editImageDescription = require('./routers/Images/editDescriptionRouter')
@@ -34,8 +37,10 @@ const updateproperty =require('./routers/Onboarding/patchPropertyDetailsRouter')
 //const postRoom =require('./routers/Onboarding/addRoomRouter');
 const addRoom =require('./routers/Onboarding/addRoomRouter')
 const  patchRoom =require('./routers/Onboarding/patchAddRoomRouter')
-const addRateType =require('./routers/Onboarding/addRateTypeRouter')
+//const addRateType =require('./routers/Onboarding/addRateTypeRouter')
 const addRatePlan =require('./routers/Onboarding/addRatePlanRouter')
+const addRateType =require('./routers/Onboarding/addRateTypeRouter');
+const selectAmenitiesInRoom = require('./routers/Onboarding/selectAmenitiesInRoomTypeRouter')
 
 //location
 const country =require('./routers/location/getAllcountryrouter')
@@ -54,6 +59,9 @@ app.use(fetchAmenityType)
 app.use(fetchAmenityName)
 app.use(patchAmenityProperty)
 
+//inclusions
+app.use(getInclusionsByType)
+
 //Onboarding
 app.use(property);
 app.use(updateproperty);
@@ -61,6 +69,7 @@ app.use(patchRoom);
 app.use(addRoom)
 app.use(addRateType)
 app.use(addRatePlan)
+app.use(selectAmenitiesInRoom)
 
 //location
 app.use(country)
