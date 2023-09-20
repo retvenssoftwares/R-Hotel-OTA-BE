@@ -1,61 +1,71 @@
 const mongoose = require("mongoose")
+const randomstring = require("randomstring")
 
-const ratePlanSchema = new mongoose.Schema({
-rateTypeId:{
-    type:String,
-    default:"",
-},
-roomTypeId: { type: String, default: "" },
-rateTypeId: {
-    default: "",
-    type: String
-},
-propertyId:{
-    default:"",
-     type:String
- 
- },
-name:{
-    type:String,
-    default:""
-},
-inclusion:[{
-    inclusionId:{
-        type:String,
+const rateDetails = new mongoose.Schema({
+
+    propertyId: {
+        type: String,
+    },
+    ratePlanId: {
+        default: "",
+        type: String
+    },
+    roomTypeId:{
+        default: "",
+        type: String
+    },
+    inclusion:[{
+      inclusionId:{
         default:"",
-    }
+        type:String
+      },
+      isSelected:{
+        default:"",
+        type:String
+      }
+    }],       
+    description:{
+        default: "",
+        type: String
+    },
+    MLO:{
+        default: "",
+        type: String
+    },
+    percentage:{
+        default: "",
+        type: String
+    },
+    value:{
+        default: "",
+        type: String
+    },
+    rateTypeName:{
+        default: "",
+        type: String
+    },
+    startDate:{
+        type: String,
+        default: ""
 
-}],
-basePrice:{
-    type:String,
-    default:"",
-},
-roomType:{
-    type:String,
-    default:"",
-},
-taxIncluded:{
-    type:String,
-    default:"",
-},
-refundable:{
-    type:String,
-    default:"",
-},
-startDate:{
-    type:String,
-    default:"",
-},
-endDate:{
-    type:String,
-    default:"",
-},
-date: {
-    type: String,
-    default: ""
-}
+    },
+    priceIncrease:{
+        type: String,
+        default: ""
+    },
+
+    endDate:{
+        type: String,
+        default: ""
+
+    },
+
+    date: {
+        type: String,
+        default: ""
+    }
 
 })
 
-const ratePlan = mongoose.model("ratePlan", ratePlanSchema)
-module.exports = ratePlan
+const rateData = mongoose.model("ratePlan", rateDetails)
+module.exports = rateData

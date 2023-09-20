@@ -1,6 +1,6 @@
 const express = require('express');
 const router = express.Router();
-const rateType = require('../../models/Onboarding/rateType'); // Import your Mongoose model
+const rateType = require('../../models/Onboarding/ratePlan'); // Import your Mongoose model
 
 // Define the PATCH route
 module.exports = async (req, res) => {

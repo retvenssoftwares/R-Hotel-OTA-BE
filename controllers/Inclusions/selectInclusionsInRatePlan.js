@@ -1,5 +1,5 @@
 // const inclusionModel = require('../../models/Inclusions/inclusions');
-const ratePlanModel = require('../../models/Onboarding/ratePlan');
+const ratePlanModel = require('../../models/Onboarding/rateType');
 
 module.exports = async (req, res) => {
     try {

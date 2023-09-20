@@ -1,9 +1,8 @@
 const express = require('express');
 const router = express.Router();
 const Property = require("../../models/Onboarding/propertys");
-const RateType = require("../../models/Onboarding/rateType");
+const RatePlan = require("../../models/Onboarding/ratePlan");
 const RoomType = require("../../models/Onboarding/roomTypeDetails");
-const ratePlan = require("../../models/Onboarding/ratePlan");
 const admin = require("../../models/Onboarding/registrations");
 const randomstring = require("randomstring");
 
@@ -12,7 +11,7 @@ const randomstring = require("randomstring");
 module.exports = async (req, res) => {
     try {
         // Get user data from the request body
-        const {userId,propertyId, roomTypeId, rateTypeId, name, inclusion, basePrice, roomType, taxIncluded, refundable, startDate,endDate, SessionId,date} = req.body;
+        const {userId,propertyId, inclusion, description, MLO, percentage, value, rateTypeName, startDate, endDate, roomTypeId, SessionId } = req.body;
 
         const userProfile = await admin.findOne({ userId: userId })
         const room = await RoomType.findOne({ roomTypeId: roomTypeId });
@@ -25,27 +24,26 @@ module.exports = async (req, res) => {
             return res.status(404).json({ message: "session id not match" })
         }
         // Create a new user using the Mongoose model
-        const newplan = new ratePlan({
-            rateTypeId: randomstring.generate(8),
+        const newroom = new RatePlan({
+            ratePlanId: randomstring.generate(8),
             propertyId,
             roomTypeId,
-            rateTypeId,
-            name,
             inclusion,
-            basePrice ,
-            roomType,
-            taxIncluded,
-            refundable,
+            MLO,
+            percentage,
+            value,
+            rateTypeName,
             startDate,
             endDate,
+            description,
             date: new Date().toLocaleString("en-IN", { timeZone: "Asia/Kolkata" }),
         });
 
         // Save the new user to the database
-        const savedProperty = await newplan.save();
+        const savedProperty = await newroom.save();
 
 
-        res.status(201).json({ message: 'rate Plan added  successfully' });
+        res.status(201).json({ message: 'rate type added  successfully' });
     } catch (error) {
         console.log(error)
         res.status(500).json({ error: 'Internal server error' });
