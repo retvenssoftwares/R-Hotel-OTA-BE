@@ -11,17 +11,17 @@ const randomstring = require("randomstring");
 module.exports = async (req, res) => {
     try {
         // Get user data from the request body
-        const { userId, country, propertyAddress, propertyAddress1, postCode, city, latitude, longitude, genVariable,SessionId} = req.body;
+        const { userId, country, propertyAddress, propertyAddress1, postCode, city, latitude, longitude, genVariable, SessionId } = req.body;
 
         const userProfile = await admin.findOne({ userId: userId })
 
         if (!userProfile) {
             return res.status(404).json({ message: "User Profile Not Found" })
         }
-        const {sessionId}=userProfile
+        const { sessionId } = userProfile
 
-        if(sessionId!==SessionId){
-            return res.status(404).json({ message: "session id not match" })  
+        if (sessionId !== SessionId) {
+            return res.status(404).json({ message: "session id not match" })
         }
 
         // const { firstName, phoneNumber } = userProfile;
@@ -50,7 +50,7 @@ module.exports = async (req, res) => {
 
         // Save the new user to the database
         const savedProperty = await newProperty.save();
-        
+
         const { propertyId } = savedProperty
         const image = new propertyImage({
             propertyId: propertyId
@@ -59,9 +59,11 @@ module.exports = async (req, res) => {
         // Save the like to the "likes" collection
         await image.save();
 
-         //save Propertyid in registration
-           userProfile.Property.push({ propertyId: propertyId });
-           await userProfile.save();
+        //save Propertyid in registration
+        userProfile.Property.push({ propertyId: propertyId });
+        
+        // Notify connected clients about the new amenity
+        req.io.emit('newProperty', savedProperty);
 
         res.status(201).json({ message: 'Property added  successfully' });
     } catch (error) {

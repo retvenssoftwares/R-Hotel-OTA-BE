@@ -1,15 +1,36 @@
 require('dotenv').config();
-const cors = require('cors')
+const cors = require('cors');
+const express = require('express');
+const http = require('http');
+const socketIo = require('socket.io');
 const bodyParser = require('body-parser');
-const app = require('express')();
 
 const mongoose = require('mongoose');
+const app = express();
+const server = http.createServer(app);
+const io = socketIo(server);
 const port = process.env.PORT || 8000;
 
 app.use(bodyParser.json());
+app.use(express.json());
 app.use(cors({
     origin: '*'
 }));
+
+app.use((req, res, next) => {
+    req.io = io;
+    next();
+});
+
+// Socket.IO setup
+io.on('connection', (socket) => {
+    console.log('A user connected');
+  
+    socket.on('disconnect', () => {
+      console.log('User disconnected');
+    });
+  });
+  
 
 
 //accountCreation
@@ -34,18 +55,22 @@ const editImageDescription = require('./routers/Images/editDescriptionRouter')
 
 
 //Onboarding
-const property =require('./routers/Onboarding/addPropertyRouter');
-const updateproperty =require('./routers/Onboarding/patchPropertyDetailsRouter');
+const property = require('./routers/Onboarding/addPropertyRouter');
+const updateproperty = require('./routers/Onboarding/patchPropertyDetailsRouter');
 //const postRoom =require('./routers/Onboarding/addRoomRouter');
-const addRoom =require('./routers/Onboarding/addRoomRouter')
-const  patchRoom =require('./routers/Onboarding/patchAddRoomRouter')
+const addRoom = require('./routers/Onboarding/addRoomRouter')
+const patchRoom = require('./routers/Onboarding/patchAddRoomRouter')
 //const addRateType =require('./routers/Onboarding/addRateTypeRouter')
-const addRatePlan =require('./routers/Onboarding/addRatePlanRouter')
-const addRateType =require('./routers/Onboarding/addRateTypeRouter');
+const addRatePlan = require('./routers/Onboarding/addRatePlanRouter')
+const addRateType = require('./routers/Onboarding/addRateTypeRouter');
+const getAllUserProperties = require('./routers/Onboarding/getAllUserProperties')
 const selectAmenitiesInRoom = require('./routers/Amenities/selectAmenitiesInRoomTypeRouter')
 
 //location
-const country =require('./routers/location/getAllcountryrouter')
+const country = require('./routers/location/getAllcountryrouter')
+
+//room
+const fetchRoomTypeList = require('./routers/Room/roomTypelistFetchRouter')
 
 
 //accountCreation
@@ -66,6 +91,9 @@ app.use(getInclusionsByType)
 app.use(inclusionRateType)
 app.use(selectUnselectInclusions);
 
+//room
+app.use(fetchRoomTypeList)
+
 //Onboarding
 app.use(property);
 app.use(updateproperty);
@@ -73,7 +101,8 @@ app.use(patchRoom);
 app.use(addRoom)
 app.use(addRateType)
 app.use(addRatePlan)
-app.use(selectAmenitiesInRoom)
+app.use(selectAmenitiesInRoom);
+app.use(getAllUserProperties)
 
 //location
 app.use(country)
