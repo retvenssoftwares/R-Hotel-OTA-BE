@@ -25,7 +25,11 @@ const patchAmenityProperty = require('./routers/Amenities/patchAmenityPropertyRo
 
 //Inclusions
 const getInclusionsByType = require('./routers/Inclusions/getInclusionsByTypeRouter')
+<<<<<<< HEAD
 const inclusionRateType = require('./routers/Inclusions/patchInclusionRateTypeRouter')
+=======
+const selectUnselectInclusions = require('./routers/Inclusions/selectInclusionInRatePlanRouter')
+>>>>>>> 24d877e8b80670f9fb122816ede0a1f914fa3a5f
 
 //Images
 const propertyImages = require('./routers/Images/propertyImagesRouter')
@@ -41,7 +45,7 @@ const  patchRoom =require('./routers/Onboarding/patchAddRoomRouter')
 //const addRateType =require('./routers/Onboarding/addRateTypeRouter')
 const addRatePlan =require('./routers/Onboarding/addRatePlanRouter')
 const addRateType =require('./routers/Onboarding/addRateTypeRouter');
-const selectAmenitiesInRoom = require('./routers/Onboarding/selectAmenitiesInRoomTypeRouter')
+const selectAmenitiesInRoom = require('./routers/Amenities/selectAmenitiesInRoomTypeRouter')
 
 //location
 const country =require('./routers/location/getAllcountryrouter')
@@ -62,7 +66,11 @@ app.use(patchAmenityProperty)
 
 //inclusions
 app.use(getInclusionsByType)
+<<<<<<< HEAD
 app.use(inclusionRateType)
+=======
+app.use(selectUnselectInclusions);
+>>>>>>> 24d877e8b80670f9fb122816ede0a1f914fa3a5f
 
 //Onboarding
 app.use(property);
