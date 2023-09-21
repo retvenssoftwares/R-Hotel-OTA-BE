@@ -97,11 +97,11 @@ module.exports = async (req, res) => {
         const updatedFields = {};
 
         if (description) {
-            updatedFields.description = { $each: [{ description }], $position: 0 };
+            updatedFields.description = { $each: [{ description, modifiedDate: new Date().toLocaleString("en-IN", { timeZone: "Asia/Kolkata" }) }], $position: 0 };
         }
 
         if (numberOfRooms) {
-            updatedFields.numberOfRooms = { $each: [{ numberOfRooms }], $position: 0 };
+            updatedFields.numberOfRooms = { $each: [{ numberOfRooms,modifiedDate: new Date().toLocaleString("en-IN", { timeZone: "Asia/Kolkata" }) }], $position: 0 };
         }
 
         if (bedType) {
@@ -109,51 +109,51 @@ module.exports = async (req, res) => {
         }
 
         if (roomSize) {
-            updatedFields.roomSize = { $each: [{ roomSize }], $position: 0 };
+            updatedFields.roomSize = { $each: [{ roomSize,modifiedDate: new Date().toLocaleString("en-IN", { timeZone: "Asia/Kolkata" }) }], $position: 0 };
         }
 
         if (smoking) {
-            updatedFields.smoking = { $each: [{ smoking }], $position: 0 };
+            updatedFields.smoking = { $each: [{ smoking, modifiedDate: new Date().toLocaleString("en-IN", { timeZone: "Asia/Kolkata" }) }], $position: 0 };
         }
 
         if (roomType) {
-            updatedFields.roomType = { $each: [{ roomType }], $position: 0 };
+            updatedFields.roomType = { $each: [{ roomType, modifiedDate: new Date().toLocaleString("en-IN", { timeZone: "Asia/Kolkata" }) }], $position: 0 };
         }
 
         if (roomName) {
-            updatedFields.roomName = { $each: [{ roomName }], $position: 0 };
+            updatedFields.roomName = { $each: [{ roomName, modifiedDate: new Date().toLocaleString("en-IN", { timeZone: "Asia/Kolkata" }) }], $position: 0 };
         }
 
         if (baseAdult) {
-            updatedFields.baseAdult = { $each: [{ baseAdult }], $position: 0 };
+            updatedFields.baseAdult = { $each: [{ baseAdult, modifiedDate: new Date().toLocaleString("en-IN", { timeZone: "Asia/Kolkata" }) }], $position: 0 };
         }
 
         if (baseChild) {
-            updatedFields.baseChild = { $each: [{ baseChild }], $position: 0 };
+            updatedFields.baseChild = { $each: [{ baseChild, modifiedDate: new Date().toLocaleString("en-IN", { timeZone: "Asia/Kolkata" }) }], $position: 0 };
         }
 
         if (maxAdult) {
-            updatedFields.maxAdult = { $each: [{ maxAdult }], $position: 0 };
+            updatedFields.maxAdult = { $each: [{ maxAdult,modifiedDate: new Date().toLocaleString("en-IN", { timeZone: "Asia/Kolkata" }) }], $position: 0 };
         }
 
         if (maxChild) {
-            updatedFields.maxChild = { $each: [{ maxChild }], $position: 0 };
+            updatedFields.maxChild = { $each: [{ maxChild, modifiedDate: new Date().toLocaleString("en-IN", { timeZone: "Asia/Kolkata" }) }], $position: 0 };
         }
 
         if (maxOccupancy) {
-            updatedFields.maxOccupancy = { $each: [{ maxOccupancy }], $position: 0 };
+            updatedFields.maxOccupancy = { $each: [{ maxOccupancy, modifiedDate: new Date().toLocaleString("en-IN", { timeZone: "Asia/Kolkata" }) }], $position: 0 };
         }
 
         if (baseRate) {
-            updatedFields.baseRate = { $each: [{ baseRate }], $position: 0 };
+            updatedFields.baseRate = { $each: [{ baseRate, modifiedDate: new Date().toLocaleString("en-IN", { timeZone: "Asia/Kolkata" }) }], $position: 0 };
         }
 
         if (extraAdultRate) {
-            updatedFields.extraAdultRate = { $each: [{ extraAdultRate }], $position: 0 };
+            updatedFields.extraAdultRate = { $each: [{ extraAdultRate, modifiedDate: new Date().toLocaleString("en-IN", { timeZone: "Asia/Kolkata" }) }], $position: 0 };
         }
 
         if (extraChildRate) {
-            updatedFields.extraChildRate = { $each: [{ extraChildRate }], $position: 0 };
+            updatedFields.extraChildRate = { $each: [{ extraChildRate, modifiedDate: new Date().toLocaleString("en-IN", { timeZone: "Asia/Kolkata" }) }], $position: 0 };
         }
 
         if (generalAmenities) {
