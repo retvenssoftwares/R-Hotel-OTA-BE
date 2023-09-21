@@ -9,7 +9,7 @@ module.exports = async (req, res) => {
       amenityCategory: category,
     });
 
-    res.json({ amenityType: uniqueAmenityTypes }); // Change "amenityTypes" to "amenityType"
+    res.json(uniqueAmenityTypes); // Change "amenityTypes" to "amenityType"
   } catch (error) {
     res.status(500).json({ error: "Internal Server Error" });
   }
