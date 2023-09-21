@@ -45,6 +45,7 @@ const  patchRoom =require('./routers/Onboarding/patchAddRoomRouter')
 const addRatePlan =require('./routers/Onboarding/addRatePlanRouter')
 const addRateType =require('./routers/Onboarding/addRateTypeRouter');
 const selectAmenitiesInRoom = require('./routers/Amenities/selectAmenitiesInRoomTypeRouter')
+const fetchBedName =require('./routers/Onboarding/getBedTypeNameRouter');
 
 //location
 const country =require('./routers/location/getAllcountryrouter')
@@ -78,6 +79,7 @@ app.use(addRateType)
 app.use(addRatePlan)
 app.use(selectAmenitiesInRoom)
 app.use(fetchRoom)
+app.use(fetchBedName)
 
 //location
 app.use(country)
