@@ -49,12 +49,12 @@ propertyName:{
     default:"",
     type:String,
 },
-Rating:[{
+
     rating:{
         default:"",
         type:String,
     },
-}],
+
 
 propertyManagement:{
     default:"",
