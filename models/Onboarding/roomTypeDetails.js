@@ -6,65 +6,67 @@ const roomDetails = new mongoose.Schema({
     propertyId: {
         type: String,
     },
-    userId:{
-        default:"",
-        type:String
-    },
-    description:{
+    userId: {
         default: "",
         type: String
     },
-    numberOfRooms: { type: String, default: "" },
+    description: [{
+        description: {
+            default: "",
+            type: String
+        }
+    }],
+    numberOfRooms: [{numberOfRooms: { type: String, default: "" }}],
     bedType: [{
         bedTypeId: { type: String, default: "" },
     }],
-    roomSize: { type: String, default: "" },
-    smoking: { type: String, default: "" },
+    roomSize: [{roomSize: { type: String, default: "" }}],
+    smoking: [{smoking:{ type: String, default: "" }}],
     generalAmenities: [{
         amenitiesId: { type: String, default: "" },
-        isSelected: {type: String, default: ''}
+        isSelected: { type: String, default: '' }
     }],
-    baseAdult: {
+    baseAdult: [{baseAdult:{
         default: "",
         type: String
-    },
-    baseChild: {
+    }}],
+    baseChild: [{baseChild:{
         default: "",
         type: String
-    },
-    maxAdult: {
+    }}],
+    maxAdult: [{maxAdult:{
         default: "",
         type: String
-    },
-    maxChild: {
+    }}],
+    maxChild: [{maxChild:{
         default: "",
         type: String
-    },
-    maxOccupancy: {
+    }}],
+    maxOccupancy: [{maxOccupancy:{
         default: "",
         type: String
-    },
-    baseRate: {
+    }}],
+    baseRate: [{baseRate: {
         default: "",
         type: String
-    },
-    extraAdultRate: {
+    }}],
+    extraAdultRate: [{extraAdultRate:{
         default: "",
         type: String
-    },
-    extraChildRate: {
+    }}],
+    extraChildRate: [{extraChildRate:{
         default: "",
         type: String
-    },
+    }}],
 
-    roomName: {
+    roomName: [{roomName: {
         type: String,
         default: ""
-    },
-    roomType: {
+    }}],
+    roomType: [{roomType:{
         type: String,
         default: ""
-    },
+    }}],
 
     date: {
         type: String,
