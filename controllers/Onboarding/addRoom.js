@@ -11,7 +11,7 @@ const randomstring = require("randomstring");
 module.exports = async (req, res) => {
     try {
         // Get user data from the request body
-        const { userId, propertyId, description, numberOfRooms, bedType, roomSize, smoking, roomType, roomName,SessionId} = req.body;
+        const { userId, propertyId, description, numberOfRooms, bedType, roomSize, smoking, roomType, roomName, SessionId } = req.body;
 
         const userProfile = await admin.findOne({ userId: userId })
 
@@ -24,11 +24,11 @@ module.exports = async (req, res) => {
         if (!property) {
             return res.status(404).json({ message: "Property not found" });
         }
-         // Check if the provided propertyId exists in the user's properties
-         const userproperty = userProfile.Property.find(prop => prop.propertyId === propertyId);
-         if (!userproperty) {
-             return res.status(404).json({ message: "Property not found in user's profile" });
-         }
+        // Check if the provided propertyId exists in the user's properties
+        const userproperty = userProfile.Property.find(prop => prop.propertyId === propertyId);
+        if (!userproperty) {
+            return res.status(404).json({ message: "Property not found in user's profile" });
+        }
 
         const { sessionId } = userProfile
 
@@ -39,13 +39,28 @@ module.exports = async (req, res) => {
         const newroom = new RoomType({
             roomTypeId: randomstring.generate(8),
             propertyId,
-            numberOfRooms,
+            numberOfRooms: [{ numberOfRooms: numberOfRooms }],
             bedType,
-            roomSize,
-            smoking,
-            roomType,
-            roomName,
-            description,
+            roomSize: [{
+                roomSize: roomSize,
+                modifiedDate: new Date().toLocaleString("en-IN", { timeZone: "Asia/Kolkata" })
+            }],
+            smoking: [{
+                smoking: smoking,
+                modifiedDate: new Date().toLocaleString("en-IN", { timeZone: "Asia/Kolkata" })
+            }],
+            roomType: [{
+                roomType: roomType,
+                modifiedDate: new Date().toLocaleString("en-IN", { timeZone: "Asia/Kolkata" })
+            }],
+            roomName: [{
+                roomName: roomName,
+                modifiedDate: new Date().toLocaleString("en-IN", { timeZone: "Asia/Kolkata" })
+            }],
+            description: [{
+                description: description,
+                modifiedDate: new Date().toLocaleString("en-IN", { timeZone: "Asia/Kolkata" })
+            }],
             date: new Date().toLocaleString("en-IN", { timeZone: "Asia/Kolkata" }),
         });
 

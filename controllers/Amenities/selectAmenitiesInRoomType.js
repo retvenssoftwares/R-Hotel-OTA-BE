@@ -20,7 +20,8 @@ module.exports = async (req, res) => {
                 // If it doesn't exist, add it with isSelected as "true"
                 roomType.generalAmenities.push({
                     amenitiesId: amenityId,
-                    isSelected: 'true'
+                    isSelected: 'true',
+                    modifiedDate: new Date().toLocaleString("en-IN", { timeZone: "Asia/Kolkata" }) 
                 })
 
             } else if (existingAmenity.isSelected === 'false') {
