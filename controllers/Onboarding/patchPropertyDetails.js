@@ -19,34 +19,106 @@ module.exports= async (req, res) => {
             rating,
             propertyManagement,
             management,
-            amenities,
+            checkInFrom,
+            checkInUntil, 
+            checkOutFrom,
+            checkOutUntil,
             checkInTime,
             checkOutTime,
         } = req.body;
 
         // Create an object with the updated data
-        const updatedPropertyData = {
-            
-            country,
-            propertyAddress,
-            propertyAddress1,
-            postCode,
-            city,
-            latitude,
-            longitude,
-            propertyName,
-            rating,
-            propertyManagement,
-            management,
-            amenities,
-            checkInTime,
-            checkOutTime,
-        };
+       
 
+        // Create an object with the updated data
+        const updatedFields = {};
+
+        
+        if (country) {
+            const userlogin = await Property.updateOne({ propertyId }, {$set: {country:country}})
+            // updatedFields.country = country;
+        }
+
+        if (propertyAddress) {
+            const userlogin = await Property.updateOne({ propertyId }, {$set: {propertyAddress:propertyAddress}})
+            // updatedFields.country = country;
+        }
+        if (propertyAddress1) {
+            const userlogin = await Property.updateOne({ propertyId }, {$set: {propertyAddress1:propertyAddress1}})
+            // updatedFields.country = country;
+        }
+     
+        if (propertyManagement) {
+            const userlogin = await Property.updateOne({ propertyId }, {$set: {propertyManagement:propertyManagement}})
+            // updatedFields.country = country;
+        }
+        if (management) {
+            const userlogin = await Property.updateOne({ propertyId }, {$set: {management:management}})
+            // updatedFields.country = country;
+        }
+       
+        if (city) {
+            updatedFields.city = { $each: [{ city,modifiedDate:new Date().toLocaleString("en-IN", { timeZone: "Asia/Kolkata" })}], $position: 0 };
+        }
+
+             
+        if (postCode) {
+            updatedFields.postCode = { $each: [{ postCode,modifiedDate:new Date().toLocaleString("en-IN", { timeZone: "Asia/Kolkata" })}], $position: 0 };
+        }
+  //checkin
+        if (checkInFrom || checkInUntil) {
+            const checkInTimeObject = {};
+            if (checkInFrom) {
+                checkInTimeObject.checkInFrom = checkInFrom;
+            }
+            if (checkInUntil) {
+                checkInTimeObject.checkInUntil = checkInUntil;
+            }
+            updatedFields.checkInTime = { $each: [{checkInTimeObject,modifiedDate:new Date().toLocaleString("en-IN", { timeZone: "Asia/Kolkata" })}], $position: 0 };
+        }
+
+        //checkout
+        if (checkOutFrom || checkOutUntil) {
+            const checkOutTimeObject = {};
+            if (checkOutFrom) {
+                checkOutTimeObject.checkOutFrom = checkOutFrom;
+            }
+            if (checkOutUntil) {
+                checkOutTimeObject.checkOutUntil = checkOutUntil;
+            }
+            updatedFields.checkOutTime = { $each: [{checkOutTimeObject,modifiedDate:new Date().toLocaleString("en-IN", { timeZone: "Asia/Kolkata" })}], $position: 0 };
+        }
+        //location
+        if (latitude || longitude) {
+            const locationObject = {};
+            if (latitude) {
+                locationObject.latitude = latitude;
+            }
+            if (longitude) {
+                locationObject.longitude = longitude;
+            }
+            updatedFields.location = { $each: [{locationObject,modifiedDate:new Date().toLocaleString("en-IN", { timeZone: "Asia/Kolkata" })}], $position: 0 };
+        }
+
+
+
+
+
+        ///
+        if (propertyName) {
+            updatedFields.propertyName = { $each: [{ propertyName,modifiedDate:new Date().toLocaleString("en-IN", { timeZone: "Asia/Kolkata" }) }], $position: 0 };
+        }
+
+        if (rating) {
+            updatedFields.rating = { $each: [{ rating,modifiedDate:new Date().toLocaleString("en-IN", { timeZone: "Asia/Kolkata" }) }], $position: 0 };
+        }
         // Find the property by propertyId and update it
         const updatedProperty = await Property.findOneAndUpdate(
             { propertyId }, // Find by propertyId
-            updatedPropertyData, // Update with the new data
+           
+            {
+                $push: updatedFields, // Push updated fields to arrays
+            },
             { new: true } // Return the updated document
         );
 

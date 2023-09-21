@@ -27,34 +27,67 @@ propertyAddress1:{
     default:"",
     type:String
 },
-postCode:{
-    default:"",
-    type:String
-},
-city:{
-    default:"",
-    type:String
-},
-latitude:{
-    default:"",
-    type:String,
+postCode:[{
+    postCode:{
+        default:"",
+        type:String
+    },
+    modifiedDate:{
+        type:String,
+        default:""
+    }
+}],
 
-},
-longitude:{
-    default:"",
-    type:String
-},
+city:[{
+    city:{
+        default:"",
+        type:String
+    },
+    modifiedDate:{
+        type:String,
+        default:""
+    }
+}],
+location:[{
 
-propertyName:{
-    default:"",
-    type:String,
-},
+    latitude:{
+        default:"",
+        type:String,
+    
+    },
+    longitude:{
+        default:"",
+        type:String
+    },
+    modifiedDate:{
+        type:String,
+        default:""
+    }
+}],
 
+propertyName:[{
+    propertyName:{
+        default:"",
+        type:String,
+    },
+    modifiedDate:{
+        type:String,
+        default:""
+    }
+}],
+
+rating:[{
     rating:{
         default:"",
         type:String,
     },
+    modifiedDate:{
+        type:String,
+        default:""
+    }
 
+}],
+    
 
 propertyManagement:{
     default:"",
@@ -85,6 +118,10 @@ checkInTime:[{
         default:"",
         type:String
     },
+    modifiedDate:{
+        type:String,
+        default:""
+    }
 }],
 
 checkOutTime:[{
@@ -96,6 +133,10 @@ checkOutTime:[{
         default:"",
         type:String
     },
+    modifiedDate:{
+        type:String,
+        default:""
+    }
 }],
 
 
