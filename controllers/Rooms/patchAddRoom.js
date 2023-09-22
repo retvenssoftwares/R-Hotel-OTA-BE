@@ -106,6 +106,8 @@ module.exports = async (req, res) => {
             { new: true } // Return the updated document
         );
 
+        
+
         if (!updatedRoom) {
             return res.status(404).json({ error: 'roomtype not found' });
         }

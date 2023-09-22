@@ -31,8 +31,19 @@ module.exports = async (req, res) => {
         const newProperty = new Property({
             userId,
             country,
-            propertyAddress,
-            propertyAddress1,
+            
+            propertyAddress:[{
+                propertyAddress:propertyAddress,
+                modifiedDate:new Date().toLocaleString("en-IN", { timeZone: "Asia/Kolkata" })
+
+            }],
+            propertyAddress1:[{
+                propertyAddress1:propertyAddress1,
+                modifiedDate:new Date().toLocaleString("en-IN", { timeZone: "Asia/Kolkata" })
+
+            }],
+
+            
             postCode:[{
                 postCode:postCode,
                 modifiedDate:new Date().toLocaleString("en-IN", { timeZone: "Asia/Kolkata" })
