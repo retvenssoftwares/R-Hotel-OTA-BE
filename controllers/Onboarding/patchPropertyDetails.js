@@ -39,14 +39,7 @@ module.exports= async (req, res) => {
             // updatedFields.country = country;
         }
 
-        if (propertyAddress) {
-            const userlogin = await Property.updateOne({ propertyId }, {$set: {propertyAddress:propertyAddress}})
-            // updatedFields.country = country;
-        }
-        if (propertyAddress1) {
-            const userlogin = await Property.updateOne({ propertyId }, {$set: {propertyAddress1:propertyAddress1}})
-            // updatedFields.country = country;
-        }
+      
      
         if (propertyManagement) {
             const userlogin = await Property.updateOne({ propertyId }, {$set: {propertyManagement:propertyManagement}})
@@ -57,6 +50,14 @@ module.exports= async (req, res) => {
             // updatedFields.country = country;
         }
        
+
+             
+        if (propertyAddress1) {
+            updatedFields.propertyAddress1 = { $each: [{ propertyAddress1,modifiedDate:new Date().toLocaleString("en-IN", { timeZone: "Asia/Kolkata" })}], $position: 0 };
+        }
+        if (propertyAddress) {
+            updatedFields.propertyAddress = { $each: [{ propertyAddress,modifiedDate:new Date().toLocaleString("en-IN", { timeZone: "Asia/Kolkata" })}], $position: 0 };
+        }
         if (city) {
             updatedFields.city = { $each: [{ city,modifiedDate:new Date().toLocaleString("en-IN", { timeZone: "Asia/Kolkata" })}], $position: 0 };
         }
