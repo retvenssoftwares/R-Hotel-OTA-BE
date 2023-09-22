@@ -33,7 +33,7 @@ module.exports = async (req, res) => {
     }
   } catch (error) {
     console.log(error)
-    // Handle errors and send a 500 Internal Server Error response
+    // Handle errors and send a 500 Internal Server Error 
     return res.status(500).json({ message: "Internal Server Error" });
   }
 };
