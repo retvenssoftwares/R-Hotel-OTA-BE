@@ -1,5 +1,5 @@
 const { Router } = require('express');
-const getratePlan = require('../../controllers/Onboarding/getRatePlanByRoomType');
+const getratePlan = require('../../controllers/Rooms/getRatePlanByRoomType');
 const app = Router();
 
 app.get('/getRatePlan/:roomTypeId',getratePlan);

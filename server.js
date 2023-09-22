@@ -59,17 +59,9 @@ const editImageDescription = require('./routers/Images/editDescriptionRouter')
 const property =require('./routers/Onboarding/addPropertyRouter');
 const getProperty =require('./routers/Onboarding/getPropertyRouter');
 const updateproperty =require('./routers/Onboarding/patchPropertyDetailsRouter');
-//const postRoom =require('./routers/Onboarding/addRoomRouter');
-const addRoom =require('./routers/Onboarding/addRoomRouter')
-const fetchRoom =require('./routers/Onboarding/getRoomRouter')
-const  patchRoom =require('./routers/Onboarding/patchAddRoomRouter')
-//const addRateType =require('./routers/Onboarding/addRateTypeRouter')
-const addRatePlan = require('./routers/Onboarding/addRatePlanRouter')
-const addRateType = require('./routers/Onboarding/addRateTypeRouter');
 const getAllUserProperties = require('./routers/Onboarding/getAllUserProperties')
 const selectAmenitiesInRoom = require('./routers/Amenities/selectAmenitiesInRoomTypeRouter')
-const fetchBedName =require('./routers/Onboarding/getBedTypeNameRouter');
-const fetchRatePlan =require('./routers/Onboarding/getRatePlanByRoomTypeRouter');
+
 
 //location
 const country = require('./routers/location/getAllcountryrouter')
@@ -77,6 +69,14 @@ const country = require('./routers/location/getAllcountryrouter')
 //room
 const fetchRoomTypeList = require('./routers/Room/roomTypelistFetchRouter')
 const fetchRoomType = require('./routers/Room/fetchRoomTypeByPropertyIdRouter')
+const addRoom =require('./routers/Room/addRoomRouter')
+const fetchRoom =require('./routers/Room/getRoomRouter')
+const  patchRoom =require('./routers/Room/patchAddRoomRouter')
+const addRatePlan = require('./routers/Room/addRatePlanRouter')
+const addRateType = require('./routers/Room/addRateTypeRouter');
+const fetchBedName =require('./routers/Room/getBedTypeNameRouter');
+const fetchRatePlan =require('./routers/Room/getRatePlanByRoomTypeRouter');
+const getRatePlan =require('./routers/Room/getRatePlanByPropertyIdRouter');
 
 //accountCreation
 app.use(login);
@@ -99,20 +99,20 @@ app.use(selectUnselectInclusions);
 //room
 app.use(fetchRoomTypeList)
 app.use(fetchRoomType)
-
-//Onboarding
-app.use(property);
-app.use(getProperty)
-app.use(updateproperty);
 app.use(patchRoom);
 app.use(addRoom)
 app.use(addRateType)
 app.use(addRatePlan)
-app.use(selectAmenitiesInRoom);
-app.use(getAllUserProperties)
 app.use(fetchRoom)
 app.use(fetchBedName)
 app.use(fetchRatePlan)
+app.use(getRatePlan)
+//Onboarding
+app.use(property);
+app.use(getProperty)
+app.use(updateproperty);
+app.use(selectAmenitiesInRoom);
+app.use(getAllUserProperties)
 
 //location
 app.use(country)

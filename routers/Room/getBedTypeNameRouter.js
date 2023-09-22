@@ -1,5 +1,5 @@
 const { Router } = require('express');
-const fetchBedName = require('../../controllers/Onboarding/getBedTypeName');
+const fetchBedName = require('../../controllers/Rooms/getBedTypeName');
 const app = Router();
 
 app.get('/getBedName',fetchBedName);

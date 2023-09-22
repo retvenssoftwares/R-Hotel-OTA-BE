@@ -1,4 +1,4 @@
-const RatePlan = require('../../models/Onboarding/ratePlan')
+const RatePlan = require('../../models/Rooms/ratePlan')
 
 module.exports = async (req, res) => {
     try {

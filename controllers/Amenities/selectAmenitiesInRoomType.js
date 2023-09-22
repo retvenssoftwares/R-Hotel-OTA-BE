@@ -1,4 +1,4 @@
-const roomTypeModel = require('../../models/Onboarding/roomTypeDetails');
+const roomTypeModel = require('../../models/Rooms/roomTypeDetails');
 
 module.exports = async (req, res) => {
     try {
