@@ -11,7 +11,7 @@ const randomstring = require("randomstring");
 module.exports = async (req, res) => {
     try {
         // Get user data from the request body
-        const { userId, country, propertyAddress, propertyAddress1, postCode, city, latitude, longitude, genVariable, SessionId } = req.body;
+        const { userId, country, propertyAddress, propertyAddress1, postCode, city, latitude, longitude, SessionId } = req.body;
 
         const userProfile = await admin.findOne({ userId: userId })
 
@@ -24,14 +24,7 @@ module.exports = async (req, res) => {
             return res.status(404).json({ message: "session id not match" })
         }
 
-        // const { firstName, phoneNumber } = userProfile;
-        // const namePrefix = firstName.slice(0, 4);
-        // const phoneSuffix = phoneNumber.slice(-4);
-        // const generatedVariable = namePrefix + phoneSuffix;
-
-        // if (genVariable !== generatedVariable) {
-        //     return res.status(400).json({ message: "invalid genvariable" })
-        // }
+       
 
 
         // Create a new user using the Mongoose model
@@ -40,10 +33,22 @@ module.exports = async (req, res) => {
             country,
             propertyAddress,
             propertyAddress1,
-            postCode,
-            city,
-            latitude,
-            longitude,
+            postCode:[{
+                postCode:postCode,
+                modifiedDate:new Date().toLocaleString("en-IN", { timeZone: "Asia/Kolkata" })
+
+            }],
+            city:[{
+                city:city,
+                modifiedDate:new Date().toLocaleString("en-IN", { timeZone: "Asia/Kolkata" })
+            }],
+            location:[{
+
+                latitude:latitude,
+                longitude:longitude,
+                modifiedDate:new Date().toLocaleString("en-IN", { timeZone: "Asia/Kolkata" })
+            }],
+           
             propertyId: randomstring.generate(8),
             date: new Date().toLocaleString("en-IN", { timeZone: "Asia/Kolkata" }),
         });
@@ -61,7 +66,7 @@ module.exports = async (req, res) => {
 
         //save Propertyid in registration
         userProfile.Property.push({ propertyId: propertyId });
-        
+        await userProfile.save();
         // Notify connected clients about the new amenity
         req.io.emit('newProperty', savedProperty);
 
