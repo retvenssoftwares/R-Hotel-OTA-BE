@@ -54,6 +54,9 @@ const selectUnselectInclusions = require('./routers/Inclusions/selectInclusionIn
 const propertyImages = require('./routers/Images/propertyImagesRouter')
 const editImageDescription = require('./routers/Images/editDescriptionRouter')
 
+//Booking
+const createBookingRouter = require('./routers/Bookings/createBookingRouter')
+
 
 //Onboarding
 const property =require('./routers/Onboarding/addPropertyRouter');
@@ -97,6 +100,9 @@ app.use(selectUnselectInclusions);
 
 //room
 app.use(fetchRoomTypeList)
+
+//booking
+app.use(createBookingRouter)
 
 //Onboarding
 app.use(property);
