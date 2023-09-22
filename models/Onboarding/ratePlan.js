@@ -10,6 +10,10 @@ const rateDetails = new mongoose.Schema({
         default: "",
         type: String
     },
+    rateTypeId:{
+        default: "",
+        type: String
+    },
     roomTypeId:{
         default: "",
         type: String
@@ -23,42 +27,103 @@ const rateDetails = new mongoose.Schema({
         default:"",
         type:String
       }
-    }],       
-    description:{
-        default: "",
-        type: String
-    },
-    MLO:{
-        default: "",
-        type: String
-    },
-    percentage:{
-        default: "",
-        type: String
-    },
-    value:{
-        default: "",
-        type: String
-    },
-    rateTypeName:{
-        default: "",
-        type: String
-    },
-    startDate:{
-        type: String,
-        default: ""
+    }],
+    description:[{
+        description:{
+            default: "",
+            type: String
+        },
+        modifiedDate: {
+            default: "",
+            type: String
+        }
+    }],    
+   
 
-    },
+    MLO:[{
+        MLO:{
+            default: "",
+            type: String
+        },
+        modifiedDate: {
+            default: "",
+            type: String
+        },
+    }],
+   
+    persentage:[{
+        percentage:{
+            default: "",
+            type: String
+        },
+        modifiedDate: {
+            default: "",
+            type: String
+        },
+    }],
+
+    value:[{
+        value:{
+            default: "",
+            type: String
+        },
+        modifiedDate: {
+            default: "",
+            type: String
+        },
+
+    }],
+   
+   
+    ratePlanName:[{
+        ratePlanName:{
+            default: "",
+            type: String
+        },
+        modifiedDate: {
+            default: "",
+            type: String
+        },
+    }],
+
+  priceIncrease:[{
     priceIncrease:{
         type: String,
         default: ""
     },
+    modifiedDate: {
+        default: "",
+        type: String
+    },
 
+  }],
+   
+
+    startDate:[{
+        startDate:{
+            type: String,
+            default: ""
+    
+        },
+        modifiedDate: {
+            default: "",
+            type: String
+        },
+    }],
+    
+   endDate:[{
     endDate:{
         type: String,
         default: ""
 
     },
+    modifiedDate: {
+        default: "",
+        type: String
+    },
+
+   }],
+    
 
     date: {
         type: String,
