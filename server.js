@@ -69,6 +69,9 @@ const selectAmenitiesInRoom = require('./routers/Amenities/selectAmenitiesInRoom
 //location
 const country = require('./routers/location/getAllcountryrouter')
 
+//inventory
+const patchInventory = require('./routers/manageInventory/patchInventoryRouter')
+
 //room
 const fetchRoomTypeList = require('./routers/Room/roomTypelistFetchRouter')
 const fetchRoomType = require('./routers/Room/fetchRoomTypeByPropertyIdRouter')
@@ -108,6 +111,9 @@ app.use(getRoomType);
 //booking
 app.use(createBookingRouter)
 
+//inventory
+app.use(patchInventory)
+
 //Onboarding
 app.use(property);
 app.use(getProperty)
@@ -120,10 +126,6 @@ app.use(fetchRoom)
 app.use(fetchBedName)
 app.use(fetchRatePlan)
 app.use(getRatePlan)
-//Onboarding
-app.use(property);
-app.use(getProperty)
-app.use(updateproperty);
 app.use(selectAmenitiesInRoom);
 app.use(getAllUserProperties)
 
