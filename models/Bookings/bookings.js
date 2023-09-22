@@ -310,11 +310,49 @@ roomDetails:[{
         type:String,
         default:"",
     },
-    
-}]
+    salutation :{
+                 type:String,
+                 default:""
+           },
+
+}],
+
+roomNights:{
+    type:String,
+    default:""
+},
+totalRoomRate:{
+    type:String,
+    default:""
+},
+totalTax:{
+    type:String,
+    default:"",
+},
+totalAmount:{
+    type:String,
+    default:"",
+},
+bookingStatus:{
+    type:String,
+    default:"",
+},
+paymentStatus:{
+    type:String,
+    default:"",
+},
+paymentMode:{
+    type:String,
+    default:"",
+},
+madeBy:{
+    type:String,
+    default:"",
+},
 
 
 
- }, {timestamps:true})
+
+ })
 
 module.exports = mongoose.model('Booking', bookingSchema);
