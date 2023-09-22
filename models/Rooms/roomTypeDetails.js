@@ -10,6 +10,11 @@ const roomDetails = new mongoose.Schema({
         default: "",
         type: String
     },
+    ratePlan:[{
+        ratePlanId: {type: String, default: ''},
+        isActive: {type: String, default: 'true'},
+        modifiedDate: {type: String, default:''}
+    }],
     description: [{
         description: {
             default: "",

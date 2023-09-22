@@ -1,12 +1,9 @@
 const mongoose = require("mongoose");
 const { ObjectId } = mongoose.Schema;
+const randomstring = require('randomstring')
 
 const bookingSchema = mongoose.Schema({
-    //     booking_id:{
-    //         type: mongoose.Types.ObjectId,
-    //         default: mongoose.Types.ObjectId,
-    //         unique: true
-    //     },
+
     //     propertyId:{
     //         type:String,
     //         default:""
@@ -35,10 +32,7 @@ const bookingSchema = mongoose.Schema({
     //         type:String,
     //         default:""
     //     },
-    //     purpose_of_travel:{
-    //         type:String,
-    //         default:""
-    //     },
+    //     
     //     guest_title:{
     //         type:String,
     //         default:""
@@ -51,10 +45,7 @@ const bookingSchema = mongoose.Schema({
     //         type:String,
     //         default:""
     //     },
-    //     guest_gender:{
-    //         type:String,
-    //         default:""
-    //     },
+    //   
     //     guest_mobile_number:{
     //         type:String,
     //         default:""
@@ -67,38 +58,13 @@ const bookingSchema = mongoose.Schema({
     //         type:String,
     //         default:""
     //     },
-    //     guest_address_1:{
-    //         type:String,
-    //         default:""
-    //     },
-    //     guest_address_2:{
-    //         type:String,
-    //         default:""
-    //     },
-    //     guest_city:{
-    //         type:String,
-    //         default:""
-    //     },
-    //     guest_state:{
-    //         type:String,
-    //         default:""
-    //     },
-    //     guest_country:{
-    //         type:String,
-    //         default:""
-    //     },
-    //     guest_zip_code:{
-    //         type:String,
-    //         default:""
-    //     },
+    //     
+    //
     //     guest_fax:{
     //         type:String,
     //         default:""
     //     },
-    //     guest_device:{
-    //         type:String,
-    //         default:""
-    //     },
+    //    
     //     discount:{
     //         type:String,
     //         default:""
@@ -237,11 +203,11 @@ const bookingSchema = mongoose.Schema({
         type: String,
         default: ""
     },
-    checkInTime: {
+    checkInDate: {
         type: String,
         default: ""
     },
-    checkOutTime: {
+    checkOutDate: {
         type: String,
         default: ""
     },
@@ -260,9 +226,25 @@ const bookingSchema = mongoose.Schema({
         },
         reservationId: {
             type: String,
+            default: randomstring.generate(15)
+        },
+        guestGender: {
+            type: String,
             default: ""
         },
         baseAdult: {
+            type: String,
+            default: ""
+        },
+        guestAddress1: {
+            type: String,
+            default: ""
+        },
+        guestAddress2: {
+            type: String,
+            default: ""
+        },
+        purposeOfTravel: {
             type: String,
             default: ""
         },
@@ -274,7 +256,11 @@ const bookingSchema = mongoose.Schema({
             type: String,
             default: ""
         },
-        propertyId: {
+        guestDevice: {
+            type: String,
+            default: ""
+        },
+        guestLocation: {
             type: String,
             default: ""
         },
@@ -282,7 +268,7 @@ const bookingSchema = mongoose.Schema({
             type: String,
             default: ""
         },
-        romTax: {
+        roomTax: {
             type: String,
             default: ""
         },
@@ -290,11 +276,27 @@ const bookingSchema = mongoose.Schema({
             type: String,
             default: ""
         },
-        guestlastName: {
+        guestLastName: {
             type: String,
             default: ""
         },
         guestEmail: {
+            type: String,
+            default: ""
+        },
+        guestCity: {
+            type: String,
+            default: ""
+        },
+        guestState: {
+            type: String,
+            default: ""
+        },
+        guestCountry: {
+            type: String,
+            default: ""
+        },
+        guestZipCode: {
             type: String,
             default: ""
         },
@@ -349,8 +351,6 @@ const bookingSchema = mongoose.Schema({
         type: String,
         default: "",
     },
-
-
 
 
 })
