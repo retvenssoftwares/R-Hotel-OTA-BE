@@ -14,10 +14,18 @@ const ManageInventory = new mongoose.Schema({
         type: String,
         default: ""
     },
-    baseInventory: {
+    Inventory: [{
+        baseInventory:{
         type: String,
-        default: ""
-    },
+        default: "",
+        },
+        modifiedDate: {
+            type: String,
+            default: ""
+        }
+
+    }],
+    
     ratesAndInventory: [{
         inventory: {
             type: String,
