@@ -85,6 +85,9 @@ const fetchRatePlan =require('./routers/Room/getRatePlanByRoomTypeRouter');
 const getRatePlan =require('./routers/Room/getRatePlanByPropertyIdRouter');
 const getRoomType = require('./routers/Room/getRoomTypeByPropertyIdRouter');
 
+//ManageInventory
+const fetchInventory = require('./routers/manageInventory/getInventoryByPropertyId');
+
 //accountCreation
 app.use(login);
 app.use(logout);
@@ -131,6 +134,10 @@ app.use(getAllUserProperties)
 
 //location
 app.use(country)
+
+
+//inventory
+app.use(fetchInventory)
 
 mongoose
     .connect(process.env.DATABASE, {
