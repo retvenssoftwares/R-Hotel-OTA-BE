@@ -4,6 +4,7 @@ const Property = require('../../models/Onboarding/propertys'); // Import the Mon
 const RoomType = require("../../models/Rooms/roomTypeDetails");
 const roomImage = require("../../models/Images/roomTypeImages");
 const admin = require("../../models/Onboarding/registrations");
+const inventoryModel = require("../../models/manageInventory/manageInventory")
 const randomstring = require("randomstring");
 
 
@@ -78,7 +79,17 @@ module.exports = async (req, res) => {
         });
         await image.save();
 
-        res.status(201).json({ message: 'room type added  successfully',roomTypeId:roomTypeId });
+        const createInventory = new inventoryModel({
+            propertyId: propertyId,
+            roomTypeId: roomTypeId,
+            Inventory: [{
+                baseInventory: numberOfRooms,
+                modifiedDate: new Date().toLocaleString("en-IN", { timeZone: "Asia/Kolkata" })
+            }]
+        })
+
+        await createInventory.save();
+        res.status(201).json({ message: 'room type added  successfully', roomTypeId: roomTypeId });
     } catch (error) {
         console.log(error)
         res.status(500).json({ error: 'Internal server error' });
