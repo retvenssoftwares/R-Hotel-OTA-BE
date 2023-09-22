@@ -72,7 +72,6 @@ const country = require('./routers/location/getAllcountryrouter')
 //room
 const fetchRoomTypeList = require('./routers/Room/roomTypelistFetchRouter')
 const fetchRoomType = require('./routers/Room/fetchRoomTypeByPropertyIdRouter')
-<<<<<<< HEAD
 const addRoom =require('./routers/Room/addRoomRouter')
 const fetchRoom =require('./routers/Room/getRoomRouter')
 const  patchRoom =require('./routers/Room/patchAddRoomRouter')
@@ -81,9 +80,7 @@ const addRateType = require('./routers/Room/addRateTypeRouter');
 const fetchBedName =require('./routers/Room/getBedTypeNameRouter');
 const fetchRatePlan =require('./routers/Room/getRatePlanByRoomTypeRouter');
 const getRatePlan =require('./routers/Room/getRatePlanByPropertyIdRouter');
-=======
 const getRoomType = require('./routers/Room/getRoomTypeByPropertyIdRouter');
->>>>>>> db94f0fe0a275434682cf8f6eafc5e441ea878ee
 
 //accountCreation
 app.use(login);
@@ -106,8 +103,6 @@ app.use(selectUnselectInclusions);
 //room
 app.use(fetchRoomTypeList)
 app.use(fetchRoomType)
-<<<<<<< HEAD
-=======
 app.use(getRoomType);
 
 //booking
@@ -117,7 +112,6 @@ app.use(createBookingRouter)
 app.use(property);
 app.use(getProperty)
 app.use(updateproperty);
->>>>>>> db94f0fe0a275434682cf8f6eafc5e441ea878ee
 app.use(patchRoom);
 app.use(addRoom)
 app.use(addRateType)
