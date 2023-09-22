@@ -3,7 +3,7 @@
 
 const express = require('express');
 const router = express.Router();
-const RoomType = require('../../models/Onboarding/roomTypeDetails'); // Import the Mongoose model
+const RoomType = require('../../models/Rooms/roomTypeDetails'); // Import the Mongoose model
 
 module.exports = async (req, res) => {
     try {

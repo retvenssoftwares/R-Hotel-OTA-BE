@@ -6,10 +6,7 @@ const rateTypeSchema = new mongoose.Schema({
         default: "",
     },
     roomTypeId: { type: String, default: "" },
-    // rateTypeId: {
-    //     default: "",
-    //     type: String
-    // },
+
     propertyId: {
         default: "",
         type: String
@@ -45,14 +42,7 @@ const rateTypeSchema = new mongoose.Schema({
         type: String,
         default: "",
     },
-    // startDate: {
-    //     type: String,
-    //     default: "",
-    // },
-    // endDate: {
-    //     type: String,
-    //     default: "",
-    // },
+   
     date: {
         type: String,
         default: ""

@@ -62,16 +62,9 @@ const createBookingRouter = require('./routers/Bookings/createBookingRouter')
 const property =require('./routers/Onboarding/addPropertyRouter');
 const getProperty =require('./routers/Onboarding/getPropertyRouter');
 const updateproperty =require('./routers/Onboarding/patchPropertyDetailsRouter');
-//const postRoom =require('./routers/Onboarding/addRoomRouter');
-const addRoom =require('./routers/Onboarding/addRoomRouter')
-const fetchRoom =require('./routers/Onboarding/getRoomRouter')
-const  patchRoom =require('./routers/Onboarding/patchAddRoomRouter')
-//const addRateType =require('./routers/Onboarding/addRateTypeRouter')
-const addRatePlan = require('./routers/Onboarding/addRatePlanRouter')
-const addRateType = require('./routers/Onboarding/addRateTypeRouter');
 const getAllUserProperties = require('./routers/Onboarding/getAllUserProperties')
 const selectAmenitiesInRoom = require('./routers/Amenities/selectAmenitiesInRoomTypeRouter')
-const fetchBedName =require('./routers/Onboarding/getBedTypeNameRouter');
+
 
 //location
 const country = require('./routers/location/getAllcountryrouter')
@@ -79,7 +72,18 @@ const country = require('./routers/location/getAllcountryrouter')
 //room
 const fetchRoomTypeList = require('./routers/Room/roomTypelistFetchRouter')
 const fetchRoomType = require('./routers/Room/fetchRoomTypeByPropertyIdRouter')
+<<<<<<< HEAD
+const addRoom =require('./routers/Room/addRoomRouter')
+const fetchRoom =require('./routers/Room/getRoomRouter')
+const  patchRoom =require('./routers/Room/patchAddRoomRouter')
+const addRatePlan = require('./routers/Room/addRatePlanRouter')
+const addRateType = require('./routers/Room/addRateTypeRouter');
+const fetchBedName =require('./routers/Room/getBedTypeNameRouter');
+const fetchRatePlan =require('./routers/Room/getRatePlanByRoomTypeRouter');
+const getRatePlan =require('./routers/Room/getRatePlanByPropertyIdRouter');
+=======
 const getRoomType = require('./routers/Room/getRoomTypeByPropertyIdRouter');
+>>>>>>> db94f0fe0a275434682cf8f6eafc5e441ea878ee
 
 //accountCreation
 app.use(login);
@@ -102,6 +106,8 @@ app.use(selectUnselectInclusions);
 //room
 app.use(fetchRoomTypeList)
 app.use(fetchRoomType)
+<<<<<<< HEAD
+=======
 app.use(getRoomType);
 
 //booking
@@ -111,14 +117,21 @@ app.use(createBookingRouter)
 app.use(property);
 app.use(getProperty)
 app.use(updateproperty);
+>>>>>>> db94f0fe0a275434682cf8f6eafc5e441ea878ee
 app.use(patchRoom);
 app.use(addRoom)
 app.use(addRateType)
 app.use(addRatePlan)
-app.use(selectAmenitiesInRoom);
-app.use(getAllUserProperties)
 app.use(fetchRoom)
 app.use(fetchBedName)
+app.use(fetchRatePlan)
+app.use(getRatePlan)
+//Onboarding
+app.use(property);
+app.use(getProperty)
+app.use(updateproperty);
+app.use(selectAmenitiesInRoom);
+app.use(getAllUserProperties)
 
 //location
 app.use(country)
