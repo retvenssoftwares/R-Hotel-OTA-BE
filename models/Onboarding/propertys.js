@@ -2,151 +2,163 @@ const mongoose = require('mongoose');
 const randomstring = require("randomstring");
 
 const propertySchema = new mongoose.Schema({
-userId:{
-    default:"",
-    type:String
-},
-propertyId:{
-   default:"",
-    type:String
-
-},
-date:{
-    type:String
-},
-country:{
-    default:"",
-    type:String
-},
-propertyAddress:{
-    default:"",
-    type:String
-},
-
-propertyAddress1:{
-    default:"",
-    type:String
-},
-postCode:[{
-    postCode:{
-        default:"",
-        type:String
+    userId: {
+        default: "",
+        type: String
     },
-    modifiedDate:{
-        type:String,
-        default:""
-    }
-}],
+    propertyId: {
+        default: "",
+        type: String
 
-city:[{
-    city:{
-        default:"",
-        type:String
     },
-    modifiedDate:{
-        type:String,
-        default:""
-    }
-}],
-location:[{
-
-    latitude:{
-        default:"",
-        type:String,
-    
+    date: {
+        type: String
     },
-    longitude:{
-        default:"",
-        type:String
+    country: {
+        default: "",
+        type: String
     },
-    modifiedDate:{
-        type:String,
-        default:""
-    }
-}],
+    propertyAddress: [{
+        propertyAddress: {
+            default: "",
+            type: String
+        },
+        modifiedDate: {
+            type: String,
+            default: ""
+        }
+    }],
 
-propertyName:[{
-    propertyName:{
-        default:"",
-        type:String,
+    propertyAddress1: [{
+        propertyAddress1: {
+            default: "",
+            type: String
+        },
+        modifiedDate: {
+            type: String,
+            default: ""
+        }
+    }],
+    postCode: [{
+        postCode: {
+            default: "",
+            type: String
+        },
+        modifiedDate: {
+            type: String,
+            default: ""
+        }
+    }],
+
+    city: [{
+        city: {
+            default: "",
+            type: String
+        },
+        modifiedDate: {
+            type: String,
+            default: ""
+        }
+    }],
+    location: [{
+
+        latitude: {
+            default: "",
+            type: String,
+
+        },
+        longitude: {
+            default: "",
+            type: String
+        },
+        modifiedDate: {
+            type: String,
+            default: ""
+        }
+    }],
+
+    propertyName: [{
+        propertyName: {
+            default: "",
+            type: String,
+        },
+        modifiedDate: {
+            type: String,
+            default: ""
+        }
+    }],
+
+    rating: [{
+        rating: {
+            default: "",
+            type: String,
+        },
+        modifiedDate: {
+            type: String,
+            default: ""
+        }
+
+    }],
+
+
+    propertyManagement: {
+        default: "",
+        type: String,
     },
-    modifiedDate:{
-        type:String,
-        default:""
-    }
-}],
-
-rating:[{
-    rating:{
-        default:"",
-        type:String,
+    management: {
+        default: "",
+        type: String,
     },
-    modifiedDate:{
-        type:String,
-        default:""
-    }
+    amenities: [{
+        amenitiesID: {
+            default: "",
+            type: String
+        },
+        isSelected: {
+            default: "",
+            type: String
+        }
 
-}],
-    
+    }],
 
-propertyManagement:{
-    default:"",
-    type:String,
-},
-management:{
-    default:"",
-    type:String,
-},
-amenities:[{
-    amenitiesID:{
-        default:"",
-        type:String
-    },
-    isSelected:{
-        default:"",
-        type:String
-    }
+    checkInTime: [{
+        checkInFrom: {
+            default: "",
+            type: String
+        },
+        checkInUntil: {
+            default: "",
+            type: String
+        },
+        modifiedDate: {
+            type: String,
+            default: ""
+        }
+    }],
 
-}],
-
-checkInTime:[{
-    checkInFrom:{
-        default:"",
-        type:String
-    },
-    checkInUntil:{
-        default:"",
-        type:String
-    },
-    modifiedDate:{
-        type:String,
-        default:""
-    }
-}],
-
-checkOutTime:[{
-    checkOutFrom:{
-        default:"",
-        type:String
-    },
-    checkOutUntil:{
-        default:"",
-        type:String
-    },
-    modifiedDate:{
-        type:String,
-        default:""
-    }
-}],
+    checkOutTime: [{
+        checkOutFrom: {
+            default: "",
+            type: String
+        },
+        checkOutUntil: {
+            default: "",
+            type: String
+        },
+        modifiedDate: {
+            type: String,
+            default: ""
+        }
+    }],
 
 
-////
- roomType:[{
-    roomTypeId:{
-        default:"",
-        type:String
-    }
- }]
+    ////
+    roomType: [{
+        roomTypeId: {
+            default: "",
+            type: String
+        }
+    }]
 
 })
 

@@ -11,7 +11,7 @@ const randomstring = require("randomstring");
 module.exports = async (req, res) => {
     try {
         // Get user data from the request body
-        const {userId,propertyId, inclusion, description, MLO, percentage, value, rateTypeName, startDate, endDate, roomTypeId, SessionId } = req.body;
+        const {userId,propertyId,rateTypeId, inclusion, description, MLO, percentage, value, rateTypeName, startDate, endDate,priceIncrease, roomTypeId, SessionId } = req.body;
 
         const userProfile = await admin.findOne({ userId: userId })
         const room = await RoomType.findOne({ roomTypeId: roomTypeId });
@@ -28,14 +28,41 @@ module.exports = async (req, res) => {
             ratePlanId: randomstring.generate(8),
             propertyId,
             roomTypeId,
+            rateTypeId,
             inclusion,
-            MLO,
-            percentage,
-            value,
-            rateTypeName,
-            startDate,
-            endDate,
-            description,
+            MLO:[{
+                MLO:MLO,
+                modifiedDate: new Date().toLocaleString("en-IN", { timeZone: "Asia/Kolkata" })
+            }],
+            percentage:[{
+                percentage:percentage,
+                modifiedDate: new Date().toLocaleString("en-IN", { timeZone: "Asia/Kolkata" })
+            }],
+            value:[{
+                value:value,
+                modifiedDate: new Date().toLocaleString("en-IN", { timeZone: "Asia/Kolkata" })
+            }],
+            rateTypeName:[{
+                rateTypeName:rateTypeName,
+                modifiedDate: new Date().toLocaleString("en-IN", { timeZone: "Asia/Kolkata" })
+            }],
+            startDate:[{
+                startDate:startDate,
+                modifiedDate: new Date().toLocaleString("en-IN", { timeZone: "Asia/Kolkata" })
+            }],
+            endDate:[{
+                endDate:endDate,
+                modifiedDate: new Date().toLocaleString("en-IN", { timeZone: "Asia/Kolkata" })
+            }],
+            description:[{
+                description:description,
+                modifiedDate: new Date().toLocaleString("en-IN", { timeZone: "Asia/Kolkata" })
+            }],
+            priceIncrease:[{
+                priceIncrease:priceIncrease,
+                modifiedDate: new Date().toLocaleString("en-IN", { timeZone: "Asia/Kolkata" })
+            }],
+            
             date: new Date().toLocaleString("en-IN", { timeZone: "Asia/Kolkata" }),
         });
 

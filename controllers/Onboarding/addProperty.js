@@ -66,7 +66,7 @@ module.exports = async (req, res) => {
 
         //save Propertyid in registration
         userProfile.Property.push({ propertyId: propertyId });
-        
+        await userProfile.save();
         // Notify connected clients about the new amenity
         req.io.emit('newProperty', savedProperty);
 

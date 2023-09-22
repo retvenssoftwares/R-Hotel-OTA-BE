@@ -19,16 +19,16 @@ const rateTypeSchema = new mongoose.Schema({
         type: String,
         default: ""
     },
-    inclusion: [{
-        inclusionId: {
-            default: "",
-            type: String
-        },
-        isSelected: {
-            default: "",
-            type: String
-        }
-    }],
+    // inclusion: [{
+    //     inclusionId: {
+    //         default: "",
+    //         type: String
+    //     },
+    //     isSelected: {
+    //         default: "",
+    //         type: String
+    //     }
+    // }],
     basePrice: {
         type: String,
         default: "",
@@ -45,14 +45,14 @@ const rateTypeSchema = new mongoose.Schema({
         type: String,
         default: "",
     },
-    startDate: {
-        type: String,
-        default: "",
-    },
-    endDate: {
-        type: String,
-        default: "",
-    },
+    // startDate: {
+    //     type: String,
+    //     default: "",
+    // },
+    // endDate: {
+    //     type: String,
+    //     default: "",
+    // },
     date: {
         type: String,
         default: ""

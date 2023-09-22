@@ -78,7 +78,8 @@ const country = require('./routers/location/getAllcountryrouter')
 
 //room
 const fetchRoomTypeList = require('./routers/Room/roomTypelistFetchRouter')
-
+const fetchRoomType = require('./routers/Room/fetchRoomTypeByPropertyIdRouter')
+const getRoomType = require('./routers/Room/getRoomTypeByPropertyIdRouter');
 
 //accountCreation
 app.use(login);
@@ -100,6 +101,8 @@ app.use(selectUnselectInclusions);
 
 //room
 app.use(fetchRoomTypeList)
+app.use(fetchRoomType)
+app.use(getRoomType);
 
 //booking
 app.use(createBookingRouter)

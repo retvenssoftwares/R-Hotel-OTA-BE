@@ -78,7 +78,7 @@ module.exports = async (req, res) => {
         });
         await image.save();
 
-        res.status(201).json({ message: 'room type added  successfully' });
+        res.status(201).json({ message: 'room type added  successfully',roomTypeId:roomTypeId });
     } catch (error) {
         console.log(error)
         res.status(500).json({ error: 'Internal server error' });
