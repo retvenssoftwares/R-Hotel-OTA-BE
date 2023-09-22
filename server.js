@@ -69,6 +69,7 @@ const addRateType = require('./routers/Onboarding/addRateTypeRouter');
 const getAllUserProperties = require('./routers/Onboarding/getAllUserProperties')
 const selectAmenitiesInRoom = require('./routers/Amenities/selectAmenitiesInRoomTypeRouter')
 const fetchBedName =require('./routers/Onboarding/getBedTypeNameRouter');
+const fetchRatePlan =require('./routers/Onboarding/getRatePlanByRoomTypeRouter');
 
 //location
 const country = require('./routers/location/getAllcountryrouter')
@@ -111,6 +112,7 @@ app.use(selectAmenitiesInRoom);
 app.use(getAllUserProperties)
 app.use(fetchRoom)
 app.use(fetchBedName)
+app.use(fetchRatePlan)
 
 //location
 app.use(country)
