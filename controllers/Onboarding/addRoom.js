@@ -14,7 +14,7 @@ module.exports = async (req, res) => {
         const { userId, propertyId, description, numberOfRooms, bedType, roomSize, smoking, roomType, roomName,SessionId} = req.body;
 
         const userProfile = await admin.findOne({ userId: userId })
-
+        console.log(userId)
         const user = await Property.findOne({ userId: userId });
         if (!user) {
             return res.status(404).json({ message: "do not have any property" });
