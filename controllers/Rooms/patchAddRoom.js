@@ -1,9 +1,7 @@
-
-
-
 const express = require('express');
 const router = express.Router();
 const RoomType = require('../../models/Rooms/roomTypeDetails'); // Import the Mongoose model
+const inventoryModel = require('../../models/manageInventory/manageInventory')
 
 module.exports = async (req, res) => {
     try {
@@ -31,13 +29,28 @@ module.exports = async (req, res) => {
 
         // Create an object with the updated data
         const updatedFields = {};
+        
 
         if (description) {
             updatedFields.description = { $each: [{ description, modifiedDate: new Date().toLocaleString("en-IN", { timeZone: "Asia/Kolkata" }) }], $position: 0 };
         }
 
         if (numberOfRooms) {
-            updatedFields.numberOfRooms = { $each: [{ numberOfRooms,modifiedDate: new Date().toLocaleString("en-IN", { timeZone: "Asia/Kolkata" }) }], $position: 0 };
+            updatedFields.numberOfRooms = { $each: [{ numberOfRooms, modifiedDate: new Date().toLocaleString("en-IN", { timeZone: "Asia/Kolkata" }) }], $position: 0 };
+            // Create an object with updated inventory data
+            const updatedInventory = {
+                propertyId: updatedRoom.propertyId,
+                roomTypeId: roomTypeId,
+                baseInventory: numberOfRooms,
+                modifiedDate: new Date().toLocaleString("en-IN", { timeZone: "Asia/Kolkata" }),
+            };
+
+            // Find and update or insert the inventory item in the manageInventory collection
+            await inventoryModel.findOneAndUpdate(
+                { propertyId: updatedRoom.propertyId, roomTypeId: roomTypeId },
+                updatedInventory,
+                { upsert: true }
+            );
         }
 
         if (bedType) {
@@ -45,7 +58,7 @@ module.exports = async (req, res) => {
         }
 
         if (roomSize) {
-            updatedFields.roomSize = { $each: [{ roomSize,modifiedDate: new Date().toLocaleString("en-IN", { timeZone: "Asia/Kolkata" }) }], $position: 0 };
+            updatedFields.roomSize = { $each: [{ roomSize, modifiedDate: new Date().toLocaleString("en-IN", { timeZone: "Asia/Kolkata" }) }], $position: 0 };
         }
 
         if (smoking) {
@@ -69,7 +82,7 @@ module.exports = async (req, res) => {
         }
 
         if (maxAdult) {
-            updatedFields.maxAdult = { $each: [{ maxAdult,modifiedDate: new Date().toLocaleString("en-IN", { timeZone: "Asia/Kolkata" }) }], $position: 0 };
+            updatedFields.maxAdult = { $each: [{ maxAdult, modifiedDate: new Date().toLocaleString("en-IN", { timeZone: "Asia/Kolkata" }) }], $position: 0 };
         }
 
         if (maxChild) {
