@@ -6,22 +6,19 @@ module.exports = async (req, res) => {
     const userProperties = await propertyModel.find({ userId: req.params.userId });
 
     if (userProperties.length > 0) {
-      // If records are found, send a 200 OK response with the data
-
-      const extractedPropertyData = {};
-
-      // Iterate over the first element of each array field to extract data
-      const firstProperty = userProperties[0]; // Get the first property for reference
-      extractedPropertyData.userId = firstProperty.userId;
-      extractedPropertyData.propertyId = firstProperty.propertyId;
-      extractedPropertyData.country = firstProperty.country;
-      extractedPropertyData.city = firstProperty.city[0] || ''; // Check if city array has elements
-      extractedPropertyData.propertyAddress = firstProperty.propertyAddress[0] || ''; // Check if propAdd array has elements
-      extractedPropertyData.propertyName = firstProperty.propertyName[0] || ''; // Check if propertyName array has elements
-      extractedPropertyData.checkInTime = firstProperty.checkInTime[0] || ''; // Check if checkInTime array has elements
-      extractedPropertyData.checkOutTime = firstProperty.checkOutTime[0] || ''; // Check if checkOutTime array has elements
-      extractedPropertyData.rating = firstProperty.rating[0] || ''; // Check if rating array has elements
-      extractedPropertyData.location = firstProperty.location[0] || ''
+      // If records are found, send a 200 OK response with an array of extracted data
+      const extractedPropertyData = userProperties.map((property) => ({
+        userId: property.userId,
+        propertyId: property.propertyId,
+        country: property.country,
+        city: property.city[0] || '',
+        propertyAddress: property.propertyAddress[0] || '',
+        propertyName: property.propertyName[0] || '',
+        checkInTime: property.checkInTime[0] || '',
+        checkOutTime: property.checkOutTime[0] || '',
+        rating: property.rating[0] || '',
+        location: property.location[0] || '',
+      }));
       return res.status(200).json(extractedPropertyData);
     } else {
       // If no records are found, send a 404 Not Found response

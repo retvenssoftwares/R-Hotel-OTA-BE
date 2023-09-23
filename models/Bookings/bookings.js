@@ -351,6 +351,10 @@ const bookingSchema = mongoose.Schema({
         type: String,
         default: "",
     },
+    createdAt:{
+        type: String,
+        default: ''
+    }
 
 
 })

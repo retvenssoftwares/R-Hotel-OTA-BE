@@ -22,7 +22,8 @@ module.exports = async (req, res) => {
             bookingStatus,
             paymentStatus,
             paymentMode,
-            madeBy
+            madeBy,
+            createdAt: new Date().toLocaleString("en-IN", { timeZone: "Asia/Kolkata" })
         });
 
         await newBooking.save();
