@@ -1,4 +1,4 @@
-const propertyModel = require('../../models/Onboarding/propertys')
+const propertyModel = require('../../models/Onboarding/propertys');
 
 module.exports = async (req, res) => {
   try {
