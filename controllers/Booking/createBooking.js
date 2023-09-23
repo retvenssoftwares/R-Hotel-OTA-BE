@@ -1,4 +1,4 @@
-const bookingModel = require('../../models/Bookings/bookings');
+const bookingModel = require('../../models/Bookings/bookingPending');
 const propertyModel = require('../../models/Onboarding/propertys');
 const randomstring = require('randomstring');
 
