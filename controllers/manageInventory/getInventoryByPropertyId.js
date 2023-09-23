@@ -4,17 +4,17 @@ module.exports = async (req, res) => {
     try {
         const propertyId = req.params.propertyId;
         const startDate = req.query.startDate;
-        const endDate = req.query.endDate;
+       // const endDate = req.query.endDate;
 
-        if (!startDate || !endDate) {
-            return res.status(400).json({ error: 'Both start date and end date are required as query parameters.' });
-        }
+       if (!startDate) {
+        return res.status(400).json({ error: 'Start date is required as a query parameter.' });
+    }
 
         const manageInventory = await inventory.find({
             propertyId: propertyId,
             'ratesAndInventory.date': {
                 $gte: startDate,
-                $lte: endDate
+                
             }
         });
 
@@ -28,7 +28,7 @@ module.exports = async (req, res) => {
             propertyId: ratePlan.propertyId,
             roomTypeId: ratePlan.roomTypeId,
             Inventory: ratePlan.Inventory[0] || {},
-            ratesAndInventory: ratePlan.ratesAndInventory.filter(item => item.date >= startDate && item.date <= endDate)
+            ratesAndInventory: ratePlan.ratesAndInventory.filter(item => item.date >= startDate).slice(0, 6)
         }));
 
         return res.status(200).json(extractedData);
