@@ -165,4 +165,4 @@ const bookingSchema = mongoose.Schema({
 
 })
 
-module.exports = mongoose.model('Booking', bookingSchema);
+module.exports = mongoose.model('BookingPending', bookingSchema);

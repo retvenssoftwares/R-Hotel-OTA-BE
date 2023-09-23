@@ -1,4 +1,4 @@
-const bookingModel = require('../../models/Bookings/bookings');
+const bookingModel = require('../../models/Bookings/bookingPending');
 const propertyModel = require('../../models/Onboarding/propertys');
 const randomstring = require('randomstring');
 
@@ -22,7 +22,8 @@ module.exports = async (req, res) => {
             bookingStatus,
             paymentStatus,
             paymentMode,
-            madeBy
+            madeBy,
+            createdAt: new Date().toLocaleString("en-IN", { timeZone: "Asia/Kolkata" })
         });
 
         await newBooking.save();

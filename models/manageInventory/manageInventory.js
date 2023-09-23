@@ -31,10 +31,6 @@ const ManageInventory = new mongoose.Schema({
             type: String,
             default: "",
         },
-        price: {
-            type: String,
-            default: "",
-        },
         date: {
             type: String,
             default: ""
