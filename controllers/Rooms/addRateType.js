@@ -12,7 +12,7 @@ const randomstring = require("randomstring");
 module.exports = async (req, res) => {
     try {
         // Get user data from the request body
-        const {userId,propertyId, roomTypeId, rateTypeId, name, inclusion, basePrice, roomType, taxIncluded, refundable, startDate,endDate, SessionId,date} = req.body;
+        const {userId,propertyId, roomTypeId, rateTypeId, name, inclusion, basePrice, roomType, taxIncluded, refundable, SessionId,date} = req.body;
 
         const userProfile = await admin.findOne({ userId: userId })
         const room = await RoomType.findOne({ roomTypeId: roomTypeId });
@@ -30,14 +30,36 @@ module.exports = async (req, res) => {
             propertyId,
             roomTypeId,
             rateTypeId,
-            name,
-            inclusion,
-            basePrice ,
-            roomType,
-            taxIncluded,
-            refundable,
-            startDate,
-            endDate,
+            name:[{
+                name:name,
+                modifiedDate: new Date().toLocaleString("en-IN", { timeZone: "Asia/Kolkata" })
+            }],
+          
+            inclusion:[{
+                inclusion:inclusion,
+                modifiedDate: new Date().toLocaleString("en-IN", { timeZone: "Asia/Kolkata" })
+            }],
+         
+             basePrice:[{
+                basePrice:basePrice,
+                modifiedDate: new Date().toLocaleString("en-IN", { timeZone: "Asia/Kolkata" })
+            }],
+          
+            roomType:[{
+                roomType:roomType,
+                modifiedDate: new Date().toLocaleString("en-IN", { timeZone: "Asia/Kolkata" })
+            }],
+           
+            taxIncluded:[{
+                taxIncluded:taxIncluded,
+                modifiedDate: new Date().toLocaleString("en-IN", { timeZone: "Asia/Kolkata" })
+            }],
+           
+            refundable:[{
+                refundable:refundable,
+                modifiedDate: new Date().toLocaleString("en-IN", { timeZone: "Asia/Kolkata" })
+            }],
+           
             date: new Date().toLocaleString("en-IN", { timeZone: "Asia/Kolkata" }),
         });
 
