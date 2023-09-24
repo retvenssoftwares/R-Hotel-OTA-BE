@@ -49,6 +49,7 @@ const patchAmenityProperty = require('./routers/Amenities/patchAmenityPropertyRo
 const getInclusionsByType = require('./routers/Inclusions/getInclusionsByTypeRouter')
 const inclusionRateType = require('./routers/Inclusions/patchInclusionRateTypeRouter')
 const selectUnselectInclusions = require('./routers/Inclusions/selectInclusionInRatePlanRouter')
+const getInclusions = require('./routers/Inclusions/fetchInclusionTypeRouter')
 
 //Images
 const propertyImages = require('./routers/Images/propertyImagesRouter')
@@ -106,6 +107,7 @@ app.use(patchAmenityProperty)
 app.use(getInclusionsByType)
 app.use(inclusionRateType)
 app.use(selectUnselectInclusions);
+app.use(getInclusions)
 
 //room
 app.use(fetchRoomTypeList)
