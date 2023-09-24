@@ -144,7 +144,7 @@ const bookingSchema = mongoose.Schema({
     },
     bookingStatus: {
         type: String,
-        default: "",
+        default: "Pending",
     },
     paymentStatus: {
         type: String,
