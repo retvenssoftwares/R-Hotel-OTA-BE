@@ -86,6 +86,7 @@ const fetchBedName =require('./routers/Room/getBedTypeNameRouter');
 const fetchRatePlan =require('./routers/Room/getRatePlanByRoomTypeRouter');
 const getRatePlan =require('./routers/Room/getRatePlanByPropertyIdRouter');
 const getRoomType = require('./routers/Room/getRoomTypeByPropertyIdRouter');
+const getRateType = require('./routers/Room/fetchRateTypeByRateIdRouter')
 
 //ManageInventory
 const fetchInventory = require('./routers/manageInventory/getInventoryByPropertyId');
@@ -113,6 +114,7 @@ app.use(getInclusions)
 app.use(fetchRoomTypeList)
 app.use(fetchRoomType)
 app.use(getRoomType);
+app.use(getRateType)
 
 //booking
 app.use(createBookingRouter)
