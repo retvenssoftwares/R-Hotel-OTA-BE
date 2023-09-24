@@ -49,6 +49,7 @@ const patchAmenityProperty = require('./routers/Amenities/patchAmenityPropertyRo
 const getInclusionsByType = require('./routers/Inclusions/getInclusionsByTypeRouter')
 const inclusionRateType = require('./routers/Inclusions/patchInclusionRateTypeRouter')
 const selectUnselectInclusions = require('./routers/Inclusions/selectInclusionInRatePlanRouter')
+const getInclusions = require('./routers/Inclusions/fetchInclusionTypeRouter')
 
 //Images
 const propertyImages = require('./routers/Images/propertyImagesRouter')
@@ -85,6 +86,7 @@ const fetchBedName =require('./routers/Room/getBedTypeNameRouter');
 const fetchRatePlan =require('./routers/Room/getRatePlanByRoomTypeRouter');
 const getRatePlan =require('./routers/Room/getRatePlanByPropertyIdRouter');
 const getRoomType = require('./routers/Room/getRoomTypeByPropertyIdRouter');
+const getRateType = require('./routers/Room/fetchRateTypeByRateIdRouter')
 
 //ManageInventory
 const fetchInventory = require('./routers/manageInventory/getInventoryByPropertyId');
@@ -106,11 +108,13 @@ app.use(patchAmenityProperty)
 app.use(getInclusionsByType)
 app.use(inclusionRateType)
 app.use(selectUnselectInclusions);
+app.use(getInclusions)
 
 //room
 app.use(fetchRoomTypeList)
 app.use(fetchRoomType)
 app.use(getRoomType);
+app.use(getRateType)
 
 //booking
 app.use(createBookingRouter)

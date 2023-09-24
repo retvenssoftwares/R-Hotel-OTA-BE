@@ -12,7 +12,7 @@ const randomstring = require("randomstring");
 module.exports = async (req, res) => {
     try {
         // Get user data from the request body
-        const {userId,propertyId, roomTypeId, rateTypeId, name, inclusion, basePrice, roomType, taxIncluded, refundable, SessionId,date} = req.body;
+        const {userId,propertyId, roomTypeId, name, inclusion, basePrice, roomType, taxIncluded, refundable, SessionId,date} = req.body;
 
         const userProfile = await admin.findOne({ userId: userId })
         const room = await RoomType.findOne({ roomTypeId: roomTypeId });
@@ -29,7 +29,7 @@ module.exports = async (req, res) => {
             rateTypeId: randomstring.generate(8),
             propertyId,
             roomTypeId,
-            rateTypeId,
+        
             name:[{
                 name:name,
                 modifiedDate: new Date().toLocaleString("en-IN", { timeZone: "Asia/Kolkata" })
@@ -67,7 +67,7 @@ module.exports = async (req, res) => {
         const savedProperty = await newplan.save();
 
 
-        res.status(201).json({ message: 'rate Plan added  successfully' });
+        res.status(201).json({ message: 'rate type added  successfully' });
     } catch (error) {
         console.log(error)
         res.status(500).json({ error: 'Internal server error' });
