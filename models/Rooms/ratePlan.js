@@ -51,7 +51,7 @@ const rateDetails = new mongoose.Schema({
         },
     }],
    
-    persentage:[{
+    percentage:[{
         percentage:{
             default: "",
             type: String

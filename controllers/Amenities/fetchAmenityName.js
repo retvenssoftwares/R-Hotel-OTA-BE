@@ -2,10 +2,10 @@ const amenity = require('../../models/Amenities/amenities')
 
 // Define a GET API route to fetch unique amenityType values based on amenityCategory
 module.exports = async (req, res) => {
-  const Type = req.params.Type;
+  const categoryOfAmenity = req.params.category;
 
   try {
-    const uniqueAmenityName = await amenity.find({amenityType:Type}).select('amenityName amenityId -_id');
+    const uniqueAmenityName = await amenity.find({amenityCategory:categoryOfAmenity}).select('amenityName amenityId -_id');
 
     res.json(uniqueAmenityName); // Change "amenityTypes" to "amenityType"
   } catch (error) {
