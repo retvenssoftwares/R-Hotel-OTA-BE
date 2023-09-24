@@ -12,36 +12,62 @@ const rateTypeSchema = new mongoose.Schema({
         type: String
 
     },
-    name: {
-        type: String,
-        default: ""
-    },
-    // inclusion: [{
-    //     inclusionId: {
-    //         default: "",
-    //         type: String
-    //     },
-    //     isSelected: {
-    //         default: "",
-    //         type: String
-    //     }
-    // }],
+    name:[{
+        name: {
+            type: String,
+            default: ""
+        },
+        modifiedDate: {
+            default: "",
+            type: String
+        }
+    }],
+ 
+basePrice:[{
     basePrice: {
         type: String,
         default: "",
     },
+    modifiedDate: {
+        default: "",
+        type: String
+    }
+}],
+   
+roomType:[{
     roomType: {
         type: String,
         default: "",
     },
+    modifiedDate: {
+        default: "",
+        type: String
+    }
+}],
+taxIncluded:[{
+  
     taxIncluded: {
         type: String,
         default: "",
     },
+    modifiedDate: {
+        default: "",
+        type: String
+    }
+}],
+
+refundable:[{
     refundable: {
         type: String,
         default: "",
     },
+    modifiedDate: {
+        default: "",
+        type: String
+    }
+}],
+
+   
    
     date: {
         type: String,

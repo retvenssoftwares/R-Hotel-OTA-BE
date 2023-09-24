@@ -56,6 +56,7 @@ const editImageDescription = require('./routers/Images/editDescriptionRouter')
 
 //Booking
 const createBookingRouter = require('./routers/Bookings/createBookingRouter')
+const patchBooking = require('./routers/Bookings/patchBookingRouter')
 
 
 //Onboarding
@@ -113,6 +114,7 @@ app.use(getRoomType);
 
 //booking
 app.use(createBookingRouter)
+app.use(patchBooking)
 
 //inventory
 app.use(patchInventory)

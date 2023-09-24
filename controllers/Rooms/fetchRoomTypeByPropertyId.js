@@ -13,7 +13,11 @@ module.exports = async (req, res) => {
         
         // Extract only the "roomType" field from each record
         const extractedData = {
-            roomType: rooms.map(room => room.roomType[0] ? room.roomType[0].roomType : ''),
+            roomName: rooms.map(room => ({
+               roomName: room.roomName[0] ? room.roomName[0].roomName : '',
+                roomTypeId:room.roomTypeId
+        })),
+        
         };
 
         return res.status(200).json(extractedData);
