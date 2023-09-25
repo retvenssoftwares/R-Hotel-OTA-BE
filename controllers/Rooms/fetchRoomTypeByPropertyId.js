@@ -15,7 +15,9 @@ module.exports = async (req, res) => {
         const extractedData = {
             roomName: rooms.map(room => ({
                roomName: room.roomName[0] ? room.roomName[0].roomName : '',
-                roomTypeId:room.roomTypeId
+                roomTypeId:room.roomTypeId,
+                description: room.description[0] ? room.description[0].description : '',
+              
         })),
         
         };
