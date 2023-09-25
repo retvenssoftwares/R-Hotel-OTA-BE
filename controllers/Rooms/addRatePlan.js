@@ -11,7 +11,7 @@ const randomstring = require("randomstring");
 module.exports = async (req, res) => {
     try {
         // Get user data from the request body
-        const {userId,propertyId,rateTypeId, inclusion, description, MLO, percentage, value, rateTypeName, startDate, endDate,priceIncrease, roomTypeId, SessionId } = req.body;
+        const {userId,propertyId,rateTypeId, inclusion, description, MLO, percentage, value, ratePlanName, startDate, endDate,priceIncrease, roomTypeId, SessionId } = req.body;
 
         const userProfile = await admin.findOne({ userId: userId })
         const room = await RoomType.findOne({ roomTypeId: roomTypeId });
