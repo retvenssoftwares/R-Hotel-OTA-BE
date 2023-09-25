@@ -53,7 +53,6 @@ const ManageInventory = new mongoose.Schema({
         }
     }]
 
-
 })
 
 const inventory = mongoose.model('manageInventory', ManageInventory)
