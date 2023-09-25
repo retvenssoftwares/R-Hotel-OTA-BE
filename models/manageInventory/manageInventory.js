@@ -9,11 +9,17 @@ const ManageInventory = new mongoose.Schema({
         type: String,
         default: "",
     },
-
+ratePrice:[{
     basePrice: {
         type: String,
         default: ""
     },
+    modifiedDate: {
+        type: String,
+        default: ""
+    }
+}],
+   
     Inventory: [{
         baseInventory:{
         type: String,
@@ -26,8 +32,18 @@ const ManageInventory = new mongoose.Schema({
 
     }],
     
-    ratesAndInventory: [{
+    manageInventory: [{
         inventory: {
+            type: String,
+            default: "",
+        },
+        date: {
+            type: String,
+            default: ""
+        }
+    }],
+    manageRate: [{
+        price: {
             type: String,
             default: "",
         },
