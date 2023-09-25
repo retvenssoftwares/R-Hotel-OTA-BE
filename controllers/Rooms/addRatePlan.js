@@ -70,7 +70,7 @@ module.exports = async (req, res) => {
         const savedProperty = await newroom.save();
 
 
-        res.status(201).json({ message: 'rate type added  successfully' });
+        res.status(201).json({ message: 'rate plan added  successfully' });
     } catch (error) {
         console.log(error)
         res.status(500).json({ error: 'Internal server error' });

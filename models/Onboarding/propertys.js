@@ -110,7 +110,7 @@ const propertySchema = new mongoose.Schema({
         type: String,
     },
     amenities: [{
-        amenitiesID: {
+        amenitiesId: {
             default: "",
             type: String
         },
