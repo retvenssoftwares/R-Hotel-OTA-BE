@@ -29,14 +29,14 @@ module.exports = async (req, res) => {
         );
 
         // Retrieve the amenities array for the specified propertyId
-        const ratePlanInclusions = await ratePlanModel.findOne(
-            { ratePlanId: ratePlanId },
-            { inclusion: 1 }
-        );
+        // const ratePlanInclusions = await ratePlanModel.findOne(
+        //     { ratePlanId: ratePlanId },
+        //     { inclusion: 1 }
+        // );
 
-        if (!ratePlanInclusions) {
-            return res.status(404).json({ error: "rate plan not found" });
-        }
+        // if (!ratePlanInclusions) {
+        //     return res.status(404).json({ error: "rate plan not found" });
+        // }
 
         // Create an array to store the results
         const result = [];
