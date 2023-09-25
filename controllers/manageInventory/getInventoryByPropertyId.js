@@ -12,7 +12,7 @@ module.exports = async (req, res) => {
 
         const manageInventory = await inventory.find({
             propertyId: propertyId,
-            'ratesAndInventory.date': {
+            'manageInventory.modifiedDate': {
                 $gte: startDate,
                 
             }
@@ -28,7 +28,7 @@ module.exports = async (req, res) => {
             propertyId: ratePlan.propertyId,
             roomTypeId: ratePlan.roomTypeId,
             Inventory: ratePlan.Inventory[0] || {},
-            ratesAndInventory: ratePlan.ratesAndInventory.filter(item => item.date >= startDate).slice(0, 6)
+            ratesAndInventory: ratePlan.manageInventory.filter(item => item.modifiedDate >= startDate).slice(0, 6)
         }));
 
         return res.status(200).json(extractedData);
