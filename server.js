@@ -72,9 +72,6 @@ const selectAmenitiesInRoom = require('./routers/Amenities/selectAmenitiesInRoom
 //location
 const country = require('./routers/location/getAllcountryrouter')
 
-//inventory
-const patchInventory = require('./routers/manageInventory/patchInventoryRouter')
-
 //room
 const fetchRoomTypeList = require('./routers/Room/roomTypelistFetchRouter')
 const fetchRoomType = require('./routers/Room/fetchRoomTypeByPropertyIdRouter')
@@ -92,6 +89,8 @@ const getRateType = require('./routers/Room/fetchRateTypeByRateIdRouter')
 
 //ManageInventory
 const fetchInventory = require('./routers/manageInventory/getInventoryByPropertyId');
+const patchInventory = require('./routers/manageInventory/patchInventoryRouter')
+const patchRates = require('./routers/manageInventory/patchRatesRouter')
 
 //accountCreation
 app.use(login);
@@ -126,6 +125,8 @@ app.use(patchBooking)
 
 //inventory
 app.use(patchInventory)
+app.use(fetchInventory)
+app.use(patchRates)
 
 //Onboarding
 app.use(property);
@@ -144,10 +145,6 @@ app.use(getAllUserProperties)
 
 //location
 app.use(country)
-
-
-//inventory
-app.use(fetchInventory)
 
 mongoose
     .connect(process.env.DATABASE, {
