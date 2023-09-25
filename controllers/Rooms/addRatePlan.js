@@ -11,7 +11,7 @@ const randomstring = require("randomstring");
 module.exports = async (req, res) => {
     try {
         // Get user data from the request body
-        const {userId,propertyId,rateTypeId, inclusion, description, MLO, percentage, value, ratePlanName, startDate, endDate,priceIncrease, roomTypeId, SessionId } = req.body;
+        const { userId, propertyId, rateTypeId, inclusion, description, MLO, percentage, value, ratePlanName, startDate, endDate, priceIncrease, roomTypeId, SessionId } = req.body;
 
         const userProfile = await admin.findOne({ userId: userId })
         const room = await RoomType.findOne({ roomTypeId: roomTypeId });
@@ -23,51 +23,65 @@ module.exports = async (req, res) => {
         if (sessionId !== SessionId) {
             return res.status(404).json({ message: "session id not match" })
         }
+
+        let ratePlanId = randomstring.generate(8)
         // Create a new user using the Mongoose model
-        const newroom = new RatePlan({
-            ratePlanId: randomstring.generate(8),
+        const newRatePlan = new RatePlan({
+            ratePlanId: ratePlanId,
             propertyId,
             roomTypeId,
             rateTypeId,
             inclusion,
-            MLO:[{
-                MLO:MLO,
+            MLO: [{
+                MLO: MLO,
                 modifiedDate: new Date().toLocaleString("en-IN", { timeZone: "Asia/Kolkata" })
             }],
-            percentage:[{
-                percentage:percentage,
+            percentage: [{
+                percentage: percentage,
                 modifiedDate: new Date().toLocaleString("en-IN", { timeZone: "Asia/Kolkata" })
             }],
-            value:[{
-                value:value,
+            value: [{
+                value: value,
                 modifiedDate: new Date().toLocaleString("en-IN", { timeZone: "Asia/Kolkata" })
             }],
-            ratePlanName:[{
-                ratePlanName:ratePlanName,
+            ratePlanName: [{
+                ratePlanName: ratePlanName,
                 modifiedDate: new Date().toLocaleString("en-IN", { timeZone: "Asia/Kolkata" })
             }],
-            startDate:[{
-                startDate:startDate,
+            startDate: [{
+                startDate: startDate,
                 modifiedDate: new Date().toLocaleString("en-IN", { timeZone: "Asia/Kolkata" })
             }],
-            endDate:[{
-                endDate:endDate,
+            endDate: [{
+                endDate: endDate,
                 modifiedDate: new Date().toLocaleString("en-IN", { timeZone: "Asia/Kolkata" })
             }],
-            description:[{
-                description:description,
+            description: [{
+                description: description,
                 modifiedDate: new Date().toLocaleString("en-IN", { timeZone: "Asia/Kolkata" })
             }],
-            priceIncrease:[{
-                priceIncrease:priceIncrease,
+            priceIncrease: [{
+                priceIncrease: priceIncrease,
                 modifiedDate: new Date().toLocaleString("en-IN", { timeZone: "Asia/Kolkata" })
             }],
-            
+
             date: new Date().toLocaleString("en-IN", { timeZone: "Asia/Kolkata" }),
         });
 
         // Save the new user to the database
-        const savedProperty = await newroom.save();
+        const savedProperty = await newRatePlan.save();
+
+        const ratePlanObject = { ratePlanId: ratePlanId, modifiedDate: new Date().toLocaleString("en-IN", { timeZone: "Asia/Kolkata" }), isActive: 'true' };
+        const result = await RoomType.updateOne(
+            { roomTypeId: roomTypeId },
+            {
+                $addToSet: {
+                    ratePlan: {
+                        $each: [ratePlanObject],
+                    },
+                },
+            }
+        );
 
 
         res.status(201).json({ message: 'rate plan added  successfully' });

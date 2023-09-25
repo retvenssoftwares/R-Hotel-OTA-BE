@@ -1,0 +1,1 @@
+const rateTypeModel = require('../../models/Rooms/rateType')
