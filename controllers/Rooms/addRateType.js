@@ -1,7 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const Property = require("../../models/Onboarding/propertys");
-const RatePlan = require("../../models/Rooms/ratePlan");
+const inventoryModel = require("../../models/manageInventory/manageInventory");
 const RoomType = require("../../models/Rooms/roomTypeDetails");
 const rateType = require("../../models/Rooms/rateType");
 const admin = require("../../models/Onboarding/registrations");
@@ -12,7 +12,7 @@ const randomstring = require("randomstring");
 module.exports = async (req, res) => {
     try {
         // Get user data from the request body
-        const {userId,propertyId, roomTypeId, name, inclusion, basePrice, roomType, taxIncluded, refundable, SessionId,date} = req.body;
+        const { userId, propertyId, roomTypeId, name, inclusion, basePrice, roomType, taxIncluded, refundable, SessionId, date } = req.body;
 
         const userProfile = await admin.findOne({ userId: userId })
         const room = await RoomType.findOne({ roomTypeId: roomTypeId });
@@ -29,42 +29,58 @@ module.exports = async (req, res) => {
             rateTypeId: randomstring.generate(8),
             propertyId,
             roomTypeId,
-        
-            name:[{
-                name:name,
+
+            name: [{
+                name: name,
                 modifiedDate: new Date().toLocaleString("en-IN", { timeZone: "Asia/Kolkata" })
             }],
-          
-            inclusion:[{
-                inclusion:inclusion,
+
+            inclusion: [{
+                inclusion: inclusion,
                 modifiedDate: new Date().toLocaleString("en-IN", { timeZone: "Asia/Kolkata" })
             }],
-         
-             basePrice:[{
-                basePrice:basePrice,
+
+            basePrice: [{
+                basePrice: basePrice,
                 modifiedDate: new Date().toLocaleString("en-IN", { timeZone: "Asia/Kolkata" })
             }],
-          
-            roomType:[{
-                roomType:roomType,
+
+            roomType: [{
+                roomType: roomType,
                 modifiedDate: new Date().toLocaleString("en-IN", { timeZone: "Asia/Kolkata" })
             }],
-           
-            taxIncluded:[{
-                taxIncluded:taxIncluded,
+
+            taxIncluded: [{
+                taxIncluded: taxIncluded,
                 modifiedDate: new Date().toLocaleString("en-IN", { timeZone: "Asia/Kolkata" })
             }],
-           
-            refundable:[{
-                refundable:refundable,
+
+            refundable: [{
+                refundable: refundable,
                 modifiedDate: new Date().toLocaleString("en-IN", { timeZone: "Asia/Kolkata" })
             }],
-           
+
             date: new Date().toLocaleString("en-IN", { timeZone: "Asia/Kolkata" }),
         });
 
         // Save the new user to the database
         const savedProperty = await newplan.save();
+
+        // Define the object you want to prepend to the array
+        const rateObject = { basePrice: basePrice, modifiedDate: new Date().toLocaleString("en-IN", { timeZone: "Asia/Kolkata" }) };
+        console.log(rateObject)
+        // Use Mongoose to update the record and prepend the new object to the array
+        console.log(roomTypeId)
+        const result = await inventoryModel.updateOne(
+            { roomTypeId: roomTypeId },
+            {
+                $addToSet: {
+                    ratePrice: {
+                        $each: [rateObject],
+                    },
+                },
+            }
+        );
 
 
         res.status(201).json({ message: 'rate type added  successfully' });
