@@ -43,7 +43,8 @@ const logout = require('./routers/accountCreation/logOutRouter')
 const getAmenities = require('./routers/Amenities/getAmenitiesRouter')
 const fetchAmenityType = require('./routers/Amenities/fetchAmenityTypeRouter')
 const fetchAmenityName = require('./routers/Amenities/fetchAmenityNameRouter')
-const patchAmenityProperty = require('./routers/Amenities/patchAmenityPropertyRouter')
+const patchAmenityProperty = require('./routers/Amenities/patchAmenityPropertyRouter');
+const fetchAmenityCategory =  require('./routers/Amenities/fetchAmenityCategoryRouter');
 
 //Inclusions
 const getInclusionsByType = require('./routers/Inclusions/getInclusionsByTypeRouter')
@@ -104,6 +105,7 @@ app.use(getAmenities);
 app.use(fetchAmenityType)
 app.use(fetchAmenityName)
 app.use(patchAmenityProperty)
+app.use(fetchAmenityCategory)
 
 //inclusions
 app.use(getInclusionsByType)
