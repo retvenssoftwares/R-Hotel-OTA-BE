@@ -4,18 +4,17 @@ module.exports = async (req, res) => {
     try {
         const propertyId = req.params.propertyId;
         const startDate = req.query.startDate;
-       // const endDate = req.query.endDate;
 
-       if (!startDate) {
-        return res.status(400).json({ error: 'Start date is required as a query parameter.' });
-    }
+        if (!startDate) {
+            return res.status(400).json({ error: 'Start date is required as a query parameter.' });
+        }
 
         const manageInventory = await inventory.find({
             propertyId: propertyId,
-            'ratesAndInventory.date': {
-                $gte: startDate,
-                
-            }
+            // $or: [
+            //     { 'manageInventory.modifiedDate': { $gte: startDate } },
+            //     { 'manageInventory': { $exists: false, $size: 0 } }
+            // ]
         });
 
         if (!manageInventory || manageInventory.length === 0) {
@@ -28,7 +27,11 @@ module.exports = async (req, res) => {
             propertyId: ratePlan.propertyId,
             roomTypeId: ratePlan.roomTypeId,
             Inventory: ratePlan.Inventory[0] || {},
-            ratesAndInventory: ratePlan.ratesAndInventory.filter(item => item.date >= startDate).slice(0, 6)
+            ratesAndInventory: ratePlan.manageInventory
+                ? ratePlan.manageInventory
+                      .filter(item => item.modifiedDate >= startDate)
+                      .slice(0, 6)
+                : [] // Empty array if manageInventory is not defined
         }));
 
         return res.status(200).json(extractedData);
