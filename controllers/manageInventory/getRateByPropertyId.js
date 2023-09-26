@@ -2,7 +2,7 @@ const rate = require('../../models/manageInventory/manageInventory');
 
 module.exports = async (req, res) => {
     try {
-        const propertyId = req.params.propertyId;
+        const roomTypeId = req.params.roomTypeId;
         const startDate = req.query.startDate;
 
         if (!startDate) {
@@ -10,7 +10,7 @@ module.exports = async (req, res) => {
         }
 
         const manageRate = await rate.find({
-            propertyId: propertyId,
+            roomTypeId: roomTypeId,
             // $or: [
             //     { 'manageInventory.modifiedDate': { $gte: startDate } },
             //     { 'manageInventory': { $exists: false, $size: 0 } }

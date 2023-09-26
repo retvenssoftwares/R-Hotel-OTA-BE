@@ -2,5 +2,5 @@ const { Router } = require('express');
 const getRate = require('../../controllers/manageInventory/getRateByPropertyId');
 const app = Router();
 
-app.get('/getRate/:propertyId',getRate);
+app.get('/getRate/:roomTypeId',getRate);
 module.exports = app;
