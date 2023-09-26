@@ -68,6 +68,9 @@ const getProperty =require('./routers/Onboarding/getPropertyRouter');
 const updateproperty =require('./routers/Onboarding/patchPropertyDetailsRouter');
 const getAllUserProperties = require('./routers/Onboarding/getAllUserProperties')
 const selectAmenitiesInRoom = require('./routers/Amenities/selectAmenitiesInRoomTypeRouter')
+
+//Property
+const getTopProperties = require('./routers/Property/getTopSixPropertiesRouter')
 const hotelImages = require('./routers/Onboarding/pacthLogoAndCoverPhoto')
 const propertyCity = require('./routers/Onboarding/fetchCityOfPropertyRouter')
 //location
@@ -88,6 +91,7 @@ const editRateType = require('./routers/Room/patchRateTypeRouter')
 const getRatePlanById = require('./routers/Room/getRatePlanByIdRouter')
 const getRoomType = require('./routers/Room/getRoomTypeByPropertyIdRouter');
 const getRateType = require('./routers/Room/fetchRateTypeByRateIdRouter')
+const editRatePlan =  require('./routers/Room/patchRatePlanRouter')
 
 //ManageInventory
 const fetchInventory = require('./routers/manageInventory/getInventoryByPropertyId');
@@ -119,6 +123,9 @@ app.use(inclusionRateType)
 app.use(selectUnselectInclusions);
 app.use(getInclusions)
 
+//Properties
+app.use(getTopProperties)
+
 //room
 app.use(fetchRoomTypeList)
 app.use(fetchRoomType)
@@ -126,6 +133,7 @@ app.use(getRoomType);
 app.use(getRateType);
 app.use(getRatePlanById);
 app.use(editRateType)
+app.use(editRatePlan);
 
 //booking
 app.use(createBookingRouter)

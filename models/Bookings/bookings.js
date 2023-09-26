@@ -2,9 +2,7 @@ const mongoose = require("mongoose");
 const { ObjectId } = mongoose.Schema;
 const randomstring = require('randomstring')
 
-const bookingSchema = mongoose.Schema({
-
-   
+const bookingSchema = mongoose.Schema({   
 
     propertyId: {
         type: String,
