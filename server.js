@@ -68,6 +68,8 @@ const updateproperty =require('./routers/Onboarding/patchPropertyDetailsRouter')
 const getAllUserProperties = require('./routers/Onboarding/getAllUserProperties')
 const selectAmenitiesInRoom = require('./routers/Amenities/selectAmenitiesInRoomTypeRouter')
 
+//Property
+const getTopProperties = require('./routers/Property/getTopSixPropertiesRouter')
 
 //location
 const country = require('./routers/location/getAllcountryrouter')
@@ -112,6 +114,9 @@ app.use(getInclusionsByType)
 app.use(inclusionRateType)
 app.use(selectUnselectInclusions);
 app.use(getInclusions)
+
+//Properties
+app.use(getTopProperties)
 
 //room
 app.use(fetchRoomTypeList)
