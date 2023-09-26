@@ -53,7 +53,7 @@ module.exports = async (req, res) => {
             { new: true } // Return the updated document
         );
 
-        return res.status(200).json({ message: "Rate type updated successfully" });
+        return res.status(200).json({ message: "Rate plan updated successfully" });
     } catch (error) {
         return res.status(500).json({ message: "Internal server error" })
     }
