@@ -1,6 +1,7 @@
 const cron = require('node-cron');
 const pendingBookingModel = require('../models/Bookings/bookingPending');
 const bookingModel = require('../models/Bookings/bookings');
+const manageInventoryModel = require('../models/manageInventory/manageInventory')
 
 // Define a cron job pattern to run every 10 minutes
 const cronPattern = '*/10 * * * *';
