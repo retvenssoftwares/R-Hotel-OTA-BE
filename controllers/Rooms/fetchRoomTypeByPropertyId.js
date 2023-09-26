@@ -47,8 +47,10 @@ module.exports = async (req, res) => {
         // Find all records with the given propertyId
         const rooms = await Property.find({ propertyId });
 
+        let a = []
+
         if (!rooms || rooms.length === 0) {
-            return res.status(404).json({ error: 'No rooms found for the given propertyId' });
+            return res.status(200).send(a);
         }
 
         // Initialize an empty array to store the response data
