@@ -68,9 +68,9 @@ module.exports = async (req, res) => {
 
         // Define the object you want to prepend to the array
         const rateObject = { basePrice: basePrice, modifiedDate: new Date().toLocaleString("en-IN", { timeZone: "Asia/Kolkata" }) };
-      
+        // console.log(rateObject)
         // Use Mongoose to update the record and prepend the new object to the array
-     
+        // console.log(roomTypeId)
         const result = await inventoryModel.updateOne(
             { roomTypeId: roomTypeId },
             {
