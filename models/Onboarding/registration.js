@@ -3,7 +3,7 @@ const randomstring = require("randomstring");
 ///hotel owner's schema
 const UserSchema = new mongoose.Schema({
     userId:{
-       default:randomstring.generate(8),
+       default:"",
         type:String
     },
     
@@ -41,6 +41,12 @@ const UserSchema = new mongoose.Schema({
         
     },
 
+    Property:[{
+    propertyId:{
+        type:String,
+        default:""
+    }
+    }],
      date:{
         type:String
      }
