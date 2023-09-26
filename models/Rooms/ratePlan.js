@@ -40,8 +40,8 @@ const rateDetails = new mongoose.Schema({
     }],    
    
 
-    MLO:[{
-        MLO:{
+    MLOS:[{
+        MLOS:{
             default: "",
             type: String
         },

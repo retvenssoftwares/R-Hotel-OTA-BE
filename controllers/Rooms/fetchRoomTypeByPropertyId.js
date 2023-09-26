@@ -65,12 +65,14 @@ module.exports = async (req, res) => {
             // Iterate through each ratePlanId in the roomType
             for (const ratePlanId of room.ratePlan) {
                 const ratePlanIdString = ratePlanId.ratePlanId.toString(); // Ensure it's a string
+                // console.log(ratePlanIdString)
                 const ratePlan = await RatePlan.findOne({ ratePlanId: ratePlanIdString });
 
                 if (ratePlan) {
                     // Get the ratePlanName from the first object in ratePlanName array
+                    const ratePlanId = ratePlanIdString;
                     const ratePlanName = ratePlan.ratePlanName[0] ? ratePlan.ratePlanName[0].ratePlanName : '';
-                    roomTypeData.ratePlanNames.push(ratePlanName); // Push ratePlanName to the array
+                    roomTypeData.ratePlanNames.push({ ratePlanId: ratePlanId, ratePlanName: ratePlanName }); // Push ratePlanName to the array
                 }
             }
 
