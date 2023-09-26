@@ -55,6 +55,7 @@ const getInclusions = require('./routers/Inclusions/fetchInclusionTypeRouter')
 //Images
 const propertyImages = require('./routers/Images/propertyImagesRouter')
 const editImageDescription = require('./routers/Images/editDescriptionRouter')
+const getImageOgRoomType = require('./routers/Images/getRoomTypeAndPropertyImagesRouter')
 
 //Booking
 const createBookingRouter = require('./routers/Bookings/createBookingRouter')
@@ -68,7 +69,7 @@ const updateproperty =require('./routers/Onboarding/patchPropertyDetailsRouter')
 const getAllUserProperties = require('./routers/Onboarding/getAllUserProperties')
 const selectAmenitiesInRoom = require('./routers/Amenities/selectAmenitiesInRoomTypeRouter')
 const hotelImages = require('./routers/Onboarding/pacthLogoAndCoverPhoto')
-
+const propertyCity = require('./routers/Onboarding/fetchCityOfPropertyRouter')
 //location
 const country = require('./routers/location/getAllcountryrouter')
 
@@ -100,6 +101,10 @@ app.use(logout);
 app.use(registration);
 app.use(propertyImages);
 app.use(editImageDescription);
+
+//Image 
+
+app.use(getImageOgRoomType)
 
 //Amenity
 app.use(getAmenities);
@@ -147,6 +152,7 @@ app.use(getRatePlan)
 app.use(selectAmenitiesInRoom);
 app.use(getAllUserProperties)
 app.use(hotelImages)
+app.use(propertyCity)
 
 //location
 app.use(country)
