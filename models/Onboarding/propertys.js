@@ -152,6 +152,39 @@ const propertySchema = new mongoose.Schema({
     }],
 
 
+    coverPhoto:[{
+        coverPhotoId:{
+            default:"",
+            type:String,
+
+        },
+        coverPhoto:{
+            default:"",
+            type:String,
+        },
+        modifiedDate: {
+            type: String,
+            default: ""
+        },
+
+    }],
+
+    hotelLogo:[{
+        hotelLogoId:{
+            default:"",
+            type:String,
+        },
+        hotelLogo:{
+            default:"",
+            type:String,
+        },
+        modifiedDate: {
+            type: String,
+            default: ""
+        },
+
+    }],
+
     ////
     roomType: [{
         roomTypeId: {
