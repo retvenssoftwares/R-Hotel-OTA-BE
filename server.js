@@ -68,10 +68,12 @@ const getProperty =require('./routers/Onboarding/getPropertyRouter');
 const updateproperty =require('./routers/Onboarding/patchPropertyDetailsRouter');
 const getAllUserProperties = require('./routers/Onboarding/getAllUserProperties')
 const selectAmenitiesInRoom = require('./routers/Amenities/selectAmenitiesInRoomTypeRouter')
+const hotelImages = require('./routers/Onboarding/pacthLogoAndCoverPhoto')
+const fetchAllProperty = require('./routers/Onboarding/getAllPropertyRouter')
 
 //Property
 const getTopProperties = require('./routers/Property/getTopSixPropertiesRouter')
-const hotelImages = require('./routers/Onboarding/pacthLogoAndCoverPhoto')
+//const hotelImages = require('./routers/Onboarding/pacthLogoAndCoverPhoto')
 const propertyCity = require('./routers/Onboarding/fetchCityOfPropertyRouter')
 //location
 const country = require('./routers/location/getAllcountryrouter')
@@ -98,6 +100,7 @@ const fetchInventory = require('./routers/manageInventory/getInventoryByProperty
 const fetchRate = require('./routers/manageInventory/getRateByPropertyId');
 const patchInventory = require('./routers/manageInventory/patchInventoryRouter')
 const patchRates = require('./routers/manageInventory/patchRatesRouter')
+const getAvailableInvetory = require('./routers/manageInventory/fetchInventoryRouter')
 
 //accountCreation
 app.use(login);
@@ -160,7 +163,11 @@ app.use(getRatePlan)
 app.use(selectAmenitiesInRoom);
 app.use(getAllUserProperties)
 app.use(hotelImages)
+app.use(fetchAllProperty)
 app.use(propertyCity)
+
+//manageInventory
+app.use(getAvailableInvetory)
 
 //location
 app.use(country)

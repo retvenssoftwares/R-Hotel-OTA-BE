@@ -11,8 +11,14 @@ module.exports = async (req, res) => {
         
         // Map the properties to an array of extracted data
         const extractedData = properties.map((property) => ({
-           
-            city: property.city[0] || {},
+            date: property.date,
+            userId: property.userId,
+            propertyId: property.propertyId,
+            country: property.country,
+            propertyName: property.propertyName[0] || {},
+            rating: property.rating[0] || {},
+            hotelLogo: property.hotelLogo[0] || {},
+            coverPhoto: property.coverPhoto[0] || {},
            
            
            
