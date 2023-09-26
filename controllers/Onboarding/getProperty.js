@@ -58,6 +58,8 @@ module.exports = async (req, res) => {
             checkInTime,
             checkOutTime,
             rating,
+            hotelLogo,
+            coverPhoto,
             location
            
             
@@ -79,6 +81,8 @@ module.exports = async (req, res) => {
             checkInTime: checkInTime[0] || {},
             checkOutTime: checkOutTime[0] || {},
             rating: rating[0] || {},
+            hotelLogo: hotelLogo[0] || {},
+            coverPhoto: coverPhoto[0] || {},
             location: location[0] || {},
             roomType,
             amenities

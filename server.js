@@ -70,6 +70,7 @@ const selectAmenitiesInRoom = require('./routers/Amenities/selectAmenitiesInRoom
 
 //Property
 const getTopProperties = require('./routers/Property/getTopSixPropertiesRouter')
+const hotelImages = require('./routers/Onboarding/pacthLogoAndCoverPhoto')
 
 //location
 const country = require('./routers/location/getAllcountryrouter')
@@ -89,9 +90,11 @@ const editRateType = require('./routers/Room/patchRateTypeRouter')
 const getRatePlanById = require('./routers/Room/getRatePlanByIdRouter')
 const getRoomType = require('./routers/Room/getRoomTypeByPropertyIdRouter');
 const getRateType = require('./routers/Room/fetchRateTypeByRateIdRouter')
+const editRatePlan =  require('./routers/Room/patchRatePlanRouter')
 
 //ManageInventory
 const fetchInventory = require('./routers/manageInventory/getInventoryByPropertyId');
+const fetchRate = require('./routers/manageInventory/getRateByPropertyId');
 const patchInventory = require('./routers/manageInventory/patchInventoryRouter')
 const patchRates = require('./routers/manageInventory/patchRatesRouter')
 
@@ -125,6 +128,7 @@ app.use(getRoomType);
 app.use(getRateType);
 app.use(getRatePlanById);
 app.use(editRateType)
+app.use(editRatePlan);
 
 //booking
 app.use(createBookingRouter)
@@ -134,6 +138,7 @@ app.use(patchBooking)
 app.use(patchInventory)
 app.use(fetchInventory)
 app.use(patchRates)
+app.use(fetchRate)
 
 //Onboarding
 app.use(property);
@@ -149,6 +154,7 @@ app.use(fetchRatePlan)
 app.use(getRatePlan)
 app.use(selectAmenitiesInRoom);
 app.use(getAllUserProperties)
+app.use(hotelImages)
 
 //location
 app.use(country)
