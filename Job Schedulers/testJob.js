@@ -102,7 +102,7 @@ const moveConfirmedBookingsTask = async () => {
 
       console.log('Inventory Reduction Completed.');
     } else {
-      console.log('No confirmed bookings to move.');
+      console.log('No confirmed bookings to move at ', new Date().toLocaleString("en-IN", { timeZone: "Asia/Kolkata" }));
     }
   } catch (error) {
     console.error('Error moving confirmed bookings:', error);
