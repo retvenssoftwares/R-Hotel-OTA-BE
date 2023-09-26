@@ -103,6 +103,7 @@ const fetchInventory = require('./routers/manageInventory/getInventoryByProperty
 const fetchRate = require('./routers/manageInventory/getRateByPropertyId');
 const patchInventory = require('./routers/manageInventory/patchInventoryRouter')
 const patchRates = require('./routers/manageInventory/patchRatesRouter')
+const getAvailableInvetory = require('./routers/manageInventory/fetchInventoryRouter')
 
 //accountCreation
 app.use(login);
@@ -169,6 +170,9 @@ app.use(getAllUserProperties)
 app.use(hotelImages)
 app.use(fetchAllProperty)
 app.use(propertyCity)
+
+//manageInventory
+app.use(getAvailableInvetory)
 
 //location
 app.use(country)
