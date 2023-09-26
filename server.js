@@ -70,7 +70,8 @@ const selectAmenitiesInRoom = require('./routers/Amenities/selectAmenitiesInRoom
 
 //Property
 const getTopProperties = require('./routers/Property/getTopSixPropertiesRouter')
-const hotelImages = require('./routers/Onboarding/pacthLogoAndCoverPhoto')
+const hotelImages = require('./routers/Onboarding/pacthLogoAndCoverPhoto');
+const getRateTypeByPropertyId = require("./routers/Property/getRateTypeByPropertyIdRouter")
 
 //location
 const country = require('./routers/location/getAllcountryrouter')
@@ -120,6 +121,7 @@ app.use(getInclusions)
 
 //Properties
 app.use(getTopProperties)
+app.use(getRateTypeByPropertyId)
 
 //room
 app.use(fetchRoomTypeList)

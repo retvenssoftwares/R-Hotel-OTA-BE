@@ -1,7 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const Property = require("../../models/Onboarding/propertys");
-const inventoryModel = require("../../models/manageInventory/manageInventory");
+const rateModel = require("../../models/manageInventory/manageRates");
 const RoomType = require("../../models/Rooms/roomTypeDetails");
 const rateType = require("../../models/Rooms/rateType");
 const admin = require("../../models/Onboarding/registrations");
@@ -24,9 +24,10 @@ module.exports = async (req, res) => {
         if (sessionId !== SessionId) {
             return res.status(404).json({ message: "session id not match" })
         }
+        let rateTypeId = randomstring.generate(8)
         // Create a new user using the Mongoose model
         const newplan = new rateType({
-            rateTypeId: randomstring.generate(8),
+            rateTypeId: rateTypeId,
             propertyId,
             roomTypeId,
 
@@ -70,18 +71,16 @@ module.exports = async (req, res) => {
         const rateObject = { basePrice: basePrice, modifiedDate: new Date().toLocaleString("en-IN", { timeZone: "Asia/Kolkata" }) };
         // console.log(rateObject)
         // Use Mongoose to update the record and prepend the new object to the array
-        // console.log(roomTypeId)
-        const result = await inventoryModel.updateOne(
-            { roomTypeId: roomTypeId },
-            {
-                $addToSet: {
-                    ratePrice: {
-                        $each: [rateObject],
-                    },
-                },
-            }
-        );
-
+        const createRate = new rateModel({
+            propertyId: propertyId,
+            roomTypeId: roomTypeId,
+            rateTypeId: rateTypeId,
+            ratePrice: [{
+                basePrice: basePrice,
+                modifiedDate: new Date().toLocaleString("en-IN", { timeZone: "Asia/Kolkata" })
+            }]
+        })
+        await createRate.save();
 
         res.status(201).json({ message: 'rate type added  successfully' });
     } catch (error) {

@@ -1,15 +1,15 @@
-const inventoryModel = require('../../models/manageInventory/manageInventory');
+const rateModel = require('../../models/manageInventory/manageRates');
 
 module.exports = async (req, res) => {
     try {
-        const roomTypeId = req.params.roomTypeId;
+        const rateTypeId = req.params.rateTypeId;
         const { startDate, endDate, price } = req.body;
 
         // Find the inventory document for the specified roomTypeId
-        const findRates = await inventoryModel.findOne({ roomTypeId });
+        const findRates = await rateModel.findOne({ rateTypeId });
 
         if (!findRates) {
-            return res.status(404).json({ message: "Inventory not found for the given roomTypeId" });
+            return res.status(404).json({ message: "Rates not found for the given roomTypeId" });
         }
 
         if (!findRates.manageRate) {
