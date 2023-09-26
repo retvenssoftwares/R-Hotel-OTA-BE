@@ -1,34 +1,4 @@
-// const Property = require('../../models/Onboarding/propertys');
 
-// module.exports = async (req, res) => {
-//   try {
-//     const propertyId = req.params.propertyId;
-
-//     const property = await Property.findOne(
-//       { propertyId },
-//       {
-//         'postCode': { $slice: 1 }, // Fetch the first item in the "postCode" array
-//         'city': { $slice: 1 },     // Fetch the first item in the "city" array
-//         'location': { $slice: 1 }, // Fetch the first item in the "location" array
-//         'propertyName': { $slice: 1 }, // Fetch the first item in the "propertyName" array
-//         'rating': { $slice: 1 },  // Fetch the first item in the "rating" array
-//         'location':{$slice:1},
-//         'checkInTime':{$slice:1},
-//         'checkOutTime':{$slice:1},
-
-//         // Add more fields as needed
-//       }
-//     );
-
-//     if (!property) {
-//       return res.status(404).json({ error: 'Property not found' });
-//     }
-
-//     return res.status(200).json(property);
-//   } catch (error) {
-//     return res.status(500).json({ error: error.message });
-//   }
-// };
 
 
 const Property = require('../../models/Onboarding/propertys')

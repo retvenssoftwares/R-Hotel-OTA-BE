@@ -55,6 +55,7 @@ const getInclusions = require('./routers/Inclusions/fetchInclusionTypeRouter')
 //Images
 const propertyImages = require('./routers/Images/propertyImagesRouter')
 const editImageDescription = require('./routers/Images/editDescriptionRouter')
+const getImageOgRoomType = require('./routers/Images/getRoomTypeAndPropertyImagesRouter')
 
 //Booking
 const createBookingRouter = require('./routers/Bookings/createBookingRouter')
@@ -67,8 +68,15 @@ const getProperty =require('./routers/Onboarding/getPropertyRouter');
 const updateproperty =require('./routers/Onboarding/patchPropertyDetailsRouter');
 const getAllUserProperties = require('./routers/Onboarding/getAllUserProperties')
 const selectAmenitiesInRoom = require('./routers/Amenities/selectAmenitiesInRoomTypeRouter')
-const hotelImages = require('./routers/Onboarding/pacthLogoAndCoverPhoto')
+const fetchAllProperty = require('./routers/Onboarding/getAllPropertyRouter')
 
+//Property
+const getTopProperties = require('./routers/Property/getTopSixPropertiesRouter')
+const hotelImages = require('./routers/Onboarding/pacthLogoAndCoverPhoto');
+const getRateTypeByPropertyId = require("./routers/Property/getRateTypeByPropertyIdRouter")
+
+//const hotelImages = require('./routers/Onboarding/pacthLogoAndCoverPhoto')
+const propertyCity = require('./routers/Onboarding/fetchCityOfPropertyRouter')
 //location
 const country = require('./routers/location/getAllcountryrouter')
 
@@ -87,6 +95,7 @@ const editRateType = require('./routers/Room/patchRateTypeRouter')
 const getRatePlanById = require('./routers/Room/getRatePlanByIdRouter')
 const getRoomType = require('./routers/Room/getRoomTypeByPropertyIdRouter');
 const getRateType = require('./routers/Room/fetchRateTypeByRateIdRouter')
+const editRatePlan =  require('./routers/Room/patchRatePlanRouter')
 
 //ManageInventory
 const fetchInventory = require('./routers/manageInventory/getInventoryByPropertyId');
@@ -101,6 +110,10 @@ app.use(registration);
 app.use(propertyImages);
 app.use(editImageDescription);
 
+//Image 
+
+app.use(getImageOgRoomType)
+
 //Amenity
 app.use(getAmenities);
 app.use(fetchAmenityType)
@@ -114,6 +127,10 @@ app.use(inclusionRateType)
 app.use(selectUnselectInclusions);
 app.use(getInclusions)
 
+//Properties
+app.use(getTopProperties)
+app.use(getRateTypeByPropertyId)
+
 //room
 app.use(fetchRoomTypeList)
 app.use(fetchRoomType)
@@ -121,6 +138,7 @@ app.use(getRoomType);
 app.use(getRateType);
 app.use(getRatePlanById);
 app.use(editRateType)
+app.use(editRatePlan);
 
 //booking
 app.use(createBookingRouter)
@@ -147,6 +165,8 @@ app.use(getRatePlan)
 app.use(selectAmenitiesInRoom);
 app.use(getAllUserProperties)
 app.use(hotelImages)
+app.use(fetchAllProperty)
+app.use(propertyCity)
 
 //location
 app.use(country)
