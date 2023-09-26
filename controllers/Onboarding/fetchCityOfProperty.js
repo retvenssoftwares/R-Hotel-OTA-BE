@@ -17,11 +17,9 @@ module.exports = async (req, res) => {
           property_data.push(propertyData)
          
         }
-
-        
       }
   
-      return res.status(200).json({ property_data });
+      return res.status(200).json({ propertyData });
     } catch (error) {
       console.error(error);
       return res.status(500).json({ msg: 'Internal server error' });
