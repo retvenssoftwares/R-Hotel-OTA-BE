@@ -16,17 +16,17 @@ module.exports = async (req, res) => {
     }
 
     // Iterate through the array of amenitiesIDs
-    for (const amenitiesID of amenitiesIDs) {
+    for (const amenitiesId of amenitiesIDs) {
       // Find the amenity with amenitiesID in the amenities array
       const amenity = property.amenities.find(
-        (amenity) => amenity.amenitiesID === amenitiesID
+        (amenity) => amenity.amenitiesId === amenitiesId
       );
 
       if (!amenity) {
         // If the amenity doesn't exist, create a new one with isSelected as true
         const newAmenity = {
-          amenitiesID,
-          isSelected: true,
+          amenitiesId,
+          isSelected: "true",
         };
 
         // Push the new amenity to the amenities array
