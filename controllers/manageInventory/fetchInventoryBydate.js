@@ -1,5 +1,7 @@
 const manageInventory = require("../../models/manageInventory/manageInventory");
 const roomDetails = require("../../models/Rooms/roomTypeDetails");
+const images = require('../../models/Images/roomTypeImages')
+
 
 module.exports = async (req, res) => {
   const manageRoomsDetails = await manageInventory.find({
@@ -51,8 +53,22 @@ console.log(roomTypeIdCounts);
   console.log(minKey , minValue)
 
   if(minValue >= 0){
-   const data = await roomDetails.findOne({roomTypeId : minKey })
 
-   return res.status(200).json({data})
+   const data = await roomDetails.findOne({roomTypeId : minKey })
+   const getimages = await images.findOne({roomTypeId : minKey})
+
+
+   //return res.status(200).json({data})
+
+   const add = {
+    roomType: (data.roomType && data.roomType[0] && data.roomType[0].roomType) || "",
+    number_of_rooms: (data.numberOfRooms && data.numberOfRooms[0] && data.numberOfRooms[0].numberOfRooms) || "",
+    maxOccupancy: (data.maxOccupancy && data.maxOccupancy[0] && data.maxOccupancy[0].maxOccupancy) || "",
+    images: (getimages.roomTypeImages && getimages.roomTypeImages[0] && getimages.roomTypeImages[0].image) || ""
+};
+
+   return res.status(200).json({add})
+   
+   
   }
 };
