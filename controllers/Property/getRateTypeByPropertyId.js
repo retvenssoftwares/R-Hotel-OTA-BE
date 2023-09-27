@@ -6,7 +6,8 @@ module.exports = async (req, res) => {
         const rateTypes = await rateType.find({ propertyId: propertyId });
 
         if (!rateTypes || rateTypes.length === 0) {
-            return res.status(404).json({ error: 'No rate types found for the given propertyId' });
+            a=[]
+            return res.status(200).send(a);
         }
 
         // Extract data from all rate types
