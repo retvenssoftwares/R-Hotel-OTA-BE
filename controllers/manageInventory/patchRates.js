@@ -1,4 +1,5 @@
 const rateModel = require('../../models/manageInventory/manageRates');
+const dumpInventoryRatesModel = require('../../models/manageInventory/dataDumpInventoryRates');
 
 module.exports = async (req, res) => {
     try {
@@ -11,6 +12,8 @@ module.exports = async (req, res) => {
         if (!findRates) {
             return res.status(404).json({ message: "Rates not found for the given roomTypeId" });
         }
+        let { roomTypeId } = findRates
+        const findRoomTypeId = await dumpInventoryRatesModel.findOne({ roomTypeId })
 
         if (!findRates.manageRate) {
             findRates.manageRate = [];
@@ -32,19 +35,23 @@ module.exports = async (req, res) => {
             const dateString = date.toISOString().split('T')[0]; // Get YYYY-MM-DD format
 
             // Check if the date already exists in the ratesAndInventory array
-            const existingEntry = findRates.manageRate.find(entry => entry.modifiedDate === dateString);
+            const existingEntry = findRates.manageRate.find(entry => entry.date === dateString);
 
             if (existingEntry) {
-                // If the date exists, update the price
+                // If the date exists, update the price and modified date
                 existingEntry.price = price;
+                existingEntry.modifiedDate = new Date().toLocaleString("en-IN", { timeZone: "Asia/Kolkata" }) ;
+                findRoomTypeId.manageRate.push({ date: dateString, price, rateTypeId: rateTypeId, modifiedDate: new Date().toLocaleString("en-IN", { timeZone: "Asia/Kolkata" })  });
             } else {
                 // If the date does not exist, add a new entry
-                findRates.manageRate.push({ modifiedDate: dateString, price });
+                findRates.manageRate.push({ date: dateString, price, modifiedDate: new Date().toLocaleString("en-IN", { timeZone: "Asia/Kolkata" })  });
+                findRoomTypeId.manageRate.push({ date: dateString, price, rateTypeId: rateTypeId, modifiedDate: new Date().toLocaleString("en-IN", { timeZone: "Asia/Kolkata" })  });
             }
         }
 
         // Save the updated price document
         await findRates.save();
+        await findRoomTypeId.save();
 
         return res.status(200).json({ message: "Rates updated successfully" });
 

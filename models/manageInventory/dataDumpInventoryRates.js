@@ -1,31 +1,35 @@
 const mongoose = require('mongoose');
 
-const manageRates = new mongoose.Schema({
+const ratesInventoryDump = new mongoose.Schema({
     propertyId: {
         type: String,
         default: ""
-    },
-    rateTypeId: {
-        type: String,
-        default: "",
     },
     roomTypeId: {
         type: String,
         default: "",
     },
-    ratePrice: [{
-        basePrice: {
+
+    manageInventory: [{
+        inventory: {
             type: String,
-            default: ""
+            default: "",
         },
         modifiedDate: {
             type: String,
             default: ""
+        },
+        date: {
+            type: String,
+            default: ""
+        },
+        isBlocked: {
+            type: String,
+            default: 'false'
         }
     }],
-
-    
     manageRate: [{
+        rateTypeId: { type: String, default: '' },
         price: {
             type: String,
             default: "",
@@ -38,10 +42,14 @@ const manageRates = new mongoose.Schema({
             type: String, 
             default: ''
         }
-    }]
+    }],
+    date: {
+        type: String,
+        default: 'false'
+    }
 
 })
 
-const rates = mongoose.model('manageRates', manageRates)
+const inventoryRateDump = mongoose.model('dumpInventoryRates', ratesInventoryDump)
 
-module.exports = rates
+module.exports = inventoryRateDump

@@ -1,16 +1,14 @@
 const inventoryModel = require('../../models/manageInventory/manageInventory');
-const dumpInventoryRatesModel = require('../../models/manageInventory/dataDumpInventoryRates')
 
 module.exports = async (req, res) => {
     try {
         const roomTypeId = req.params.roomTypeId;
-        const { startDate, endDate, inventory } = req.body;
+        const { startDate, endDate, isBlocked } = req.body;
 
         // Find the inventory document for the specified roomTypeId
         const findInventory = await inventoryModel.findOne({ roomTypeId });
-        const findDumpInventory = await dumpInventoryRatesModel.findOne({ roomTypeId })
 
-        if (!findInventory || !findDumpInventory) {
+        if (!findInventory) {
             return res.status(404).json({ message: "Inventory not found for the given roomTypeId" });
         }
 
@@ -18,6 +16,9 @@ module.exports = async (req, res) => {
             findInventory.manageInventory = [];
         }
 
+         const {Inventory} = findInventory
+         let basePrice = Inventory[0].baseInventory;
+        //  console.log(basePrice)
         // Calculate the number of days in the date range
         const start = new Date(startDate);
         const end = new Date(endDate);
@@ -34,27 +35,22 @@ module.exports = async (req, res) => {
             const dateString = date.toISOString().split('T')[0]; // Get YYYY-MM-DD format
 
             // Check if the date already exists in the ratesAndInventory array
-            const existingEntry = findInventory.manageInventory.find(entry => entry.date === dateString);
-            // const existingEntryInDump = findDumpInventory.manageInventory.find(entry => entry.modifiedDate === dateString);
+            const existingEntry = findInventory.manageInventory.find(entry => entry.modifiedDate === dateString);
 
             if (existingEntry) {
                 // If the date exists, update the inventory
-                existingEntry.inventory = inventory;
-                existingEntry.modifiedDate = new Date().toLocaleString("en-IN", { timeZone: "Asia/Kolkata" })
-                findDumpInventory.manageInventory.push({ date: dateString, inventory, isBlocked: 'false', modifiedDate: new Date().toLocaleString("en-IN", { timeZone: "Asia/Kolkata" }) });
+                existingEntry.isBlocked = isBlocked;
+            
             } else {
                 // If the date does not exist, add a new entry
-                findDumpInventory.manageInventory.push({ date: dateString, inventory, isBlocked: 'false', modifiedDate: new Date().toLocaleString("en-IN", { timeZone: "Asia/Kolkata" }) });
-                findInventory.manageInventory.push({ date: dateString, inventory, isBlocked: 'false', modifiedDate: new Date().toLocaleString("en-IN", { timeZone: "Asia/Kolkata" }) });
+                findInventory.manageInventory.push({ modifiedDate: dateString, inventory: basePrice, isBlocked: 'false' });
             }
         }
 
         // Save the updated inventory document
         await findInventory.save();
-        await findDumpInventory.save();
 
-        return res.status(200).json({ message: "Inventory updated successfully" });
-
+        return res.status(200).json({ message: "Stopsell implemented successfully" });
     } catch (err) {
         console.error(err);
         return res.status(500).json({ message: "Internal server error" });

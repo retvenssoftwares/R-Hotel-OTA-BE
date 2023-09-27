@@ -104,7 +104,8 @@ const fetchInventory = require('./routers/manageInventory/getInventoryByProperty
 const fetchRate = require('./routers/manageInventory/getRateByPropertyId');
 const patchInventory = require('./routers/manageInventory/patchInventoryRouter')
 const patchRates = require('./routers/manageInventory/patchRatesRouter')
-const getAvailableInvetory = require('./routers/manageInventory/fetchInventoryRouter')
+const getAvailableInvetory = require('./routers/manageInventory/fetchInventoryRouter');
+const blockUnBlockInventory = require('./routers/manageInventory/blockUnblockInventoryRouter')
 
 //accountCreation
 app.use(login);
@@ -154,6 +155,7 @@ app.use(patchInventory)
 app.use(fetchInventory)
 app.use(patchRates)
 app.use(fetchRate)
+app.use(blockUnBlockInventory)
 
 //Onboarding
 app.use(property);

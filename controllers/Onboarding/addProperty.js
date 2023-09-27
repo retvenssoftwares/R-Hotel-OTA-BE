@@ -66,7 +66,7 @@ module.exports = async (req, res) => {
 
         // Save the new user to the database
         const savedProperty = await newProperty.save();
-        console.log(savedProperty)
+        // console.log(savedProperty)
         const { propertyId } = savedProperty
         const image = new propertyImage({
             propertyId: propertyId

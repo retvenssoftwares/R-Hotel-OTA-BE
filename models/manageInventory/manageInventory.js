@@ -32,12 +32,19 @@ const ManageInventory = new mongoose.Schema({
             type: String,
             default: ""
         },
+        date: {
+            type: String,
+            default: ""
+        },
         isBlocked: {
             type: String,
             default: 'false'
         }
     }],
-    
+    date: {
+        type: String,
+        default: 'false'
+    }
 
 })
 
