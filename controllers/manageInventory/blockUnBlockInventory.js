@@ -8,7 +8,7 @@ module.exports = async (req, res) => {
 
         // Find the inventory document for the specified roomTypeId
         const findInventory = await inventoryModel.findOne({ roomTypeId });
-        const findDumpInventory = await dumpInventoryRatesModel.findOne({roomTypeId});
+        const findDumpInventory = await dumpInventoryRatesModel.findOne({ roomTypeId });
 
         if (!findInventory) {
             return res.status(404).json({ message: "Inventory not found for the given roomTypeId" });
@@ -18,8 +18,8 @@ module.exports = async (req, res) => {
             findInventory.manageInventory = [];
         }
 
-         const {Inventory} = findInventory
-         let baseInventory = Inventory[0].baseInventory;
+        const { Inventory } = findInventory
+        let baseInventory = Inventory[0].baseInventory;
         //  console.log(baseInventory)
         // Calculate the number of days in the date range
         const start = new Date(startDate);
@@ -42,18 +42,19 @@ module.exports = async (req, res) => {
             if (existingEntry) {
                 // If the date exists, update the inventory
                 existingEntry.isBlocked = isBlocked;
-                existingEntry.modifiedDate = new Date().toLocaleString("en-IN", { timeZone: "Asia/Kolkata" })   
-                findInventory.manageInventory.push({ date: dateString, inventory: baseInventory, isBlocked: 'false',modifiedDate: new Date().toLocaleString("en-IN", { timeZone: "Asia/Kolkata" })  });
+                existingEntry.modifiedDate = new Date().toLocaleString("en-IN", { timeZone: "Asia/Kolkata" })
+                findDumpInventory.manageInventory.push({ date: dateString, inventory: baseInventory, isBlocked: isBlocked, modifiedDate: new Date().toLocaleString("en-IN", { timeZone: "Asia/Kolkata" }) });
 
             } else {
                 // If the date does not exist, add a new entry
-                findInventory.manageInventory.push({ date: dateString, inventory: baseInventory, isBlocked: 'false',modifiedDate: new Date().toLocaleString("en-IN", { timeZone: "Asia/Kolkata" })  });
-                findInventory.manageInventory.push({ date: dateString, inventory: baseInventory, isBlocked: 'false',modifiedDate: new Date().toLocaleString("en-IN", { timeZone: "Asia/Kolkata" })  });
+                findInventory.manageInventory.push({ date: dateString, inventory: baseInventory, isBlocked: isBlocked, modifiedDate: new Date().toLocaleString("en-IN", { timeZone: "Asia/Kolkata" }) });
+                findDumpInventory.manageInventory.push({ date: dateString, inventory: baseInventory, isBlocked: isBlocked, modifiedDate: new Date().toLocaleString("en-IN", { timeZone: "Asia/Kolkata" }) });
             }
         }
 
         // Save the updated inventory document
         await findInventory.save();
+        await findDumpInventory.save();
 
         return res.status(200).json({ message: "Stopsell implemented successfully" });
     } catch (err) {

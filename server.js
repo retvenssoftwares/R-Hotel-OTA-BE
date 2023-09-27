@@ -45,6 +45,7 @@ const fetchAmenityType = require('./routers/Amenities/fetchAmenityTypeRouter')
 const fetchAmenityName = require('./routers/Amenities/fetchAmenityNameRouter')
 const patchAmenityProperty = require('./routers/Amenities/patchAmenityPropertyRouter');
 const fetchAmenityCategory =  require('./routers/Amenities/fetchAmenityCategoryRouter');
+const fetchRoomTypeAmenity = require('./routers/Amenities/getRoomAmenitiesRouter')
 
 //Inclusions
 const getInclusionsByType = require('./routers/Inclusions/getInclusionsByTypeRouter')
@@ -124,6 +125,7 @@ app.use(fetchAmenityType)
 app.use(fetchAmenityName)
 app.use(patchAmenityProperty)
 app.use(fetchAmenityCategory)
+app.use(fetchRoomTypeAmenity)
 
 //inclusions
 app.use(getInclusionsByType)
