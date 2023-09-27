@@ -4,8 +4,9 @@ module.exports = async (req, res) => {
     try {
         const city = req.params.city;
 
-        if (!city) {
-            return res.status(400).json({ error: 'City is required as a parameter.' });
+        if (city === "null") {
+            const  all = await property.find({})
+            return res.status(200).json({ all });
         }
 
         // Search for properties with a matching city in the first object of the city array
