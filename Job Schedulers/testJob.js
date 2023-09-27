@@ -67,14 +67,14 @@ const moveConfirmedBookingsTask = async () => {
       await bookingModel.insertMany(confirmedBookings);
 
       console.log(`Moved ${confirmedBookings.length} confirmed bookings from pending to bookings.`);
-      console.log('Check-In Dates:', checkInDates);
-      console.log('Check-Out Dates:', checkOutDates);
-      console.log('Room Type IDs:', roomTypeIds);
+      // console.log('Check-In Dates:', checkInDates);
+      // console.log('Check-Out Dates:', checkOutDates);
+      // console.log('Room Type IDs:', roomTypeIds);
 
       // Find records in manageInventory model with matching roomTypeId(s)
       const matchingInventoryRecords = await manageInventoryModel.find({ roomTypeId: { $in: roomTypeIds } });
 
-      console.log('Matching Inventory Records:', matchingInventoryRecords);
+      // console.log('Matching Inventory Records:', matchingInventoryRecords);
 
       // Iterate through matchingInventoryRecords and reduce inventory based on date intervals
       for (const booking of confirmedBookings) {
