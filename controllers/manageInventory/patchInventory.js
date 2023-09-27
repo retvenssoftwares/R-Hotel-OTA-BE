@@ -39,7 +39,7 @@ module.exports = async (req, res) => {
                 existingEntry.inventory = inventory;
             } else {
                 // If the date does not exist, add a new entry
-                findInventory.manageInventory.push({ modifiedDate: dateString, inventory });
+                findInventory.manageInventory.push({ modifiedDate: dateString, inventory, isBlocked: 'false' });
             }
         }
 
