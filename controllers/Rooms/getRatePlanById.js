@@ -18,7 +18,7 @@ module.exports = async (req, res) => {
             ratePlanName: ratePlan.ratePlanName[0] || {},
             rateTypeId: ratePlan.rateTypeId,
             description: ratePlan.description[0] || {},
-            MLO: ratePlan.MLO[0] || {},
+            MLOS: ratePlan.MLOS[0] || {},
             percentage: ratePlan.percentage[0] || {},
         };
 

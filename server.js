@@ -97,6 +97,7 @@ const getRatePlanById = require('./routers/Room/getRatePlanByIdRouter')
 const getRoomType = require('./routers/Room/getRoomTypeByPropertyIdRouter');
 const getRateType = require('./routers/Room/fetchRateTypeByRateIdRouter')
 const editRatePlan =  require('./routers/Room/patchRatePlanRouter')
+const getRateTypesByRoomId = require('./routers/Room/getRateTypesByRoomIdRouter')
 
 //ManageInventory
 const fetchInventory = require('./routers/manageInventory/getInventoryByPropertyId');
@@ -141,6 +142,7 @@ app.use(getRoomType);
 app.use(getRateType);
 app.use(getRatePlanById);
 app.use(editRateType)
+app.use(getRateTypesByRoomId);
 app.use(editRatePlan);
 
 //booking
