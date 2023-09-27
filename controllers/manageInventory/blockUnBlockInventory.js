@@ -1,4 +1,5 @@
 const inventoryModel = require('../../models/manageInventory/manageInventory');
+const dumpInventoryRatesModel = require('../../models/manageInventory/dataDumpInventoryRates')
 
 module.exports = async (req, res) => {
     try {
@@ -7,6 +8,7 @@ module.exports = async (req, res) => {
 
         // Find the inventory document for the specified roomTypeId
         const findInventory = await inventoryModel.findOne({ roomTypeId });
+        const findDumpInventory = await dumpInventoryRatesModel.findOne({roomTypeId});
 
         if (!findInventory) {
             return res.status(404).json({ message: "Inventory not found for the given roomTypeId" });
@@ -17,8 +19,8 @@ module.exports = async (req, res) => {
         }
 
          const {Inventory} = findInventory
-         let basePrice = Inventory[0].baseInventory;
-        //  console.log(basePrice)
+         let baseInventory = Inventory[0].baseInventory;
+        //  console.log(baseInventory)
         // Calculate the number of days in the date range
         const start = new Date(startDate);
         const end = new Date(endDate);
@@ -35,15 +37,18 @@ module.exports = async (req, res) => {
             const dateString = date.toISOString().split('T')[0]; // Get YYYY-MM-DD format
 
             // Check if the date already exists in the ratesAndInventory array
-            const existingEntry = findInventory.manageInventory.find(entry => entry.modifiedDate === dateString);
+            const existingEntry = findInventory.manageInventory.find(entry => entry.date === dateString);
 
             if (existingEntry) {
                 // If the date exists, update the inventory
                 existingEntry.isBlocked = isBlocked;
-            
+                existingEntry.modifiedDate = new Date().toLocaleString("en-IN", { timeZone: "Asia/Kolkata" })   
+                findInventory.manageInventory.push({ date: dateString, inventory: baseInventory, isBlocked: 'false',modifiedDate: new Date().toLocaleString("en-IN", { timeZone: "Asia/Kolkata" })  });
+
             } else {
                 // If the date does not exist, add a new entry
-                findInventory.manageInventory.push({ modifiedDate: dateString, inventory: basePrice, isBlocked: 'false' });
+                findInventory.manageInventory.push({ date: dateString, inventory: baseInventory, isBlocked: 'false',modifiedDate: new Date().toLocaleString("en-IN", { timeZone: "Asia/Kolkata" })  });
+                findInventory.manageInventory.push({ date: dateString, inventory: baseInventory, isBlocked: 'false',modifiedDate: new Date().toLocaleString("en-IN", { timeZone: "Asia/Kolkata" })  });
             }
         }
 
