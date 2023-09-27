@@ -36,23 +36,9 @@ module.exports = async (req, res) => {
         if (numberOfRooms) {
             updatedFields.numberOfRooms = { $each: [{ numberOfRooms, modifiedDate: new Date().toLocaleString("en-IN", { timeZone: "Asia/Kolkata" }) }], $position: 0 };
             // Create an object with updated inventory data
-            const updatedInventory = {
-                propertyId: updatedRoom.propertyId,
-                roomTypeId: roomTypeId,
-                baseInventory: numberOfRooms,
-                modifiedDate: new Date().toLocaleString("en-IN", { timeZone: "Asia/Kolkata" }),
-            };
-
-            // Find and update or insert the inventory item in the manageInventory collection
-            await inventoryModel.findOneAndUpdate(
-                { propertyId: updatedRoom.propertyId, roomTypeId: roomTypeId },
-                updatedInventory,
-                { upsert: true }
-            );
-        }
-
+            
         if (bedType) {
-            updatedFields.bedType = { $each: [{ bedType }], $position: 0 };
+            updatedFields.bedTypeId = { $each: [{ bedType }], $position: 0 };
         }
 
         if (roomSize) {
@@ -116,12 +102,27 @@ module.exports = async (req, res) => {
             },
             { new: true } // Return the updated document
         );
-
         
-
         if (!updatedRoom) {
             return res.status(404).json({ error: 'roomtype not found' });
         }
+
+        const updatedInventory = {
+            propertyId: updatedRoom.propertyId,
+            roomTypeId: roomTypeId,
+            baseInventory: numberOfRooms,
+            modifiedDate: new Date().toLocaleString("en-IN", { timeZone: "Asia/Kolkata" }),
+        };
+
+        // Find and update or insert the inventory item in the manageInventory collection
+        await inventoryModel.findOneAndUpdate(
+            { propertyId: updatedRoom.propertyId, roomTypeId: roomTypeId },
+            updatedInventory,
+            { upsert: true }
+        );
+    }
+
+
         //
         res.status(200).json({ message: 'roomtype updated successfully' });
     } catch (error) {
