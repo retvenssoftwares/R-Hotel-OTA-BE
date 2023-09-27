@@ -39,8 +39,8 @@ const pendingBookingModel = require('../models/Bookings/bookingPending');
 const bookingModel = require('../models/Bookings/bookings');
 const manageInventoryModel = require('../models/manageInventory/manageInventory');
 
-// Define a cron job pattern to run every 10 minutes
-const cronPattern = '*/10 * * * *';
+// Define a cron job pattern to run every 5 minutes
+const cronPattern = '*/5 * * * *';
 
 // Define the task you want to run
 const moveConfirmedBookingsTask = async () => {
