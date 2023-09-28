@@ -1,14 +1,14 @@
 const inventoryModel = require('../../models/manageInventory/manageInventory');
-const dumpInventoryRatesModel = require('../../models/manageInventory/dataDumpInventoryRates')
+const dumpInventoryRatesModel = require('../../models/manageInventory/dataDumpInventoryRates');
 
 module.exports = async (req, res) => {
     try {
         const roomTypeId = req.params.roomTypeId;
-        const { startDate, endDate, inventory } = req.body;
+        const { startDate, endDate, inventory, excludedDays } = req.body;
 
         // Find the inventory document for the specified roomTypeId
         const findInventory = await inventoryModel.findOne({ roomTypeId });
-        const findDumpInventory = await dumpInventoryRatesModel.findOne({ roomTypeId })
+        const findDumpInventory = await dumpInventoryRatesModel.findOne({ roomTypeId });
 
         if (!findInventory || !findDumpInventory) {
             return res.status(404).json({ message: "Inventory not found for the given roomTypeId" });
@@ -42,16 +42,22 @@ module.exports = async (req, res) => {
         for (let i = 0; i <= dayDifference; i++) {
             const date = new Date(start);
             date.setDate(date.getDate() + i);
+
+            // Check if the day of the week is in the excluded list
+            const dayOfWeek = date.toLocaleDateString('en-US', { weekday: 'long' });
+            if (excludedDays.includes(dayOfWeek)) {
+                continue; // Skip updating inventory for excluded days
+            }
+
             const dateString = date.toISOString().split('T')[0]; // Get YYYY-MM-DD format
 
-            // Check if the date already exists in the ratesAndInventory array
+            // Check if the date already exists in the inventory array
             const existingEntry = findInventory.manageInventory.find(entry => entry.date === dateString);
-            // const existingEntryInDump = findDumpInventory.manageInventory.find(entry => entry.modifiedDate === dateString);
 
             if (existingEntry) {
                 // If the date exists, update the inventory
                 existingEntry.inventory = inventory;
-                existingEntry.modifiedDate = new Date().toLocaleString("en-IN", { timeZone: "Asia/Kolkata" })
+                existingEntry.modifiedDate = new Date().toLocaleString("en-IN", { timeZone: "Asia/Kolkata" });
                 findDumpInventory.manageInventory.push({ date: dateString, inventory, isBlocked: 'false', modifiedDate: new Date().toLocaleString("en-IN", { timeZone: "Asia/Kolkata" }) });
             } else {
                 // If the date does not exist, add a new entry
@@ -65,9 +71,8 @@ module.exports = async (req, res) => {
         await findDumpInventory.save();
 
         return res.status(200).json({ message: "Inventory updated successfully" });
-
     } catch (err) {
         console.error(err);
         return res.status(500).json({ message: "Internal server error" });
     }
-}
+};

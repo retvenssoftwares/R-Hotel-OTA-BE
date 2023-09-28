@@ -4,7 +4,7 @@ const dumpInventoryRatesModel = require('../../models/manageInventory/dataDumpIn
 module.exports = async (req, res) => {
     try {
         const rateTypeId = req.params.rateTypeId;
-        const { startDate, endDate, price } = req.body;
+        const { startDate, endDate, price, excludedDays } = req.body;
 
         // Find the inventory document for the specified roomTypeId
         const findRates = await rateModel.findOne({ rateTypeId });
@@ -42,6 +42,14 @@ module.exports = async (req, res) => {
         for (let i = 0; i <= dayDifference; i++) {
             const date = new Date(start);
             date.setDate(date.getDate() + i);
+            
+            // Check if the day of the week is in the excluded list
+            const dayOfWeek = date.toLocaleDateString('en-US', { weekday: 'long' });
+            // console.log(dayOfWeek)
+            if (excludedDays.includes(dayOfWeek)) {
+                continue; // Skip updating rates for excluded days
+            }
+
             const dateString = date.toISOString().split('T')[0]; // Get YYYY-MM-DD format
 
             // Check if the date already exists in the ratesAndInventory array
