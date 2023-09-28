@@ -2,56 +2,62 @@ const mongoose = require('mongoose');
 const randomstring = require("randomstring");
 ///hotel owner's schema
 const UserSchema = new mongoose.Schema({
-    userId:{
-       default:"",
-        type:String
+    userId: {
+        default: "",
+        type: String
     },
-    
+
     email: {
         type: String,
         default: "",
-        unique:true,
-       required: true
+        unique: true,
+        required: true
     },
 
     password: [{
-        pwd:{
-       
-        default: "",
-        type: String,
-        required: true
+        pwd: {
+
+            default: "",
+            type: String,
+            required: true
         },
     }],
 
-    firstName:{
-        default:"",
-        type:String
+    firstName: {
+        default: "",
+        type: String
     },
-    lastName:{
-        default:"",
-        type:String
+    lastName: {
+        default: "",
+        type: String
     },
-    phoneNumber:{
-        default:"",
-        type:String
+    phoneNumber: {
+        default: "",
+        type: String
     },
-    sessionId:{
-        default:"",
-        type:String
-        
-    },
-
-    Property:[{
-    propertyId:{
-        type:String,
-        default:""
-    }
+    role: [{
+        role: {
+            type: String,
+            default: ''
+        },
+        modifiedDate: { type: String }
     }],
-     date:{
-        type:String
-     }
-})
+    sessionId: {
+        default: "",
+        type: String
 
+    },
+
+    Property: [{
+        propertyId: {
+            type: String,
+            default: ""
+        }
+    }],
+    date: {
+        type: String
+    }
+})
 
 const signup = mongoose.model('registration', UserSchema);
 module.exports = signup;

@@ -20,6 +20,17 @@ module.exports = async (req, res) => {
 
         const { Inventory } = findInventory
         let baseInventory = Inventory[0].baseInventory;
+
+        // Parse startDate as a Date object
+        const startDateObj = new Date(startDate);
+
+        // Get today's date
+        const today = new Date();
+
+        // Check if startDate is older than today's date
+        if (startDateObj < today) {
+            return res.status(400).json({ message: "startDate must not be older than today's date" });
+        }
         //  console.log(baseInventory)
         // Calculate the number of days in the date range
         const start = new Date(startDate);

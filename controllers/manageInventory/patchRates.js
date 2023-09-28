@@ -19,6 +19,16 @@ module.exports = async (req, res) => {
             findRates.manageRate = [];
         }
 
+        // Parse startDate as a Date object
+        const startDateObj = new Date(startDate);
+
+        // Get today's date
+        const today = new Date();
+
+        // Check if startDate is older than today's date
+        if (startDateObj < today) {
+            return res.status(400).json({ message: "startDate must not be older than today's date" });
+        }
         // Calculate the number of days in the date range
         const start = new Date(startDate);
         const end = new Date(endDate);
@@ -40,12 +50,12 @@ module.exports = async (req, res) => {
             if (existingEntry) {
                 // If the date exists, update the price and modified date
                 existingEntry.price = price;
-                existingEntry.modifiedDate = new Date().toLocaleString("en-IN", { timeZone: "Asia/Kolkata" }) ;
-                findRoomTypeId.manageRate.push({ date: dateString, price, rateTypeId: rateTypeId, modifiedDate: new Date().toLocaleString("en-IN", { timeZone: "Asia/Kolkata" })  });
+                existingEntry.modifiedDate = new Date().toLocaleString("en-IN", { timeZone: "Asia/Kolkata" });
+                findRoomTypeId.manageRate.push({ date: dateString, price, rateTypeId: rateTypeId, modifiedDate: new Date().toLocaleString("en-IN", { timeZone: "Asia/Kolkata" }) });
             } else {
                 // If the date does not exist, add a new entry
-                findRates.manageRate.push({ date: dateString, price, modifiedDate: new Date().toLocaleString("en-IN", { timeZone: "Asia/Kolkata" })  });
-                findRoomTypeId.manageRate.push({ date: dateString, price, rateTypeId: rateTypeId, modifiedDate: new Date().toLocaleString("en-IN", { timeZone: "Asia/Kolkata" })  });
+                findRates.manageRate.push({ date: dateString, price, modifiedDate: new Date().toLocaleString("en-IN", { timeZone: "Asia/Kolkata" }) });
+                findRoomTypeId.manageRate.push({ date: dateString, price, rateTypeId: rateTypeId, modifiedDate: new Date().toLocaleString("en-IN", { timeZone: "Asia/Kolkata" }) });
             }
         }
 
