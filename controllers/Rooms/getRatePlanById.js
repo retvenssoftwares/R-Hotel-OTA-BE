@@ -18,6 +18,7 @@ module.exports = async (req, res) => {
             rateTypeId: ratePlan.rateTypeId,
             description: ratePlan.description[0] || {},
             MLOS: ratePlan.MLOS[0] || {},
+            mealsIncluded: ratePlan.mealsIncluded[0] || {},
             percentage: ratePlan.percentage[0] || {},
             value: ratePlan.value[0] || {},
             startDate: ratePlan.startDate[0] || {},
