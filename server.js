@@ -5,8 +5,8 @@ const express = require('express');
 const http = require('http');
 const socketIo = require('socket.io');
 const bodyParser = require('body-parser');
-
 const mongoose = require('mongoose');
+
 const app = express();
 const server = http.createServer(app);
 const io = socketIo(server);

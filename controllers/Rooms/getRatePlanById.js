@@ -11,7 +11,6 @@ module.exports = async (req, res) => {
 
         // Extract data from all rate plans
         const extractedData ={
-            date: ratePlan.date,
             propertyId: ratePlan.propertyId,
             ratePlanId: ratePlan.ratePlanId,
             roomTypeId: ratePlan.roomTypeId,
@@ -20,6 +19,9 @@ module.exports = async (req, res) => {
             description: ratePlan.description[0] || {},
             MLOS: ratePlan.MLOS[0] || {},
             percentage: ratePlan.percentage[0] || {},
+            value: ratePlan.value[0] || {},
+            startDate: ratePlan.startDate[0] || {},
+            endDate: ratePlan.endDate[0] || {}
         };
 
         return res.status(200).json(extractedData);
