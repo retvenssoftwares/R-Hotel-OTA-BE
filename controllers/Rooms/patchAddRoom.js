@@ -5,11 +5,17 @@ module.exports = async (req, res) => {
     try {
         const roomTypeId = req.params.roomTypeId;
 
+        const findRoomType = await RoomType.findOne({ roomTypeId: roomTypeId });
+        if(!findRoomType){
+            return res.status(404).json({message: "Room type not found"});
+        }
+        const { propertyId } = findRoomType
+
         // Get the updated data from the request body
         const {
             description,
             numberOfRooms,
-            bedType,
+            bedTypeId,
             roomSize,
             smoking,
             roomType,
@@ -27,7 +33,7 @@ module.exports = async (req, res) => {
 
         // Create an object with the updated data
         const updatedFields = {};
-        
+
 
         if (description) {
             updatedFields.description = { $each: [{ description, modifiedDate: new Date().toLocaleString("en-IN", { timeZone: "Asia/Kolkata" }) }], $position: 0 };
@@ -35,10 +41,25 @@ module.exports = async (req, res) => {
 
         if (numberOfRooms) {
             updatedFields.numberOfRooms = { $each: [{ numberOfRooms, modifiedDate: new Date().toLocaleString("en-IN", { timeZone: "Asia/Kolkata" }) }], $position: 0 };
+
             // Create an object with updated inventory data
-            
-        if (bedType) {
-            updatedFields.bedTypeId = { $each: [{ bedType }], $position: 0 };
+            const updatedInventory = {
+                propertyId: propertyId,
+                roomTypeId: roomTypeId,
+                baseInventory: numberOfRooms,
+                modifiedDate: new Date().toLocaleString("en-IN", { timeZone: "Asia/Kolkata" }),
+            };
+
+            // Find and update or insert the inventory item in the manageInventory collection
+            await inventoryModel.findOneAndUpdate(
+                { propertyId: propertyId, roomTypeId: roomTypeId },
+                updatedInventory,
+                { upsert: true }
+            );
+        }
+
+        if (bedTypeId) {
+            updatedFields.bedType = { $each: [{ bedTypeId }], $position: 0 };
         }
 
         if (roomSize) {
@@ -102,27 +123,13 @@ module.exports = async (req, res) => {
             },
             { new: true } // Return the updated document
         );
-        
+
+
+
+
         if (!updatedRoom) {
             return res.status(404).json({ error: 'roomtype not found' });
         }
-
-        const updatedInventory = {
-            propertyId: updatedRoom.propertyId,
-            roomTypeId: roomTypeId,
-            baseInventory: numberOfRooms,
-            modifiedDate: new Date().toLocaleString("en-IN", { timeZone: "Asia/Kolkata" }),
-        };
-
-        // Find and update or insert the inventory item in the manageInventory collection
-        await inventoryModel.findOneAndUpdate(
-            { propertyId: updatedRoom.propertyId, roomTypeId: roomTypeId },
-            updatedInventory,
-            { upsert: true }
-        );
-    }
-
-
         //
         res.status(200).json({ message: 'roomtype updated successfully' });
     } catch (error) {
