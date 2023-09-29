@@ -12,7 +12,8 @@ module.exports = async (req, res) => {
             ratePlanName,
             priceIncrease,
             startDate,
-            endDate
+            endDate,
+            mealNames
         } = req.body
 
         // Create an object with the updated data
@@ -24,6 +25,9 @@ module.exports = async (req, res) => {
         if (MLOS) {
             updatedFields.MLOS = { $each: [{ MLOS, modifiedDate: new Date().toLocaleString("en-IN", { timeZone: "Asia/Kolkata" }) }], $position: 0 };
             // inventoryUpdatedFields.ratePrice = { $each: [{ basePrice, modifiedDate: new Date().toLocaleString("en-IN", { timeZone: "Asia/Kolkata" }) }], $position: 0 };
+        }
+        if(mealNames){
+            updatedFields.mealsIncluded = { $each: [{ mealNames, modifiedDate: new Date().toLocaleString("en-IN", { timeZone: "Asia/Kolkata" }) }], $position: 0 };
         }
         if (percentage) {
             updatedFields.percentage = { $each: [{ percentage, modifiedDate: new Date().toLocaleString("en-IN", { timeZone: "Asia/Kolkata" }) }], $position: 0 };

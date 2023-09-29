@@ -5,8 +5,8 @@ const express = require('express');
 const http = require('http');
 const socketIo = require('socket.io');
 const bodyParser = require('body-parser');
-
 const mongoose = require('mongoose');
+
 const app = express();
 const server = http.createServer(app);
 const io = socketIo(server);
@@ -45,6 +45,7 @@ const fetchAmenityType = require('./routers/Amenities/fetchAmenityTypeRouter')
 const fetchAmenityName = require('./routers/Amenities/fetchAmenityNameRouter')
 const patchAmenityProperty = require('./routers/Amenities/patchAmenityPropertyRouter');
 const fetchAmenityCategory =  require('./routers/Amenities/fetchAmenityCategoryRouter');
+const fetchRoomTypeAmenity = require('./routers/Amenities/getRoomAmenitiesRouter')
 
 //Inclusions
 const getInclusionsByType = require('./routers/Inclusions/getInclusionsByTypeRouter')
@@ -97,13 +98,15 @@ const getRatePlanById = require('./routers/Room/getRatePlanByIdRouter')
 const getRoomType = require('./routers/Room/getRoomTypeByPropertyIdRouter');
 const getRateType = require('./routers/Room/fetchRateTypeByRateIdRouter')
 const editRatePlan =  require('./routers/Room/patchRatePlanRouter')
+const getRateTypesByRoomId = require('./routers/Room/getRateTypesByRoomIdRouter')
 
 //ManageInventory
 const fetchInventory = require('./routers/manageInventory/getInventoryByPropertyId');
 const fetchRate = require('./routers/manageInventory/getRateByPropertyId');
 const patchInventory = require('./routers/manageInventory/patchInventoryRouter')
 const patchRates = require('./routers/manageInventory/patchRatesRouter')
-const getAvailableInvetory = require('./routers/manageInventory/fetchInventoryRouter')
+const getAvailableInvetory = require('./routers/manageInventory/fetchInventoryRouter');
+const blockUnBlockInventory = require('./routers/manageInventory/blockUnblockInventoryRouter')
 
 //accountCreation
 app.use(login);
@@ -122,6 +125,7 @@ app.use(fetchAmenityType)
 app.use(fetchAmenityName)
 app.use(patchAmenityProperty)
 app.use(fetchAmenityCategory)
+app.use(fetchRoomTypeAmenity)
 
 //inclusions
 app.use(getInclusionsByType)
@@ -141,6 +145,7 @@ app.use(getRoomType);
 app.use(getRateType);
 app.use(getRatePlanById);
 app.use(editRateType)
+app.use(getRateTypesByRoomId);
 app.use(editRatePlan);
 
 //booking
@@ -152,6 +157,7 @@ app.use(patchInventory)
 app.use(fetchInventory)
 app.use(patchRates)
 app.use(fetchRate)
+app.use(blockUnBlockInventory)
 
 //Onboarding
 app.use(property);

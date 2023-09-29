@@ -11,7 +11,7 @@ const randomstring = require("randomstring");
 module.exports = async (req, res) => {
     try {
         // Get user data from the request body
-        const { userId, propertyId, rateTypeId, inclusion, description, MLO, percentage, value, ratePlanName, startDate, endDate, priceIncrease, roomTypeId, SessionId } = req.body;
+        const { userId, propertyId, rateTypeId, inclusion, description, MLOS, percentage, value, ratePlanName, startDate, endDate, priceIncrease, roomTypeId, SessionId, mealNames } = req.body;
 
         const userProfile = await admin.findOne({ userId: userId })
         const room = await RoomType.findOne({ roomTypeId: roomTypeId });
@@ -32,8 +32,8 @@ module.exports = async (req, res) => {
             roomTypeId,
             rateTypeId,
             inclusion,
-            MLO: [{
-                MLO: MLO,
+            MLOS: [{
+                MLOS: MLOS,
                 modifiedDate: new Date().toLocaleString("en-IN", { timeZone: "Asia/Kolkata" })
             }],
             percentage: [{
@@ -42,6 +42,10 @@ module.exports = async (req, res) => {
             }],
             value: [{
                 value: value,
+                modifiedDate: new Date().toLocaleString("en-IN", { timeZone: "Asia/Kolkata" })
+            }],
+            mealsIncluded: [{
+                mealNames: mealNames,
                 modifiedDate: new Date().toLocaleString("en-IN", { timeZone: "Asia/Kolkata" })
             }],
             ratePlanName: [{

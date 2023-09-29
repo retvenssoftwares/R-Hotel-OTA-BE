@@ -1,14 +1,20 @@
 const express = require('express');
 const router = express.Router();
+const crypto = require("crypto");
+const randomstring = require("randomstring");
+
 const Property = require('../../models/Onboarding/propertys'); // Import the Mongoose model
 const admin = require("../../models/Onboarding/registrations");
 const propertyImage = require("../../models/Images/propertyImages");
-const crypto = require("crypto");
-const randomstring = require("randomstring");
+const propertyLogs = require('../../models/Logs/logs')
 
 
 // Create a POST route for user registration
 module.exports = async (req, res) => {
+    let propertyId = '';
+    let firstName;
+    let lastName;
+    let userRole;
     try {
         // Get user data from the request body
         const { userId, country, propertyAddress, propertyAddress1, postCode, city, latitude, longitude, SessionId } = req.body;
@@ -19,55 +25,51 @@ module.exports = async (req, res) => {
             return res.status(404).json({ message: "User Profile Not Found" })
         }
         const { sessionId } = userProfile
-
+        // Capture user profile data here
+        firstName = userProfile.firstName;
+        lastName = userProfile.lastName;
+        userRole = userProfile.role[0].role;
         if (sessionId !== SessionId) {
             return res.status(404).json({ message: "session id not match" })
         }
-
-       
-
 
         // Create a new user using the Mongoose model
         const newProperty = new Property({
             userId,
             country,
-            
-            propertyAddress:[{
-                propertyAddress:propertyAddress,
-                modifiedDate:new Date().toLocaleString("en-IN", { timeZone: "Asia/Kolkata" })
+
+            propertyAddress: [{
+                propertyAddress: propertyAddress,
+                modifiedDate: new Date().toLocaleString("en-IN", { timeZone: "Asia/Kolkata" })
 
             }],
-            propertyAddress1:[{
-                propertyAddress1:propertyAddress1,
-                modifiedDate:new Date().toLocaleString("en-IN", { timeZone: "Asia/Kolkata" })
-
+            propertyAddress1: [{
+                propertyAddress1: propertyAddress1,
+                modifiedDate: new Date().toLocaleString("en-IN", { timeZone: "Asia/Kolkata" })
             }],
 
-            
-            postCode:[{
-                postCode:postCode,
-                modifiedDate:new Date().toLocaleString("en-IN", { timeZone: "Asia/Kolkata" })
+            postCode: [{
+                postCode: postCode,
+                modifiedDate: new Date().toLocaleString("en-IN", { timeZone: "Asia/Kolkata" })
 
             }],
-            city:[{
-                city:city,
-                modifiedDate:new Date().toLocaleString("en-IN", { timeZone: "Asia/Kolkata" })
+            city: [{
+                city: city,
+                modifiedDate: new Date().toLocaleString("en-IN", { timeZone: "Asia/Kolkata" })
             }],
-            location:[{
-
-                latitude:latitude,
-                longitude:longitude,
-                modifiedDate:new Date().toLocaleString("en-IN", { timeZone: "Asia/Kolkata" })
+            location: [{
+                latitude: latitude,
+                longitude: longitude,
+                modifiedDate: new Date().toLocaleString("en-IN", { timeZone: "Asia/Kolkata" })
             }],
-           
             propertyId: randomstring.generate(8),
             date: new Date().toLocaleString("en-IN", { timeZone: "Asia/Kolkata" }),
         });
 
         // Save the new user to the database
         const savedProperty = await newProperty.save();
-
-        const { propertyId } = savedProperty
+        // console.log(savedProperty)
+        propertyId = savedProperty.propertyId
         const image = new propertyImage({
             propertyId: propertyId
         });
@@ -78,13 +80,39 @@ module.exports = async (req, res) => {
         //save Propertyid in registration
         userProfile.Property.push({ propertyId: propertyId });
         await userProfile.save();
+
+        const createLog = new propertyLogs({
+            propertyId: propertyId,
+            activities: [{
+                employeeName: irstName + lastName,
+                role: userRole,
+                actionType: 'added property',
+                statusCode: '201'
+            }],
+            date: new Date().toLocaleString("en-IN", { timeZone: "Asia/Kolkata" })
+        })
+        await createLog.save();
         // Notify connected clients about the new amenity
         req.io.emit('newProperty', savedProperty);
 
-        res.status(201).json({ message: 'Property added  successfully',propertyId:savedProperty.propertyId});
+
+        res.status(201).json({ message: 'Property added  successfully', propertyId: savedProperty.propertyId });
     } catch (error) {
+        if (propertyId) { // Check if propertyId is defined
+            const createLog = new propertyLogs({
+                propertyId: propertyId,
+                activities: [{
+                    employeeName: firstName + lastName,
+                    role: userRole,
+                    actionType: 'added property',
+                    statusCode: '500'
+                }],
+                date: new Date().toLocaleString("en-IN", { timeZone: "Asia/Kolkata" })
+            });
+            await createLog.save();
+        }
         console.log(error)
-        res.status(500).json({ error: 'Internal server error' });
+        return res.status(500).json({ error: 'Internal server error' });
     }
 };
 
