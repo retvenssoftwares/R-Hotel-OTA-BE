@@ -38,7 +38,7 @@ const cron = require('node-cron');
 const pendingBookingModel = require('../models/Bookings/bookingPending');
 const bookingModel = require('../models/Bookings/bookings');
 const manageInventoryModel = require('../models/manageInventory/manageInventory');
-
+const io = require('socket.io')();
 // Define a cron job pattern to run every 5 minutes
 const cronPattern = '*/5 * * * *';
 
@@ -84,7 +84,7 @@ const moveConfirmedBookingsTask = async () => {
         matchingInventoryRecords.forEach(record => {
           const inventoryEntries = record.manageInventory || [];
           inventoryEntries.forEach(entry => {
-            const entryDate = new Date(entry.modifiedDate);
+            const entryDate = new Date(entry.date);
             if (entryDate >= checkInDate && entryDate <= checkOutDate) {
               // Calculate the reduction value based on the number of occurrences of the roomTypeId
               const roomTypeIdOccurrences = roomTypeIds.filter(id => id === record.roomTypeId).length;
@@ -92,6 +92,7 @@ const moveConfirmedBookingsTask = async () => {
               
               // Reduce the inventory value
               entry.inventory -= reductionValue;
+             
             }
           });
         });
@@ -101,6 +102,8 @@ const moveConfirmedBookingsTask = async () => {
       await Promise.all(matchingInventoryRecords.map(record => record.save()));
 
       console.log('Inventory Reduction Completed.');
+      const updatedInventory = await manageInventoryModel.find({}); // Replace with your actual query to get updated inventory
+      io.emit('inventoryUpdate', updatedInventory);
     } else {
       console.log('No confirmed bookings to move at ', new Date().toLocaleString("en-IN", { timeZone: "Asia/Kolkata" }));
     }

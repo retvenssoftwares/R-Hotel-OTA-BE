@@ -21,6 +21,9 @@ module.exports.propertyImages = async(req,res)=>{
     }
 
     const images = getPropertyImages.propertyImages
+    //const description = getPropertyImages.description
+
+    
 
     return res.status(200).json({images})
 }

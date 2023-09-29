@@ -1,7 +1,11 @@
 const inventory = require('../../models/manageInventory/manageInventory');
 const roomTypeModel = require('../../models/Rooms/roomTypeDetails');
+const io = require('socket.io')();
+// const socket = io('http://localhost:8000');
 
-module.exports = async (req, res) => {
+module.exports = (io)=>{
+return async (req,res)=>{
+
     try {
         const propertyId = req.params.propertyId;
         const startDate = req.query.startDate;
@@ -49,8 +53,12 @@ module.exports = async (req, res) => {
                 : [], // Empty array if manageInventory is not defined
         }));
 
+        io.emit('inventoryUpdate', extractedData);
+
         return res.status(200).json(extractedData);
     } catch (error) {
         return res.status(500).json({ error: error.message });
     }
+}
+    
 };

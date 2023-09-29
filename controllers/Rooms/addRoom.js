@@ -6,6 +6,7 @@ const roomImage = require("../../models/Images/roomTypeImages");
 const admin = require("../../models/Onboarding/registrations");
 const inventoryModel = require("../../models/manageInventory/manageInventory")
 const randomstring = require("randomstring");
+// const io = require('socket.io')();
 
 
 // Create a POST route for user registration
@@ -89,6 +90,7 @@ module.exports = async (req, res) => {
         })
 
         await createInventory.save();
+        // io.emit('roomAdded', { roomTypeId: roomTypeId });
         res.status(201).json({ message: 'room type added  successfully', roomTypeId: roomTypeId });
     } catch (error) {
         console.log(error)
