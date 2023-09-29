@@ -21,11 +21,11 @@ module.exports = async (req, res) => {
         const { Inventory } = findInventory;
         let baseInventory = Inventory[0].baseInventory;
 
-        // Parse startDate as a Date object
-        const startDateObj = new Date(startDate);
+        // Get today's date as a string in "yyyy-mm-dd" format
+        const today = new Date().toISOString().split('T')[0];
 
-        // Get today's date
-        const today = new Date();
+        // Parse startDate as a Date object
+        const startDateObj = new Date(startDate).toISOString().split('T')[0];
 
         // Check if startDate is older than today's date
         if (startDateObj < today) {

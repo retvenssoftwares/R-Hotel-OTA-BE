@@ -19,12 +19,13 @@ module.exports = async (req, res) => {
             findRates.manageRate = [];
         }
 
+        // Get today's date as a string in "yyyy-mm-dd" format
+        const today = new Date().toISOString().split('T')[0];
+
         // Parse startDate as a Date object
-        const startDateObj = new Date(startDate);
+        const startDateObj = new Date(startDate).toISOString().split('T')[0];
 
-        // Get today's date
-        const today = new Date();
-
+        // console.log(startDateObj, today);
         // Check if startDate is older than today's date
         if (startDateObj < today) {
             return res.status(400).json({ message: "startDate must not be older than today's date" });
@@ -42,7 +43,7 @@ module.exports = async (req, res) => {
         for (let i = 0; i <= dayDifference; i++) {
             const date = new Date(start);
             date.setDate(date.getDate() + i);
-            
+
             // Check if the day of the week is in the excluded list
             const dayOfWeek = date.toLocaleDateString('en-US', { weekday: 'long' });
             // console.log(dayOfWeek)
