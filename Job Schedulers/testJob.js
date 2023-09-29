@@ -84,7 +84,7 @@ const moveConfirmedBookingsTask = async () => {
         matchingInventoryRecords.forEach(record => {
           const inventoryEntries = record.manageInventory || [];
           inventoryEntries.forEach(entry => {
-            const entryDate = new Date(entry.modifiedDate);
+            const entryDate = new Date(entry.date);
             if (entryDate >= checkInDate && entryDate <= checkOutDate) {
               // Calculate the reduction value based on the number of occurrences of the roomTypeId
               const roomTypeIdOccurrences = roomTypeIds.filter(id => id === record.roomTypeId).length;
