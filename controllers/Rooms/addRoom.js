@@ -1,13 +1,19 @@
 const express = require('express');
+const randomstring = require("randomstring");
 const router = express.Router();
 const Property = require('../../models/Onboarding/propertys'); // Import the Mongoose model
 const RoomType = require("../../models/Rooms/roomTypeDetails");
 const roomImage = require("../../models/Images/roomTypeImages");
 const admin = require("../../models/Onboarding/registrations");
+<<<<<<< HEAD
 const inventoryModel = require("../../models/manageInventory/manageInventory")
 const randomstring = require("randomstring");
 // const io = require('socket.io')();
 
+=======
+const inventoryModel = require("../../models/manageInventory/manageInventory");
+const dumpIR = require('../../models/manageInventory/dataDumpInventoryRates');
+>>>>>>> 460c31a0fcf3cf1bde69523e6c236cdbaefa50fa
 
 // Create a POST route for user registration
 module.exports = async (req, res) => {
@@ -16,7 +22,7 @@ module.exports = async (req, res) => {
         const { userId, propertyId, description, numberOfRooms, bedType, roomSize, smoking, roomType, roomName, SessionId } = req.body;
 
         const userProfile = await admin.findOne({ userId: userId })
-        console.log(userId)
+        // console.log(userId)
         const user = await Property.findOne({ userId: userId });
         if (!user) {
             return res.status(404).json({ message: "do not have any property" });
@@ -86,12 +92,27 @@ module.exports = async (req, res) => {
             Inventory: [{
                 baseInventory: numberOfRooms,
                 modifiedDate: new Date().toLocaleString("en-IN", { timeZone: "Asia/Kolkata" })
-            }]
+            }],
+            date: new Date().toLocaleString("en-IN", { timeZone: "Asia/Kolkata" })
         })
 
         await createInventory.save();
+<<<<<<< HEAD
         // io.emit('roomAdded', { roomTypeId: roomTypeId });
         res.status(201).json({ message: 'room type added  successfully', roomTypeId: roomTypeId });
+=======
+
+        const createInventoryRateDump = new dumpIR({
+            propertyId: propertyId,
+            roomTypeId: roomTypeId,
+            manageInventory:[],
+            manageRate:[],
+            date: new Date().toLocaleString("en-IN", { timeZone: "Asia/Kolkata" })
+        })
+
+        await createInventoryRateDump.save();
+        res.status(201).json({ message: 'room type added successfully', roomTypeId: roomTypeId });
+>>>>>>> 460c31a0fcf3cf1bde69523e6c236cdbaefa50fa
     } catch (error) {
         console.log(error)
         res.status(500).json({ error: 'Internal server error' });

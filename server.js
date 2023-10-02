@@ -10,6 +10,7 @@ const path = require('path')
 
 
 const mongoose = require('mongoose');
+
 const app = express();
 const server = http.createServer(app);
 const io = socketIo(server);
@@ -53,6 +54,7 @@ const fetchAmenityType = require('./routers/Amenities/fetchAmenityTypeRouter')
 const fetchAmenityName = require('./routers/Amenities/fetchAmenityNameRouter')
 const patchAmenityProperty = require('./routers/Amenities/patchAmenityPropertyRouter');
 const fetchAmenityCategory =  require('./routers/Amenities/fetchAmenityCategoryRouter');
+const fetchRoomTypeAmenity = require('./routers/Amenities/getRoomAmenitiesRouter')
 
 //Inclusions
 const getInclusionsByType = require('./routers/Inclusions/getInclusionsByTypeRouter')
@@ -112,7 +114,8 @@ const fetchInventory = require('./routers/manageInventory/getInventoryByProperty
 const fetchRate = require('./routers/manageInventory/getRateByPropertyId');
 const patchInventory = require('./routers/manageInventory/patchInventoryRouter')
 const patchRates = require('./routers/manageInventory/patchRatesRouter')
-const getAvailableInvetory = require('./routers/manageInventory/fetchInventoryRouter')
+const getAvailableInvetory = require('./routers/manageInventory/fetchInventoryRouter');
+const blockUnBlockInventory = require('./routers/manageInventory/blockUnblockInventoryRouter')
 
 //accountCreation
 app.use(login);
@@ -131,6 +134,7 @@ app.use(fetchAmenityType)
 app.use(fetchAmenityName)
 app.use(patchAmenityProperty)
 app.use(fetchAmenityCategory)
+app.use(fetchRoomTypeAmenity)
 
 //inclusions
 app.use(getInclusionsByType)
@@ -162,6 +166,7 @@ app.use(patchInventory)
 app.use(fetchInventory(io))
 app.use(patchRates)
 app.use(fetchRate)
+app.use(blockUnBlockInventory)
 
 //Onboarding
 app.use(property);

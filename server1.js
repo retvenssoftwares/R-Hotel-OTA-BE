@@ -22,8 +22,11 @@ app.use(express.static(path.join(__dirname, 'R-Hotel-OTA-BE')));
 
 const fetchInventory = require('./routers/manageInventory/getInventoryByPropertyId');
 const createBookingRouter = require('./routers/Bookings/createBookingRouter')
-app.use(createBookingRouter)
-app.use(fetchInventory(io))
+const getAllBooking = require("./routers/Bookings/getBookingRouter")
+app.use(getAllBooking)
+app.use(createBookingRouter(io))
+app.use(fetchInventory)
+
 io.on('connection', function (socket) {
     console.log('A user connected');
 
