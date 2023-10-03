@@ -60,7 +60,9 @@ const getImageOgRoomType = require('./routers/Images/getRoomTypeAndPropertyImage
 
 //Booking
 const createBookingRouter = require('./routers/Bookings/createBookingRouter')
-const patchBooking = require('./routers/Bookings/patchBookingRouter')
+const patchBooking = require('./routers/Bookings/patchBookingRouter');
+const getUserBookings = require('./routers/Bookings/getBookingsByUserIdRouter')
+const getBookingData = require('./routers/Bookings/getBookingDetailsRouter')
 
 
 //Onboarding
@@ -70,6 +72,8 @@ const updateproperty =require('./routers/Onboarding/patchPropertyDetailsRouter')
 const getAllUserProperties = require('./routers/Onboarding/getAllUserProperties')
 const selectAmenitiesInRoom = require('./routers/Amenities/selectAmenitiesInRoomTypeRouter')
 const fetchAllProperty = require('./routers/Onboarding/getAllPropertyRouter')
+const getRegisteredUsers = require('./routers/accountCreation/getRegisteredUsersRouter')
+const getUserById = require('./routers/accountCreation/getUserByUserIDRouter')
 
 //Property
 const getTopProperties = require('./routers/Property/getTopSixPropertiesRouter')
@@ -114,6 +118,8 @@ app.use(logout);
 app.use(registration);
 app.use(propertyImages);
 app.use(editImageDescription);
+app.use(getRegisteredUsers)
+app.use(getUserById)
 
 //Image 
 
@@ -151,6 +157,8 @@ app.use(editRatePlan);
 //booking
 app.use(createBookingRouter)
 app.use(patchBooking)
+app.use(getBookingData)
+app.use(getUserBookings);
 
 //inventory
 app.use(patchInventory)
