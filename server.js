@@ -61,6 +61,8 @@ const getImageOgRoomType = require('./routers/Images/getRoomTypeAndPropertyImage
 //Booking
 const createBookingRouter = require('./routers/Bookings/createBookingRouter')
 const patchBooking = require('./routers/Bookings/patchBookingRouter')
+const fetchBooking =require('./routers/Bookings/fetchBookingByPorpertyIdRouter')
+const fetchCheckOutBooking =require('./routers/Bookings/fetchCheckOutBookingByPropertyIdRouter')
 
 
 //Onboarding
@@ -151,6 +153,8 @@ app.use(editRatePlan);
 //booking
 app.use(createBookingRouter)
 app.use(patchBooking)
+app.use(fetchBooking)
+app.use(fetchCheckOutBooking)
 
 //inventory
 app.use(patchInventory)
