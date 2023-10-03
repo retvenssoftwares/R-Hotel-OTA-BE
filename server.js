@@ -89,6 +89,7 @@ const getTopProperties = require('./routers/Property/getTopSixPropertiesRouter')
 const hotelImages = require('./routers/Onboarding/pacthLogoAndCoverPhoto');
 const getRateTypeByPropertyId = require("./routers/Property/getRateTypeByPropertyIdRouter")
 const propertyByCity = require('./routers/Property/getPropertyByCityRouter')
+const addPropertyReview = require('./routers/Property/postRatingsRouter')
 
 //const hotelImages = require('./routers/Onboarding/pacthLogoAndCoverPhoto')
 const propertyCity = require('./routers/Onboarding/fetchCityOfPropertyRouter')
@@ -152,6 +153,7 @@ app.use(getInclusions)
 app.use(getTopProperties)
 app.use(getRateTypeByPropertyId)
 app.use(propertyByCity)
+app.use(addPropertyReview)
 
 //room
 app.use(fetchRoomTypeList)
