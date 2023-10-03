@@ -2,92 +2,108 @@ const AWS = require('aws-sdk');
 const s3 = require('../../utils/url');
 const multer = require('multer');
 const upload = multer();
-const ratingsAndReviewsModel = require("../../models/Onboarding/ratingsAndReviews")
+const reviewsModel = require("../../models/Onboarding/ratingsAndReviews");
 const randomstring = require('randomstring');
 
-const uploadHotelReview = async (req, res) => {
-
+const uploadPropertyReview = async (req, res) => {
     upload.fields([
-        // { name: 'hotel_cover_photo', maxCount: 1 },
         { name: 'reviewImages', maxCount: 6 },
-        // { name: 'hotel_logo', maxCount: 1 }
     ])(req, res, async (err) => {
         try {
+            const propertyId = req.params.propertyId;
 
-            const propertyId = req.params.propertyId
-            const findHotelReview = await ratingsAndReviewsModel.findOne({ propertyId: propertyId })
-            if (!findHotelReview) {
-                return res.status(404).json({ error: 'Hotel review not found' });
+            // Find the document by propertyId
+            const doc = await reviewsModel.findOne({ propertyId });
+
+            if (!doc) {
+                return res.status(404).json({ error: 'Property rating and review not found' });
             }
-
+            // const { overallRating, roomRating, serviceRating,locationRating,  } = req.body
             if (req.files['reviewImages']) {
+                const uploadedImageIds = [];
+                const uploadPromises = [];
+
+                // Create a new review object for each set of uploaded images
+                const newReviewObject = {
+                    userId: req.body.userId,
+                    oneWordDescription: req.body.oneWordDescription,
+                    displayStatus: '1',
+                    date: new Date().toLocaleString("en-IN", { timeZone: "Asia/Kolkata" }),
+                    travelledWithWhom: req.body.travelledWithWhom,
+                    overallRating: [{ overallRating: req.body.overallRating, date: new Date().toLocaleString("en-IN", { timeZone: "Asia/Kolkata" }) }],
+                    roomRating: [{ roomRating: req.body.roomRating, date: new Date().toLocaleString("en-IN", { timeZone: "Asia/Kolkata" }) }],
+                    serviceRating: [{ serviceRating: req.body.serviceRating, date: new Date().toLocaleString("en-IN", { timeZone: "Asia/Kolkata" }) }],
+                    locationRating: [{ locationRating: req.body.locationRating, date: new Date().toLocaleString("en-IN", { timeZone: "Asia/Kolkata" }) }],
+                    reviewDescription: [{ reviewDescription: req.body.reviewDescription, date: new Date().toLocaleString("en-IN", { timeZone: "Asia/Kolkata" }) }],
+                    kindOfTrip: req.body.kindOfTrip,
+                    reviewImages: [] // Initialize the reviewImages array
+                };
+
                 for (const hotel_image of req.files['reviewImages']) {
-                    const review_image_id = randomstring.generate(10); // Generate a unique ID
+                    const hotel_image_id = randomstring.generate(10); // Generate a unique ID
                     const hotel_image_params = {
-                        Bucket: 'rown-space-bucket/review_images',
+                        Bucket: 'rown-space-bucket/hotel_images',
                         Key: hotel_image.originalname,
                         Body: hotel_image.buffer,
                         ContentType: hotel_image.mimetype,
                         ACL: 'public-read'
                     };
-                    await s3.upload(hotel_image_params).promise();
-                    const imageUrl = `https://rown-space-bucket.nyc3.digitaloceanspaces.com/review_images/${hotel_image.originalname}`;
-                    // Create an object with image details
-                    const imageDetails = {
-                        imageId: review_image_id,
-                        images: imageUrl,
-                        displayStatus: '1'
-                    };
 
-                    // Push the new imageDetails at the beginning of the images array
-                    findHotelReview.ratingsAndReviews.images.unshift(imageDetails);
+                    const uploadPromise = s3.upload(hotel_image_params).promise()
+                        .then(() => {
+                            const imageUrl = `https://rown-space-bucket.nyc3.digitaloceanspaces.com/hotel_images/${hotel_image.originalname}`;
+                            // Create an object with image details
+                            const imageDetails = {
+                                imageId: hotel_image_id,
+                                images: imageUrl,
+                                displayStatus: '1'
+                            };
+                            uploadedImageIds.push(hotel_image_id);
+                            // Push image details into the reviewImages array of the new review object
+                            newReviewObject.reviewImages.push(imageDetails);
+                        });
+                    uploadPromises.push(uploadPromise);
                 }
-console.log("1")
-                // Push the new data at the beginning of the respective arrays
-                findHotelReview.ratingsAndReviews.overallRating.unshift({
-                    overallRating: req.body.overallRating,
-                    date: req.body.date
-                });
 
-                findHotelReview.ratingsAndReviews.roomRating.unshift({
-                    roomRating: req.body.roomRating,
-                    date: req.body.date
-                });
+                // Wait for all image uploads to complete before proceeding
+                await Promise.all(uploadPromises);
 
-                findHotelReview.ratingsAndReviews.serviceRating.unshift({
-                    serviceRating: req.body.serviceRating,
-                    date: req.body.date
-                });
-                console.log("2")
-                findHotelReview.ratingsAndReviews.locationRating.unshift({
-                    locationRating: req.body.locationRating,
-                    date: req.body.date
-                });
+                // Your other code for updating fields...
 
-                findHotelReview.ratingsAndReviews.reviewDescription.unshift({
-                    reviewDescription: req.body.reviewDescription,
-                    date: req.body.date
-                });
+                // Add the new review object to the beginning of the ratingsAndReviews array
+                doc.ratingsAndReviews.unshift(newReviewObject);
+            } else {
+                // Create a new review object for each set of uploaded images
+                const newReviewObject = {
+                    userId: req.body.userId,
+                    oneWordDescription: req.body.oneWordDescription,
+                    displayStatus: '1',
+                    overallRating: [{ overallRating: req.body.overallRating, date: new Date().toLocaleString("en-IN", { timeZone: "Asia/Kolkata" }) }],
+                    roomRating: [{ roomRating: req.body.roomRating, date: new Date().toLocaleString("en-IN", { timeZone: "Asia/Kolkata" }) }],
+                    serviceRating: [{ serviceRating: req.body.serviceRating, date: new Date().toLocaleString("en-IN", { timeZone: "Asia/Kolkata" }) }],
+                    locationRating: [{ locationRating: req.body.locationRating, date: new Date().toLocaleString("en-IN", { timeZone: "Asia/Kolkata" }) }],
+                    reviewDescription: [{ reviewDescription: req.body.reviewDescription, date: new Date().toLocaleString("en-IN", { timeZone: "Asia/Kolkata" }) }],
+                    date: new Date().toLocaleString("en-IN", { timeZone: "Asia/Kolkata" }),
+                    travelledWithWhom: req.body.travelledWithWhom,
+                    kindOfTrip: req.body.kindOfTrip,
+                    reviewImages: [] // Initialize the reviewImages array
+                };
 
-                // findHotelReview.ratingsAndReviews.images.push(imageDetails);
-                findHotelReview.ratingsAndReviews.kindOfTrip = req.body.kindOfTrip || findHotelReview.ratingsAndReviews.kindOfTrip;
-                findHotelReview.ratingsAndReviews.travelledWithWhom = req.body.travelledWithWhom || findHotelReview.ratingsAndReviews.travelledWithWhom;
-                findHotelReview.ratingsAndReviews.oneWordDescription = req.body.oneWordDescription || findHotelReview.ratingsAndReviews.oneWordDescription;
-                findHotelReview.ratingsAndReviews.displayStatus = req.body.displayStatus || findHotelReview.ratingsAndReviews.displayStatus;
-                findHotelReview.ratingsAndReviews.userId = req.body.userId || findHotelReview.ratingsAndReviews.userId;
-                console.log("3")
-                await findHotelReview.save();
-                res.status(200).json({
-                    message: "Review added successfully",
-                    propertyId: findHotelReview.propertyId,
-                });
+                doc.ratingsAndReviews.unshift(newReviewObject);
             }
-        }
-        catch (err) {
+
+            // Save the updated document
+            await doc.save();
+
+            return res.status(200).json({
+                message: 'Property rating and review updated successfully',
+                propertyId: doc.propertyId,
+            });
+        } catch (err) {
             console.log(err);
             return res.status(500).json({ message: "Internal Server Error" });
         }
     });
 }
 
-module.exports = uploadHotelReview;
+module.exports = uploadPropertyReview;

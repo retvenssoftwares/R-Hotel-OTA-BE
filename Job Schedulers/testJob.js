@@ -5,7 +5,7 @@ const bookingModel = require('../models/Bookings/bookings');
 const manageInventoryModel = require('../models/manageInventory/manageInventory');
 const io = require('socket.io')();
 // Define a cron job pattern to run every 5 minutes
-const cronPattern = '*/1 * * * *';
+const cronPattern = '*/5 * * * *';
   
 // Define the task you want to run
 const moveConfirmedBookingsTask = async () => {
