@@ -98,7 +98,31 @@ module.exports = async (req, res) => {
                     return res.status(400).json({ message: `Not enough inventory available for room type ${roomTypeIdToCheck} on ${dateToCheck}` });
                 }
             }
-        }
+    
+            // Create booking record
+            const newBooking = new bookingModel({
+                propertyId,
+                bookingId: randomstring.generate(8),
+                checkInDate,
+                checkOutDate,
+                roomDetails,
+                roomNights,
+                totalRoomRate,
+                totalTax,
+                totalAmount,
+                bookingStatus,
+                paymentStatus,
+                paymentMode,
+                madeBy,
+                createdAt: new Date().toLocaleString("en-IN", { timeZone: "Asia/Kolkata" })
+            });
+    
+            // Save record
+            await newBooking.save();
+            io.emit('newBooking', newBooking);
+            return res.status(200).json({ message: "Booking saved", bookingId: newBooking.bookingId });
+            
+        } 
         const currentTime = new Date();
         const timestamp = Math.floor(currentTime / 1000);
         // Create a new Date object from the timestamp (in milliseconds)
@@ -134,4 +158,5 @@ module.exports = async (req, res) => {
         console.log(err);
         return res.status(500).json({ message: "Internal Server Error" });
     }
+    
 };

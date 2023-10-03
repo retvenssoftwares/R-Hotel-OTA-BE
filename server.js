@@ -5,12 +5,21 @@ const express = require('express');
 const http = require('http');
 const socketIo = require('socket.io');
 const bodyParser = require('body-parser');
+const path = require('path')
+
+
+
 const mongoose = require('mongoose');
 
 const app = express();
 const server = http.createServer(app);
 const io = socketIo(server);
 const port = process.env.PORT || 8000;
+
+
+
+// app.use(express.static('R-Hotel-OTA-BE'));
+app.use(express.static(path.join(__dirname, 'R-Hotel-OTA-BE')));
 
 app.use(bodyParser.json());
 app.use(express.json());
@@ -30,7 +39,7 @@ io.on('connection', (socket) => {
     socket.on('disconnect', () => {
       console.log('User disconnected');
     });
-  });
+});
   
 
 
@@ -162,7 +171,7 @@ app.use(getUserBookings);
 
 //inventory
 app.use(patchInventory)
-app.use(fetchInventory)
+app.use(fetchInventory(io))
 app.use(patchRates)
 app.use(fetchRate)
 app.use(blockUnBlockInventory)

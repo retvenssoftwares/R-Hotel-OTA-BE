@@ -23,7 +23,10 @@ module.exports.propertyImages = async (req, res) => {
         return res.status(200).json({ message: "ID not found" })
     }
 
-    const images = getPropertyImages.propertyImages.filter((image) => image.displayStatus === '1')
+    const images = getPropertyImages.propertyImages
+    //const description = getPropertyImages.description
+
+    
 
     return res.status(200).json({ images })
 }

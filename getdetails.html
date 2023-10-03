@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Live Inventory</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.7.2/socket.io.js"></script>
+</head>
+
+<body>
+    <h1>Live Inventory</h1>
+    <ul id="bookingList"></ul> <!-- Use 'bookingList' instead of 'inventory-list' -->
+
+    <script>
+        const socket = io('http://localhost:4000'); // Replace with your server URL and port
+
+        function updateBookingList(booking) {
+            const bookingList = document.getElementById('bookingList');
+            const bookingInfo = document.createElement('li'); // Use 'li' element for each booking
+            bookingInfo.innerHTML = `
+                <p><strong>Booking ID:</strong> ${booking.bookingId}</p>
+                <p><strong>Check-In Date:</strong> ${booking.checkInDate}</p>
+                <p><strong>Check-Out Date:</strong> ${booking.checkOutDate}</p>
+                <p><strong>Room Details:</strong> ${JSON.stringify(booking.roomDetails)}</p>
+                <hr>
+            `;
+            bookingList.appendChild(bookingInfo);
+        }
+
+        // Listen for the 'newBooking' event
+        socket.on('newBooking', (newBooking) => {
+            console.log('Received new booking:', newBooking);
+            updateBookingList(newBooking);
+            // Update your UI or perform any necessary actions with the new booking data
+        });
+
+        socket.on('error', (error) => {
+            console.log('Error found:', error);
+            // Handle the error as needed
+        });
+
+        // Function to fetch and update booking data
+        function fetchInitialInventory() {
+            const apiUrl = `http://localhost:4000/getAllBooking`;
+
+            fetch(apiUrl)
+                .then(response => response.json())
+                .then(data => {
+                    // Loop through the data array and update the booking list for each booking
+                    data.forEach(booking => {
+                        updateBookingList(booking);
+                    });
+                })
+                .catch(error => {
+                    console.error('Error fetching initial inventory:', error);
+                });
+        }
+
+        // Call the fetchInitialInventory function to fetch initial data when the page loads
+        fetchInitialInventory();
+    </script>
+</body>
+
+</html>

@@ -3,7 +3,9 @@ const Property = require('../../models/Rooms/roomTypeDetails')
 module.exports = async (req, res) => {
     try {
         const roomTypeId = req.params.roomTypeId;
+        console.log(roomTypeId)
         const room = await Property.findOne({ roomTypeId });
+        console.log(room)
         if (!room) {
             return res.status(404).json({ error: 'Room not found' });
         }
@@ -11,7 +13,7 @@ module.exports = async (req, res) => {
         // Extract the first item from each array
         const {
             description,
-            numberOfRooms,
+            numberOfRooms,  
             bedType,
             roomSize,
             smoking,
@@ -36,6 +38,7 @@ module.exports = async (req, res) => {
             roomType: roomType[0] || {},
             generalAmenities
         };
+
 
         return res.status(200).json(extractedData);
     } catch (error) {
