@@ -5,12 +5,21 @@ const express = require('express');
 const http = require('http');
 const socketIo = require('socket.io');
 const bodyParser = require('body-parser');
+const path = require('path')
+
+
+
 const mongoose = require('mongoose');
 
 const app = express();
 const server = http.createServer(app);
 const io = socketIo(server);
 const port = process.env.PORT || 8000;
+
+
+
+// app.use(express.static('R-Hotel-OTA-BE'));
+app.use(express.static(path.join(__dirname, 'R-Hotel-OTA-BE')));
 
 app.use(bodyParser.json());
 app.use(express.json());
@@ -30,7 +39,7 @@ io.on('connection', (socket) => {
     socket.on('disconnect', () => {
       console.log('User disconnected');
     });
-  });
+});
   
 
 
@@ -63,6 +72,9 @@ const createBookingRouter = require('./routers/Bookings/createBookingRouter')
 const patchBooking = require('./routers/Bookings/patchBookingRouter')
 const fetchBooking =require('./routers/Bookings/fetchBookingByPorpertyIdRouter')
 const fetchCheckOutBooking =require('./routers/Bookings/fetchCheckOutBookingByPropertyIdRouter')
+//const patchBooking = require('./routers/Bookings/patchBookingRouter');
+const getUserBookings = require('./routers/Bookings/getBookingsByUserIdRouter')
+const getBookingData = require('./routers/Bookings/getBookingDetailsRouter')
 
 
 //Onboarding
@@ -72,12 +84,17 @@ const updateproperty =require('./routers/Onboarding/patchPropertyDetailsRouter')
 const getAllUserProperties = require('./routers/Onboarding/getAllUserProperties')
 const selectAmenitiesInRoom = require('./routers/Amenities/selectAmenitiesInRoomTypeRouter')
 const fetchAllProperty = require('./routers/Onboarding/getAllPropertyRouter')
+const getRegisteredUsers = require('./routers/accountCreation/getRegisteredUsersRouter')
+const getUserById = require('./routers/accountCreation/getUserByUserIDRouter')
 
 //Property
 const getTopProperties = require('./routers/Property/getTopSixPropertiesRouter')
 const hotelImages = require('./routers/Onboarding/pacthLogoAndCoverPhoto');
 const getRateTypeByPropertyId = require("./routers/Property/getRateTypeByPropertyIdRouter")
 const propertyByCity = require('./routers/Property/getPropertyByCityRouter')
+const addPropertyReview = require('./routers/Property/postRatingsRouter')
+const getPropertyReview = require('./routers/Property/getReviewsOfPropertyRouter')
+const editPropertyReview = require('./routers/Property/editReviewRouter')
 
 //const hotelImages = require('./routers/Onboarding/pacthLogoAndCoverPhoto')
 const propertyCity = require('./routers/Onboarding/fetchCityOfPropertyRouter')
@@ -116,6 +133,8 @@ app.use(logout);
 app.use(registration);
 app.use(propertyImages);
 app.use(editImageDescription);
+app.use(getRegisteredUsers)
+app.use(getUserById)
 
 //Image 
 
@@ -139,6 +158,9 @@ app.use(getInclusions)
 app.use(getTopProperties)
 app.use(getRateTypeByPropertyId)
 app.use(propertyByCity)
+app.use(addPropertyReview)
+app.use(editPropertyReview)
+app.use(getPropertyReview)
 
 //room
 app.use(fetchRoomTypeList)
@@ -155,10 +177,12 @@ app.use(createBookingRouter)
 app.use(patchBooking)
 app.use(fetchBooking)
 app.use(fetchCheckOutBooking)
+app.use(getBookingData)
+app.use(getUserBookings);
 
 //inventory
 app.use(patchInventory)
-app.use(fetchInventory)
+app.use(fetchInventory(io))
 app.use(patchRates)
 app.use(fetchRate)
 app.use(blockUnBlockInventory)

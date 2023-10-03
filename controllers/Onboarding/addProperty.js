@@ -2,11 +2,11 @@ const express = require('express');
 const router = express.Router();
 const crypto = require("crypto");
 const randomstring = require("randomstring");
-
 const Property = require('../../models/Onboarding/propertys'); // Import the Mongoose model
 const admin = require("../../models/Onboarding/registrations");
 const propertyImage = require("../../models/Images/propertyImages");
 const propertyLogs = require('../../models/Logs/logs')
+const rateAndReviewModel = require('../../models/Onboarding/ratingsAndReviews')
 
 
 // Create a POST route for user registration
@@ -84,7 +84,7 @@ module.exports = async (req, res) => {
         const createLog = new propertyLogs({
             propertyId: propertyId,
             activities: [{
-                employeeName: irstName + lastName,
+                employeeName: firstName + lastName,
                 role: userRole,
                 actionType: 'added property',
                 statusCode: '201'
@@ -92,6 +92,15 @@ module.exports = async (req, res) => {
             date: new Date().toLocaleString("en-IN", { timeZone: "Asia/Kolkata" })
         })
         await createLog.save();
+
+        //create rating and review record
+        const createRatingsAndReview = new rateAndReviewModel({
+            propertyId: propertyId,
+            ratingsAndReviews: [],
+            date: new Date().toLocaleString("en-IN", { timeZone: "Asia/Kolkata" })
+        })
+
+        await createRatingsAndReview.save();
         // Notify connected clients about the new amenity
         req.io.emit('newProperty', savedProperty);
 

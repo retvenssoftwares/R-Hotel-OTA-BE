@@ -3,9 +3,10 @@ const { ObjectId } = mongoose.Schema;
 const randomstring = require('randomstring')
 
 const bookingSchema = mongoose.Schema({
-
-   
-
+    userId: {
+        type: String,
+        default: ''
+    },
     propertyId: {
         type: String,
         default: ""
@@ -158,9 +159,13 @@ const bookingSchema = mongoose.Schema({
         type: String,
         default: "",
     },
-    createdAt:{
+    createdAt: {
         type: String,
         default: "",
+    },
+    timeStamp: {
+        type: String,
+        default: ''
     }
 
 })

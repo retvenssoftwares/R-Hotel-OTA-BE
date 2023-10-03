@@ -1,6 +1,10 @@
-const { Router } = require('express');
-const getInventory = require('../../controllers/manageInventory/getInventoryByPropertyId');
-const app = Router();
+const express = require('express');
+const router = express.Router();
+const inventoryController = require('../../controllers/manageInventory/getInventoryByPropertyId'); // Adjust the path as needed
 
-app.get('/getInventory/:propertyId',getInventory);
-module.exports = app;
+module.exports = (io) => {
+    // Define the route for fetching inventory
+    router.get('/getInventory/:propertyId', inventoryController(io))
+
+    return router;
+};

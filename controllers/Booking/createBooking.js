@@ -5,7 +5,7 @@ const inventoryModel = require('../../models/manageInventory/manageInventory');
 
 module.exports = async (req, res) => {
     try {
-        const { propertyId, checkInDate, checkOutDate, roomDetails, roomNights, totalRoomRate, totalTax, totalAmount, bookingStatus, paymentStatus, paymentMode, madeBy } = req.body;
+        const { userId, propertyId, checkInDate, checkOutDate, roomDetails, roomNights, totalRoomRate, totalTax, totalAmount, bookingStatus, paymentStatus, paymentMode, madeBy } = req.body;
         const findProperty = await propertyModel.find({ propertyId: propertyId });
         if (!findProperty) {
             return res.status(404).json({ message: "Hotel not found" });
@@ -24,7 +24,7 @@ module.exports = async (req, res) => {
         }
 
         //check in date must not be equal to checkout date
-        if(checkInDateObj === checkOutDateObj){
+        if (checkInDateObj === checkOutDateObj) {
             return res.status(400).json({ message: "Check-in date and check-out date must not be equal" });
         }
 
@@ -61,9 +61,22 @@ module.exports = async (req, res) => {
             }
         }
 
-        // Check if check-in and check-out dates are in the manageInventory for all room types
+        // Create an object to keep track of roomTypeId counts
+        const roomTypeCounts = {};
+
+        // Count the number of roomTypeIds in roomDetails
         for (const roomDetail of roomDetails) {
-            const roomTypeIdToCheck = roomDetail.roomTypeId;
+            const roomTypeId = roomDetail.roomTypeId;
+
+            if (!roomTypeCounts[roomTypeId]) {
+                roomTypeCounts[roomTypeId] = 1;
+            } else {
+                roomTypeCounts[roomTypeId]++;
+            }
+        }
+
+        // Check if check-in and check-out dates are in the manageInventory for all room types
+        for (const roomTypeIdToCheck in roomTypeCounts) {
             const datesToCheck = [checkInDateObj, checkOutDateObj];
 
             for (const dateToCheck of datesToCheck) {
@@ -75,9 +88,49 @@ module.exports = async (req, res) => {
                 if (!inventoryEntry || !inventoryEntry.manageInventory.some(entry => entry.date === dateToCheck)) {
                     return res.status(400).json({ message: `Inventory not added for room type ${roomTypeIdToCheck} on ${dateToCheck}` });
                 }
-            }
-        }
 
+                // Get the available inventory count for this date and room type
+                const matchingDateEntry = inventoryEntry.manageInventory.find(entry => entry.date === dateToCheck);
+                const availableInventory = parseInt(matchingDateEntry.inventory);
+
+                // Check if there's enough inventory for the current roomTypeId
+                if (roomTypeCounts[roomTypeIdToCheck] > availableInventory || availableInventory === 0) {
+                    return res.status(400).json({ message: `Not enough inventory available for room type ${roomTypeIdToCheck} on ${dateToCheck}` });
+                }
+            }
+    
+            // Create booking record
+            const newBooking = new bookingModel({
+                propertyId,
+                bookingId: randomstring.generate(8),
+                checkInDate,
+                checkOutDate,
+                roomDetails,
+                roomNights,
+                totalRoomRate,
+                totalTax,
+                totalAmount,
+                bookingStatus,
+                paymentStatus,
+                paymentMode,
+                madeBy,
+                createdAt: new Date().toLocaleString("en-IN", { timeZone: "Asia/Kolkata" })
+            });
+    
+            // Save record
+            await newBooking.save();
+            io.emit('newBooking', newBooking);
+            return res.status(200).json({ message: "Booking saved", bookingId: newBooking.bookingId });
+            
+        } 
+        const currentTime = new Date();
+        const timestamp = Math.floor(currentTime / 1000);
+        // Create a new Date object from the timestamp (in milliseconds)
+        // const date = new Date(timestamp * 1000);
+
+        // Format the date as a string
+        // const formattedDate = date.toLocaleString("en-IN", { timeZone: "Asia/Kolkata" });
+        // console.log(formattedDate)
         // Create booking record
         const newBooking = new bookingModel({
             propertyId,
@@ -86,6 +139,7 @@ module.exports = async (req, res) => {
             checkOutDate,
             roomDetails,
             roomNights,
+            userId,
             totalRoomRate,
             totalTax,
             totalAmount,
@@ -93,6 +147,7 @@ module.exports = async (req, res) => {
             paymentStatus,
             paymentMode,
             madeBy,
+            timeStamp: timestamp,
             createdAt: new Date().toLocaleString("en-IN", { timeZone: "Asia/Kolkata" })
         });
 
@@ -103,4 +158,5 @@ module.exports = async (req, res) => {
         console.log(err);
         return res.status(500).json({ message: "Internal Server Error" });
     }
+    
 };

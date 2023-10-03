@@ -27,6 +27,7 @@ module.exports= async (req, res) => {
             { new: true } // Return the updated document
         );
 
+       
         if (!updatedBooking) {
             return res.status(404).json({ error: 'booking not found' });
         }

@@ -1,20 +1,23 @@
 const manageInventory = require("../../models/manageInventory/manageInventory");
 const roomDetails = require("../../models/Rooms/roomTypeDetails");
 const images = require('../../models/Images/roomTypeImages')
-
+const { parse, format } = require("date-fns");
 
 module.exports = async (req, res) => {
   const manageRoomsDetails = await manageInventory.find({
-    propertyId: req.body.propertyId,
-  });
+    propertyId: req.body.propertyId, isBlocked : "false"
+});
 
-  // console.log(manageRoomsDetails)
+  const dateFormat = "yy-mm-dd"; // Use "yy-MM-dd" format
+  
+  const from = req.query.from;
+  const to = req.query.to;
+  
+  // Assuming "from" and "to" are in the format "yy-mm-dd", you can parse them like this:
+  const fromDate = parse(from, dateFormat, new Date());
+  const toDate = parse(to, dateFormat, new Date());   // Replace with your desired end date
 
-  // Sample date range
-const fromDate = new Date('2023-09-01'); // Replace with your desired start date
-const toDate = new Date('2023-09-30');   // Replace with your desired end date
-
-const roomTypeIdCounts = {};
+  const roomTypeIdCounts = {};
 
 manageRoomsDetails.forEach((item) => {
     const { roomTypeId, manageInventory } = item;
@@ -35,7 +38,7 @@ manageRoomsDetails.forEach((item) => {
     roomTypeIdCounts[roomTypeId] += count;
 });
 
-console.log(roomTypeIdCounts);
+
 
 
   let minKey = null;
