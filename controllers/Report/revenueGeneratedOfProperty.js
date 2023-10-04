@@ -11,9 +11,12 @@ const {
 
 module.exports = async (req, res) => {
   try {
-    const allBooking = await property.find({});
+    const allBooking = await property.find({
+      propertyId: req.query.propertyId,
+    });
     const currentDate = new Date();
     const days = req.query.days;
+    let totalcount = 0;
     if (days === "6 months" || days === "3 months") {
       if (days === "6 months") {
         b = parseInt(days.slice(0, 2));
@@ -61,14 +64,11 @@ module.exports = async (req, res) => {
             const startDate = parse(startDateStr, "d MMM", currentDate);
             const endDate = parse(endDateStr, "d MMM", currentDate);
 
-            if (
-              isBefore(bookingDate, endDate) &&
-              isBefore(startDate, bookingDate)
-            ) {
+            if (isBefore(bookingDate, endDate) &&isBefore(startDate, bookingDate)) {
               if (!dateCounts[dateRange]) {
                 dateCounts[dateRange] = 0;
               }
-
+              totalcount++;
               dateCounts[dateRange]++;
             }
           }
@@ -88,12 +88,21 @@ module.exports = async (req, res) => {
         counts.push(item.count);
       }
 
-    
+      var percentage = (counts[counts.length - 1] - counts[0]) / counts[0];
+      //console.log(counts[counts.length - 1], counts[0]);
+      //console.log(typeof percentage);
+
+      if (isNaN(percentage) || percentage === 0 || percentage === undefined) {
+        percentage = 0;
+      }
+
       const response = {
         dates: dates,
-        counts: counts
+        counts: counts,
+        numberOfNight: totalcount,
+        increasingPercentage: percentage,
       };
-      
+
       return res.status(200).json(response);
     } else {
       const dateFormat = "dd/M/yyyy"; // Change the date format to "dd/M/yyyy"
@@ -139,6 +148,7 @@ module.exports = async (req, res) => {
 
               if (!dateCounts[datePortion][bookingDetails.roomTypeId]) {
                 dateCounts[datePortion][bookingDetails.roomTypeId] = 1;
+                totalcount++
               } else {
                 dateCounts[datePortion][bookingDetails.roomTypeId]++;
               }
@@ -146,34 +156,47 @@ module.exports = async (req, res) => {
           }
         }
 
-        
+        //console.log(totalcount)
 
         const dateCountArray = add.map((date) => ({
           date: date,
-          count: dateCounts[date] ? (typeof dateCounts[date] === 'object' ? Object.values(dateCounts[date]).reduce((acc, val) => acc + val, 0) : dateCounts[date]) : 0,
+          count: dateCounts[date]
+            ? typeof dateCounts[date] === "object"
+              ? Object.values(dateCounts[date]).reduce(
+                  (acc, val) => acc + val,
+                  0
+                )
+              : dateCounts[date]
+            : 0,
         }));
 
+        const dates = [];
+        const counts = [];
 
-            const dates = [];
-            const counts = [];
+        for (const item of dateCountArray) {
+          dates.push(item.date);
+          counts.push(item.count);
+        }
 
-          for (const item of dateCountArray) {
-            dates.push(item.date);
-            counts.push(item.count);
-          }
+        var percentage = (counts[counts.length - 1] - counts[0]) / counts[0];
+        //console.log(counts[counts.length - 1], counts[0]);
+        //console.log(typeof percentage);
 
-          const response = {
-            dates: dates,
-            counts: counts
-          };
-          
-          return res.status(200).json(response);
+        if (isNaN(percentage) || percentage === 0 || percentage === undefined) {
+          percentage = 0;
+        }
 
-        
+        const response = {
+          dates: dates,
+          counts: counts,
+          numberOfNight: totalcount,
+          increasingPercentage: percentage,
+        };
+        return res.status(200).json(response);
       }
     }
   } catch (error) {
-    console.error(error);
+    //console.error(error);
     return res.status(500).json({ error: "Internal Server Error" });
   }
 };
