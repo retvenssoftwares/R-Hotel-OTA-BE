@@ -75,7 +75,9 @@ const fetchCheckOutBooking =require('./routers/Bookings/fetchCheckOutBookingByPr
 //const patchBooking = require('./routers/Bookings/patchBookingRouter');
 const getUserBookings = require('./routers/Bookings/getBookingsByUserIdRouter')
 const getBookingData = require('./routers/Bookings/getBookingDetailsRouter')
-
+const checkInPendingBooking =require('./routers/Bookings/fetchCheckInPendingBookingByPropertyRouter')
+const checkOutPendingBooking =require('./routers/Bookings/fetchCheckOutPendingBookingByPropertyRouter')
+const fetchPaymentData =require('./routers/Bookings/fetchPaymentDataByCheckInAndOutRouter')
 
 //Onboarding
 const property =require('./routers/Onboarding/addPropertyRouter');
@@ -179,6 +181,9 @@ app.use(fetchBooking)
 app.use(fetchCheckOutBooking)
 app.use(getBookingData)
 app.use(getUserBookings);
+app.use(checkInPendingBooking)
+app.use(checkOutPendingBooking)
+app.use(fetchPaymentData)
 
 //inventory
 app.use(patchInventory)
