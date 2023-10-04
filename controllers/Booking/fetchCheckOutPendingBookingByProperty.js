@@ -27,8 +27,32 @@ module.exports = async function fetchBookingsByPropertyId(req, res) {
       totalAmount: 1,
       _id: 0, // Exclude the _id field from the response
       });
-      console.log(bookings);
-      res.status(200).json(bookings);
+     // Manually populate the ratePlanName
+     const populatedBookings = await Promise.all(
+        bookings.map(async (booking) => {
+          const ratePlanId = booking.roomDetails[0].ratePlanId; // Assuming a single ratePlanId per booking
+          const ratePlanData = await ratePlan.findOne({ ratePlanId: ratePlanId });
+          const ratePlanName = ratePlanData ? ratePlanData.ratePlanName : '';
+          return {
+            ...booking.toObject(),
+            ratePlanName,
+          };
+        })
+      );
+
+      // Remove ratePlanName array and keep only ratePlanName
+      const cleanedBookings = populatedBookings.map((booking) => {
+        const { ratePlanName, ...rest } = booking;
+        return {
+          ...rest,
+          ratePlanName: ratePlanName[0].ratePlanName, // Assuming a single ratePlanName per booking
+        };
+      });
+
+
+
+      console.log(cleanedBookings);
+      res.status(200).json(cleanedBookings);
     } else {
       // If requestType is not "checkIn", send a response
       res.status(400).json({ message: 'Please specify requestType as "checkOut"' });
