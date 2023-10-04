@@ -103,6 +103,10 @@ const propertyCity = require('./routers/Onboarding/fetchCityOfPropertyRouter')
 //location
 const country = require('./routers/location/getAllcountryrouter')
 
+//Promotion
+const createPromotion = require('./routers/Promotion/addPromotionRouter')
+const editPromotion = require('./routers/Promotion/editPromotionRouter');
+
 //room
 const fetchRoomTypeList = require('./routers/Room/roomTypelistFetchRouter')
 const fetchRoomType = require('./routers/Room/fetchRoomTypeByPropertyIdRouter')
@@ -145,8 +149,11 @@ app.use(getRegisteredUsers)
 app.use(getUserById)
 
 //Image 
-
 app.use(getImageOgRoomType)
+
+//Promotion
+app.use(createPromotion)
+app.use(editPromotion)
 
 //Amenity
 app.use(getAmenities);
