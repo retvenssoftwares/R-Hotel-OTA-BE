@@ -127,6 +127,12 @@ const patchRates = require('./routers/manageInventory/patchRatesRouter')
 const getAvailableInvetory = require('./routers/manageInventory/fetchInventoryRouter');
 const blockUnBlockInventory = require('./routers/manageInventory/blockUnblockInventoryRouter')
 
+
+
+//reports
+
+const getRevenueDetailsData = require("./routers/Report/revenueGenwratedOfPropertyRounter")
+
 //accountCreation
 app.use(login);
 app.use(logout);
@@ -210,6 +216,10 @@ app.use(getAvailableInvetory)
 
 //location
 app.use(country)
+
+//reports
+
+app.use(getRevenueDetailsData)
 
 mongoose
     .connect(process.env.DATABASE, {
