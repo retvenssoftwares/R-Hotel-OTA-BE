@@ -5,7 +5,6 @@ module.exports = async function fetchBookingsByPropertyId(req, res) {
   try {
     const { propertyId } = req.params;
     const { startDate, endDate, requestType } = req.query;
-
     // Check if requestType is "checkIn"
     if (requestType === 'checkIn') {
       // Create a query object with propertyId and date filters
