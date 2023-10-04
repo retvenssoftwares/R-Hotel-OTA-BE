@@ -134,6 +134,7 @@ const blockUnBlockInventory = require('./routers/manageInventory/blockUnblockInv
 //reports
 
 const getRevenueDetailsData = require("./routers/Report/revenueGenwratedOfPropertyRounter")
+const grossrevenue = require("./routers/Report/totalGrossRevenueRouter")
 
 //accountCreation
 app.use(login);
@@ -225,6 +226,7 @@ app.use(country)
 //reports
 
 app.use(getRevenueDetailsData)
+app.use(grossrevenue)
 
 mongoose
     .connect(process.env.DATABASE, {
