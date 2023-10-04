@@ -80,7 +80,21 @@ module.exports = async (req, res) => {
         count: dateCounts[dateRange] || 0,
       }));
 
-      return res.status(200).json(dateCountArrayformonth);
+      const dates = [];
+      const counts = [];
+
+      for (const item of dateCountArrayformonth) {
+        dates.push(item.date);
+        counts.push(item.count);
+      }
+
+    
+      const response = {
+        dates: dates,
+        counts: counts
+      };
+      
+      return res.status(200).json(response);
     } else {
       const dateFormat = "dd/M/yyyy"; // Change the date format to "dd/M/yyyy"
 
@@ -138,10 +152,22 @@ module.exports = async (req, res) => {
           date: date,
           count: dateCounts[date] ? (typeof dateCounts[date] === 'object' ? Object.values(dateCounts[date]).reduce((acc, val) => acc + val, 0) : dateCounts[date]) : 0,
         }));
-        
 
 
-        return res.status(200).json(dateCountArray);
+            const dates = [];
+            const counts = [];
+
+          for (const item of dateCountArray) {
+            dates.push(item.date);
+            counts.push(item.count);
+          }
+
+          const response = {
+            dates: dates,
+            counts: counts
+          };
+          
+          return res.status(200).json(response);
 
         
       }
