@@ -1,11 +1,10 @@
 const express = require('express');
-const router = express.Router();
-const crypto = require("crypto");
 const randomstring = require("randomstring");
 const Property = require('../../models/Onboarding/propertys'); // Import the Mongoose model
 const admin = require("../../models/Onboarding/registrations");
 const propertyImage = require("../../models/Images/propertyImages");
-const propertyLogs = require('../../models/Logs/logs')
+const propertyLogs = require('../../models/Logs/logs');
+const promotionModel = require('../../models/Promotion/promotion')
 const rateAndReviewModel = require('../../models/Onboarding/ratingsAndReviews')
 
 
@@ -104,6 +103,14 @@ module.exports = async (req, res) => {
         // Notify connected clients about the new amenity
         req.io.emit('newProperty', savedProperty);
 
+        //create promotion record
+        const createPromotion = new promotionModel({
+            propertyId: propertyId,
+            promotions: [],
+            date: new Date().toLocaleString("en-IN", { timeZone: "Asia/Kolkata" })
+        })
+
+        await createPromotion.save();
 
         res.status(201).json({ message: 'Property added  successfully', propertyId: savedProperty.propertyId });
     } catch (error) {
