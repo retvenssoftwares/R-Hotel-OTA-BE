@@ -69,10 +69,15 @@ const getImageOgRoomType = require('./routers/Images/getRoomTypeAndPropertyImage
 
 //Booking
 const createBookingRouter = require('./routers/Bookings/createBookingRouter')
-const patchBooking = require('./routers/Bookings/patchBookingRouter');
+const patchBooking = require('./routers/Bookings/patchBookingRouter')
+const fetchBooking =require('./routers/Bookings/fetchBookingByPorpertyIdRouter')
+const fetchCheckOutBooking =require('./routers/Bookings/fetchCheckOutBookingByPropertyIdRouter')
+//const patchBooking = require('./routers/Bookings/patchBookingRouter');
 const getUserBookings = require('./routers/Bookings/getBookingsByUserIdRouter')
 const getBookingData = require('./routers/Bookings/getBookingDetailsRouter')
-
+const checkInPendingBooking =require('./routers/Bookings/fetchCheckInPendingBookingByPropertyRouter')
+const checkOutPendingBooking =require('./routers/Bookings/fetchCheckOutPendingBookingByPropertyRouter')
+const fetchPaymentData =require('./routers/Bookings/fetchPaymentDataByCheckInAndOutRouter')
 
 //Onboarding
 const property =require('./routers/Onboarding/addPropertyRouter');
@@ -124,6 +129,12 @@ const patchRates = require('./routers/manageInventory/patchRatesRouter')
 const getAvailableInvetory = require('./routers/manageInventory/fetchInventoryRouter');
 const blockUnBlockInventory = require('./routers/manageInventory/blockUnblockInventoryRouter')
 
+
+
+//reports
+
+const getRevenueDetailsData = require("./routers/Report/revenueGenwratedOfPropertyRounter")
+
 //accountCreation
 app.use(login);
 app.use(logout);
@@ -172,8 +183,13 @@ app.use(editRatePlan);
 //booking
 app.use(createBookingRouter)
 app.use(patchBooking)
+app.use(fetchBooking)
+app.use(fetchCheckOutBooking)
 app.use(getBookingData)
 app.use(getUserBookings);
+app.use(checkInPendingBooking)
+app.use(checkOutPendingBooking)
+app.use(fetchPaymentData)
 
 //inventory
 app.use(patchInventory)
@@ -205,6 +221,10 @@ app.use(getAvailableInvetory)
 
 //location
 app.use(country)
+
+//reports
+
+app.use(getRevenueDetailsData)
 
 mongoose
     .connect(process.env.DATABASE, {
