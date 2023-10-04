@@ -1,6 +1,6 @@
 const {Router} =require('express')
-const fetchBooking = require('../../controllers/Booking/fetchCheckInBookingByPropertyId');
+const fetchCheckInBooking = require('../../controllers/Booking/fetchCheckInBookingByPropertyId');
 const app = Router();
 
-app.get('/fetchBooking/:propertyId',fetchBooking);
+app.get('/fetchBooking/:propertyId',fetchCheckInBooking);
 module.exports = app;

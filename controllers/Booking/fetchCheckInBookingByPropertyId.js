@@ -6,10 +6,11 @@ module.exports = async function fetchBookingsByPropertyId(req, res) {
   try {
     const { propertyId } = req.params;
     const { startDate, endDate, requestType } = req.query;
-    const propertyIds = await Booking.findOne({ propertyId })
-if(!propertyIds){
-  return res.status(404).json({message:'property Not found'})
-}
+//     const propertyIds = await Booking.findOne({ propertyId:propertyId })
+//     console.log(propertyIds)
+// if(!propertyIds){
+//   return res.status(404).json({message:'property Not found'})
+// }
 
     // Check if requestType is "checkIn"
     if (requestType === 'checkIn') {
@@ -20,7 +21,7 @@ if(!propertyIds){
         checkOutDate: { $lte: endDate },    // Check-out date is less than or equal to endDate
       };
 
-      const bookings = await Booking.find(query,{
+      const booking = await Booking.find(query,{
         checkOutDate: 1,
       checkInDate: 1,
       bookingId:1,
@@ -29,12 +30,36 @@ if(!propertyIds){
       "roomDetails.guestFirstName": 1,
       "roomDetails.guestLastName": 1,
       totalAmount: 1,
-      _id: 0, // Exclude the _id field from the response
+      // Exclude the _id field from the response
       });
 
 
-      console.log(bookings);
-      res.status(200).json(bookings);
+     // Manually populate the ratePlanName
+     const populatedBookings = await Promise.all(
+      booking.map(async (booking) => {
+        const ratePlanId = booking.roomDetails[0].ratePlanId; // Assuming a single ratePlanId per booking
+        const ratePlanData = await ratePlan.findOne({ ratePlanId: ratePlanId });
+        const ratePlanName = ratePlanData ? ratePlanData.ratePlanName : '';
+        return {
+          ...booking.toObject(),
+          ratePlanName,
+        };
+      })
+    );
+
+    // Remove ratePlanName array and keep only ratePlanName
+    const cleanedBookings = populatedBookings.map((booking) => {
+      const { ratePlanName, ...rest } = booking;
+      return {
+        ...rest,
+        ratePlanName: ratePlanName[0].ratePlanName, // Assuming a single ratePlanName per booking
+      };
+    });
+
+
+
+    console.log(cleanedBookings);
+    res.status(200).json(cleanedBookings);
     } else {
       // If requestType is not "checkIn", send a response
       res.status(400).json({ message: 'Please specify requestType as "checkIn"' });

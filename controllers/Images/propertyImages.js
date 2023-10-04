@@ -26,7 +26,7 @@ const uploadRoomDetails = async (req, res) => {
       if (req.files['hotelImages']) {
         const uploadedImageIds = [];
         const uploadPromises = [];
-
+        //const img =[];
         for (const hotel_image of req.files['hotelImages']) {
           const hotel_image_id = randomstring.generate(10); // Generate a unique ID
           const hotel_image_params = {
@@ -48,7 +48,10 @@ const uploadRoomDetails = async (req, res) => {
                 imageDescription: ''
               };
 
-              uploadedImageIds.push(hotel_image_id);
+              uploadedImageIds.push({
+                hotel_id: hotel_image_id,
+                imglink: imageUrl,
+              });
               findHotel.propertyImages.push(imageDetails);
             });
           uploadPromises.push(uploadPromise);
@@ -60,7 +63,8 @@ const uploadRoomDetails = async (req, res) => {
         res.status(200).json({
           message: "Hotel images successfully updated",
           propertyId: findHotel.propertyId,
-          imageData: uploadedImageIds
+          imageData: uploadedImageIds,
+          // imgLink:uploadedImageIds,
         });
       }
 
@@ -89,7 +93,10 @@ const uploadRoomDetails = async (req, res) => {
                 imageDescription: ''
               };
 
-              uploadedImageIds.push(hotel_image_id);
+              uploadedImageIds.push({
+                room_id: hotel_image_id,
+                imglink: imageUrl,
+              });
               findRoomTypes.roomTypeImages.push(imageDetails);
             });
           uploadPromises.push(uploadPromise);

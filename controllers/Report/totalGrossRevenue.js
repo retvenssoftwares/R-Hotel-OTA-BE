@@ -1,4 +1,5 @@
 const property = require("../../models/Bookings/bookings");
+const rate = require("../../models/Rooms/ratePlan")
 const {
   format,
   subMonths,
@@ -16,7 +17,8 @@ module.exports = async (req, res) => {
     });
     const currentDate = new Date();
     const days = req.query.days;
-    let totalcount = 0;
+    let totalGrossRevenue = 0;
+    let averageRevenue = 0;
     if (days === "6 months" || days === "3 months") {
       if (days === "6 months") {
         b = parseInt(days.slice(0, 2));
@@ -50,7 +52,6 @@ module.exports = async (req, res) => {
 
       const previousMonths = getPreviousMonths(currentDate, g);
       const dateCounts = {};
-
       for (const booking of allBooking) {
         for (const bookingDetails of booking.roomDetails) {
           const bookingDate = parse(
@@ -58,21 +59,30 @@ module.exports = async (req, res) => {
             "dd/M/yyyy, hh:mm:ss a",
             new Date()
           );
-          // const grossRevenue = bookingDetails.roomPrice
-          // totalGrossRevenue = totalGrossRevenue + parseInt(grossRevenue)
-         
 
           for (const dateRange of previousMonths) {
             const [startDateStr, endDateStr] = dateRange.split(" - ");
             const startDate = parse(startDateStr, "d MMM", currentDate);
             const endDate = parse(endDateStr, "d MMM", currentDate);
 
-            if (isBefore(bookingDate, endDate) &&isBefore(startDate, bookingDate)) {
+            if (
+              isBefore(bookingDate, endDate) &&
+              isBefore(startDate, bookingDate)
+            ) {
               if (!dateCounts[dateRange]) {
-                dateCounts[dateRange] = 0;
+                dateCounts[dateRange] = {};
               }
-              totalcount++;
-              dateCounts[dateRange]++;
+
+              // Calculate and accumulate the roomPrice for this room type
+              const roomTypeId = bookingDetails.roomTypeId;
+              const roomPrice = bookingDetails.roomPrice;
+
+              if (!dateCounts[dateRange][roomTypeId]) {
+                dateCounts[dateRange][roomTypeId] = 0;
+              }
+
+              // Add roomPrice to the existing value for this roomTypeId
+              dateCounts[dateRange][roomTypeId] += parseInt(roomPrice);
             }
           }
         }
@@ -84,30 +94,39 @@ module.exports = async (req, res) => {
       }));
 
       const dates = [];
-      const counts = [];
 
       for (const item of dateCountArrayformonth) {
         dates.push(item.date);
-        counts.push(item.count);
       }
 
-      var percentage = (counts[counts.length - 1] - counts[0]) / counts[0];
-    
+      const revenue = [];
+      for (const dateRange of previousMonths) {
+        if (dateCounts[dateRange]) {
+          const totalRoomPrice = Object.values(dateCounts[dateRange]).reduce(
+            (acc, val) => acc + val,
+            0
+          );
+          revenue.push(totalRoomPrice);
+          totalGrossRevenue += totalRoomPrice;
+        } else {
+          revenue.push(0);
+        }
+      }
+
+      var percentage = (revenue[revenue.length - 1] - revenue[0]) / revenue[0];
 
       if (isNaN(percentage) || percentage === 0 || percentage === undefined) {
         percentage = 0;
       }
 
-      // averageRevenue = totalGrossRevenue / totalcount
-
       const response = {
         dates: dates,
-        counts: counts,
-        numberOfNight: totalcount,
+        revenue: revenue,
+        totalRoomPrice: totalGrossRevenue,
         percentage: percentage,
-        // totalGrossRevenue :totalGrossRevenue,
-        // averageRevenue :averageRevenue
       };
+
+      //console.log(revenue);
 
       return res.status(200).json(response);
     } else {
@@ -142,27 +161,28 @@ module.exports = async (req, res) => {
         }
 
         const dateCounts = {};
-        
 
         for (const booking of allBooking) {
           for (const bookingDetails of booking.roomDetails) {
-            // const grossRevenue = bookingDetails.roomPrice
-            // totalGrossRevenue = totalGrossRevenue + parseInt(grossRevenue)
-            // console.log(totalGrossRevenue)
             const datePortion = booking.createdAt.split(",")[0].trim();
+            
 
             if (add.includes(datePortion)) {
               if (!dateCounts[datePortion]) {
                 dateCounts[datePortion] = {};
               }
 
-              if (!dateCounts[datePortion][bookingDetails.roomTypeId]) {
-                dateCounts[datePortion][bookingDetails.roomTypeId] = 1;
-                totalcount++
-              } else {
-                dateCounts[datePortion][bookingDetails.roomTypeId]++;
+              const roomTypeId = bookingDetails.roomTypeId;
+              const ratePlane = await rate.findOne({roomTypeId :roomTypeId})
+              const roomPrice = bookingDetails.roomPrice;
+
+              if (!dateCounts[datePortion][roomTypeId]) {
+                dateCounts[datePortion][roomTypeId] = 0;
               }
 
+              // Add roomPrice to the existing value for this roomTypeId
+
+              dateCounts[datePortion][roomTypeId] += parseInt(roomPrice);
             }
           }
         }
@@ -182,31 +202,38 @@ module.exports = async (req, res) => {
         }));
 
         const dates = [];
-        const counts = [];
 
         for (const item of dateCountArray) {
           dates.push(item.date);
-          counts.push(item.count);
         }
 
-        var percentage = (counts[counts.length - 1] - counts[0]) / counts[0];
-        //console.log(counts[counts.length - 1], counts[0]);
-        //console.log(typeof percentage);
+        const revenue = [];
+        for (const datePortion of add) {
+          if (dateCounts[datePortion]) {
+            const totalRoomPrice = Object.values(
+              dateCounts[datePortion]
+            ).reduce((acc, val) => acc + val, 0);
+            revenue.push(totalRoomPrice);
+            totalGrossRevenue += totalRoomPrice;
+          } else {
+            revenue.push(0);
+          }
+        }
+
+        var percentage =
+          (revenue[revenue.length - 1] - revenue[0]) / revenue[0];
 
         if (isNaN(percentage) || percentage === 0 || percentage === undefined) {
           percentage = 0;
         }
 
-        // averageRevenue = totalGrossRevenue / totalcount
-
         const response = {
           dates: dates,
-          counts: counts,
-          numberOfNight: totalcount,
+          revenue: revenue,
+          totalGrossRevenue: totalGrossRevenue,
           percentage: percentage,
-          // totalGrossRevenue :totalGrossRevenue,
-          // averageRevenue :averageRevenue
         };
+
         return res.status(200).json(response);
       }
     }
