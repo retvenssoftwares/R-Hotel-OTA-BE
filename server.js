@@ -106,7 +106,7 @@ const country = require('./routers/location/getAllcountryrouter')
 //Promotion
 const createPromotion = require('./routers/Promotion/addPromotionRouter')
 const editPromotion = require('./routers/Promotion/editPromotionRouter');
-const getPromotion = require('./routers/Promotion/getPropertionByPropertyIdRouter')
+const getPromotion = require('./routers/Promotion/getPromotionByPropertyIdRouter.js')
 
 //room
 const fetchRoomTypeList = require('./routers/Room/roomTypelistFetchRouter')

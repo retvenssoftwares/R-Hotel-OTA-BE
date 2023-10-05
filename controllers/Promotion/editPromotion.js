@@ -66,13 +66,13 @@ module.exports = async (req, res) => {
             promotionToUpdate.applicableOnWhichDays.unshift({ applicableOnWhichDays: daysArray, date: date });
         }
         if (req.body.promotionApplicableFor) {
-            promotionToUpdate.promotionApplicableFor.unshift({ promotionApplicableFor: promotionApplicableFor, date: date });
+            promotionToUpdate.promotionApplicableFor.unshift({ promotionApplicableFor: req.body.promotionApplicableFor, date: date });
         }
         if (req.body.stayStartDate || req.body.stayKeepEndDate || req.body.stayEndDate) {
             promotionToUpdate.stayDate.unshift({ stayStartDate: req.body.stayStartDate, stayKeepEndDate: req.body.stayKeepEndDate, stayEndDate: req.body.stayEndDate, date: date });
         }
         if (req.body.bookingStartDate || req.body.bookingKeepEndDate || req.body.bookingEndDate) {
-            promotionToUpdate.bookingDate.unshift({ bookingStartDate: req.body.bookingStartDate, bookingKeepEndDate: req.body.bookingStartDate, bookingEndDate: req.body.bookingEndDate, date: date });
+            promotionToUpdate.bookingDate.unshift({ bookingStartDate: req.body.bookingStartDate, bookingKeepEndDate: req.body.bookingKeepEndDate, bookingEndDate: req.body.bookingEndDate, date: date });
         }
         if (req.body.keepBlackOut) {
             promotionToUpdate.keepBlackOut.unshift({ keepBlackOut: req.body.keepBlackOut, date: date });
@@ -85,7 +85,7 @@ module.exports = async (req, res) => {
             promotionToUpdate.keepOfferNonRefundable.unshift({ keepOfferNonRefundable: req.body.keepOfferNonRefundable, date: date });
         }
         if (req.body.keepPayAtHotel) {
-            promotionToUpdate.keepPayAtHotel.unshift({ keepPayAtHotel: datesArray, date: date });
+            promotionToUpdate.keepPayAtHotel.unshift({ keepPayAtHotel: req.body.keepPayAtHotel, date: date });
         }
         if (req.body.applyPromotionForAllRoomsAndRatePlans) {
             promotionToUpdate.applyPromotionForAllRoomsAndRatePlans.unshift({ applyPromotionForAllRoomsAndRatePlans: req.body.applyPromotionForAllRoomsAndRatePlans, date: date });
@@ -96,9 +96,10 @@ module.exports = async (req, res) => {
         if (req.body.promotionName) {
             promotionToUpdate.promotionName.unshift({ promotionName: req.body.promotionName, date: date });
         }
-        if(req.body.ratePlanAndRoomType){
-            const ratePlansAndRooms = req.body
-            promotionToUpdate.ratePlanAndRoomType.unshift({ ratePlansAndRooms });
+        // Handle ratePlanAndRoomType field
+        if (req.body.roomTypeId) {
+            const { roomTypeId } = req.body
+            promotionToUpdate.ratePlanAndRoomType.unshift({roomTypeId: roomTypeId});
         }
 
 
