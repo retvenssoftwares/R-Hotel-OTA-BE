@@ -103,6 +103,11 @@ const propertyCity = require('./routers/Onboarding/fetchCityOfPropertyRouter')
 //location
 const country = require('./routers/location/getAllcountryrouter')
 
+//Promotion
+const createPromotion = require('./routers/Promotion/addPromotionRouter')
+const editPromotion = require('./routers/Promotion/editPromotionRouter');
+const getPromotion = require('./routers/Promotion/getPropertionByPropertyIdRouter')
+
 //room
 const fetchRoomTypeList = require('./routers/Room/roomTypelistFetchRouter')
 const fetchRoomType = require('./routers/Room/fetchRoomTypeByPropertyIdRouter')
@@ -136,6 +141,7 @@ const blockUnBlockInventory = require('./routers/manageInventory/blockUnblockInv
 const getRevenueDetailsData = require("./routers/Report/revenueGenwratedOfPropertyRounter")
 const grossrevenue = require("./routers/Report/totalGrossRevenueRouter")
 const avgrate = require("./routers/Report/avgSellingPriceRouter")
+const roomReport = require("./routers/Report/roomAndRatePlanReportRouter")
 
 //accountCreation
 app.use(login);
@@ -147,8 +153,12 @@ app.use(getRegisteredUsers)
 app.use(getUserById)
 
 //Image 
-
 app.use(getImageOgRoomType)
+
+//Promotion
+app.use(createPromotion)
+app.use(editPromotion)
+app.use(getPromotion)
 
 //Amenity
 app.use(getAmenities);
@@ -229,6 +239,7 @@ app.use(country)
 app.use(getRevenueDetailsData)
 app.use(grossrevenue)
 app.use(avgrate)
+app.use(roomReport)
 
 mongoose
     .connect(process.env.DATABASE, {
