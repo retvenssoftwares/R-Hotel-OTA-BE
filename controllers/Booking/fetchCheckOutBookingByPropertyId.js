@@ -12,7 +12,7 @@ module.exports = async function fetchBookingsByPropertyId(req, res) {
       const query = {
         propertyId,
         checkInDate: { $lte: startDate },  // Check-in date is greater than or equal to startDate
-        checkOutDate: { $gte: endDate },    // Check-out date is less than or equal to endDate
+        checkOutDate: { $lte: endDate },    // Check-out date is less than or equal to endDate
       };
 
       const booking = await Booking.find(query, {
