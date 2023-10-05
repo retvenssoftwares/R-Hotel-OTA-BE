@@ -69,19 +69,41 @@ module.exports = async (req, res) => {
 
             if (isBefore(bookingDate, endDate) &&isBefore(startDate, bookingDate)) {
               if (!dateCounts[dateRange]) {
-                dateCounts[dateRange] = 0;
+                dateCounts[dateRange] = {};
               }
-              totalcount++;
-              dateCounts[dateRange]++;
+              
+              if (!dateCounts[dateRange][bookingDetails.roomTypeId]) {
+                dateCounts[dateRange][bookingDetails.roomTypeId] = 1;
+                
+              } else {
+                dateCounts[dateRange][bookingDetails.roomTypeId]++;
+              }
             }
           }
         }
       }
 
+      
+
+      // const dateCountArrayformonth = previousMonths.map((dateRange) => ({
+      //   date: dateRange,
+      //   count: dateCounts[dateRange] || 0,
+      // }));
+
       const dateCountArrayformonth = previousMonths.map((dateRange) => ({
         date: dateRange,
-        count: dateCounts[dateRange] || 0,
+        count: dateCounts[dateRange]
+          ? typeof dateCounts[dateRange] === "object"
+            ? Object.values(dateCounts[dateRange]).reduce(
+                (acc, val) => acc + val,
+                0
+              )
+            : dateCounts[dateRange]
+          : 0,
       }));
+
+
+      console.log(dateCountArrayformonth)
 
       const dates = [];
       const counts = [];
@@ -91,7 +113,12 @@ module.exports = async (req, res) => {
         counts.push(item.count);
       }
 
-      var percentage = (counts[counts.length - 1] - counts[0]) / counts[0];
+      for (const number of counts) {
+        totalcount += number;
+      }
+
+      var percentage = ((counts[counts.length - 1] - counts[0]) / (counts[counts.length -1] + counts[0]))*100;
+     
     
 
       if (isNaN(percentage) || percentage === 0 || percentage === undefined) {
@@ -158,7 +185,7 @@ module.exports = async (req, res) => {
 
               if (!dateCounts[datePortion][bookingDetails.roomTypeId]) {
                 dateCounts[datePortion][bookingDetails.roomTypeId] = 1;
-                totalcount++
+                
               } else {
                 dateCounts[datePortion][bookingDetails.roomTypeId]++;
               }
@@ -167,7 +194,7 @@ module.exports = async (req, res) => {
           }
         }
 
-        //console.log(totalcount)
+        
 
         const dateCountArray = add.map((date) => ({
           date: date,
@@ -181,6 +208,8 @@ module.exports = async (req, res) => {
             : 0,
         }));
 
+        console.log(dateCountArray)
+
         const dates = [];
         const counts = [];
 
@@ -189,11 +218,17 @@ module.exports = async (req, res) => {
           counts.push(item.count);
         }
 
-        var percentage = (counts[counts.length - 1] - counts[0]) / counts[0];
-        //console.log(counts[counts.length - 1], counts[0]);
-        //console.log(typeof percentage);
+        for (const number of counts) {
+          totalcount += number;
+        }
 
-        if (isNaN(percentage) || percentage === 0 || percentage === undefined) {
+        
+
+        var percentage = ((counts[counts.length - 1] - counts[0]) / (counts[counts.length -1] + counts[0]))*100;
+        //console.log(counts[counts.length - 1], counts[0]);
+        console.log(percentage);
+
+        if (isNaN(percentage) || percentage === 0 || percentage === undefined || percentage === Infinity) {
           percentage = 0;
         }
 

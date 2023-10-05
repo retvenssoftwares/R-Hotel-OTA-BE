@@ -27,7 +27,6 @@ const promotionSchema = mongoose.Schema({
         keepOfferNonRefundable: [{ keepOfferNonRefundable: { type: String, default: '' }, date: { type: String, default: '' } }], //keep offer non refundable or not
         keepPayAtHotel: [{ keepPayAtHotel: { type: String, default: '' }, date: { type: String, default: '' } }], //keep offer when paying at hotel
         applyPromotionForAllRoomsAndRatePlans: [{ applyPromotionForAllRoomsAndRatePlans: { type: String, default: '' }, date: { type: String, default: '' } }],//yes or no 
-        // ratePlanAndRoomType: [{ roomTypeId: [{ roomTypeId: { type: String, default: '' }, ratePlanId: [{ ratePlanId: { type: String, default: '' }, displayStatus: { type: String, default: '1' }, date: { type: String, default: new Date().toLocaleString("en-IN", { timeZone: "Asia/Kolkata" }) } }], displayStatus: { type: String, default: '1' }, date: { type: String, default: new Date().toLocaleString("en-IN", { timeZone: "Asia/Kolkata" })} }]}], //apply to specific rooms and rate plans
         ratePlanAndRoomType: [{
             roomTypeId: [{
                 roomTypeId: { type: String, default: '' },
