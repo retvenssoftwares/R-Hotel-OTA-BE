@@ -223,7 +223,7 @@ module.exports = async (req, res) => {
         var percentage =
           (revenue[revenue.length - 1] - revenue[0]) / revenue[0];
 
-        if (isNaN(percentage) || percentage === 0 || percentage === undefined) {
+        if (isNaN(percentage) || percentage === 0 || percentage === undefined || percentage === Infinity) {
           percentage = 0;
         }
 
