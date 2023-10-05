@@ -140,6 +140,7 @@ const blockUnBlockInventory = require('./routers/manageInventory/blockUnblockInv
 
 const getRevenueDetailsData = require("./routers/Report/revenueGenwratedOfPropertyRounter")
 const grossrevenue = require("./routers/Report/totalGrossRevenueRouter")
+const avgrate = require("./routers/Report/avgSellingPriceRouter")
 const roomReport = require("./routers/Report/roomAndRatePlanReportRouter")
 
 //accountCreation
@@ -237,6 +238,7 @@ app.use(country)
 
 app.use(getRevenueDetailsData)
 app.use(grossrevenue)
+app.use(avgrate)
 app.use(roomReport)
 
 mongoose
