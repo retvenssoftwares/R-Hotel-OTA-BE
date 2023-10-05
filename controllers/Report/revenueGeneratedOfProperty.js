@@ -117,7 +117,7 @@ module.exports = async (req, res) => {
         totalcount += number;
       }
 
-      var percentage = (counts[counts.length - 1] - counts[0]) / counts[0];
+      var percentage = ((counts[counts.length - 1] - counts[0]) / (counts[counts.length -1] + counts[0]))*100;
      
     
 
@@ -224,7 +224,7 @@ module.exports = async (req, res) => {
 
         
 
-        var percentage = (counts[counts.length - 1] - counts[0]) / counts[0];
+        var percentage = ((counts[counts.length - 1] - counts[0]) / (counts[counts.length -1] + counts[0]))*100;
         //console.log(counts[counts.length - 1], counts[0]);
         console.log(percentage);
 

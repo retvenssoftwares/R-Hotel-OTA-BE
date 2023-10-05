@@ -443,14 +443,12 @@ module.exports = async (req, res) => {
     
 // Then define the isDateWithinRange function
 function isWithinInterval(date, startDate, endDate) {
-  // console.log(date,startDate,endDate)
+  
   return date >= startDate && date <= endDate;
 }
 function isDateWithinRange(date, rangeArray) {
   for (const range of rangeArray) {
-    console.log(range)
     const [startStr, endStr] = range.split(" - ");
-    console.log(startStr, endStr)
     if (isWithinInterval(date,startStr,endStr )) {
       return true;
     }
