@@ -113,8 +113,8 @@ module.exports = async (req, res) => {
         }
       }
 
-      var percentage = (revenue[revenue.length - 1] - revenue[0]) / revenue[0];
-
+      var percentage =((revenue[revenue.length - 1] - revenue[0]) / (revenue[revenue.length - 1])+revenue[0])*100;
+      
       if (isNaN(percentage) || percentage === 0 || percentage === undefined) {
         percentage = 0;
       }
@@ -173,7 +173,6 @@ module.exports = async (req, res) => {
               }
 
               const roomTypeId = bookingDetails.roomTypeId;
-              const ratePlane = await rate.findOne({roomTypeId :roomTypeId})
               const roomPrice = bookingDetails.roomPrice;
 
               if (!dateCounts[datePortion][roomTypeId]) {
@@ -220,8 +219,8 @@ module.exports = async (req, res) => {
           }
         }
 
-        var percentage =
-          (revenue[revenue.length - 1] - revenue[0]) / revenue[0];
+        var percentage =((revenue[revenue.length - 1] - revenue[0]) / (revenue[revenue.length - 1])+revenue[0])*100;
+        console.log(percentage)
 
         if (isNaN(percentage) || percentage === 0 || percentage === undefined || percentage === Infinity) {
           percentage = 0;
