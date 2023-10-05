@@ -119,7 +119,7 @@ module.exports = async (req, res) => {
     
             // Save record
             await newBooking.save();
-            io.emit('newBooking', newBooking);
+           // io.emit('newBooking', newBooking);
             return res.status(200).json({ message: "Booking saved", bookingId: newBooking.bookingId });
             
         } 
