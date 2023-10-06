@@ -106,7 +106,7 @@ const country = require('./routers/location/getAllcountryrouter')
 //Promotion
 const createPromotion = require('./routers/Promotion/addPromotionRouter')
 const editPromotion = require('./routers/Promotion/editPromotionRouter');
-//const getPromotion = require('./routers/Promotion/getPropertionByPropertyIdRouter')
+const getPromotion = require('./routers/Promotion/getPromotionByPropertyIdRouter.js')
 
 //room
 const fetchRoomTypeList = require('./routers/Room/roomTypelistFetchRouter')
@@ -158,7 +158,7 @@ app.use(getImageOgRoomType)
 //Promotion
 app.use(createPromotion)
 app.use(editPromotion)
-//app.use(getPromotion)
+app.use(getPromotion)
 
 //Amenity
 app.use(getAmenities);

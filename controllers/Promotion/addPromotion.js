@@ -1,6 +1,6 @@
 const randomstring = require('randomstring')
 const promotionModel = require('../../models/Promotion/promotion');
-const ratePlanModel = require('../../models/Rooms/ratePlan')
+// const ratePlanModel = require('../../models/Rooms/ratePlan')
 
 module.exports = async (req, res) => {
 
@@ -33,8 +33,6 @@ module.exports = async (req, res) => {
             keepOfferNonRefundable,
             keepPayAtHotel,
             applyPromotionForAllRoomsAndRatePlans,
-            roomTypeId,
-            ratePlanId,
             whereToApplyPromotion,
             bookNights,
             freeNights,
@@ -46,6 +44,8 @@ module.exports = async (req, res) => {
         if (!findPromotionRecord) {
             return res.status(404).json({ message: "Incorrect property id" })
         }
+
+        
         const date = new Date().toLocaleString("en-IN", { timeZone: "Asia/Kolkata" })
         const promotionObject = {
             promotionId: randomstring.generate(6),
@@ -71,8 +71,7 @@ module.exports = async (req, res) => {
             blackOutDates: [{ blackOutDates: blackOutDates, date: date }],
             keepOfferNonRefundable: [{ keepOfferNonRefundable: keepOfferNonRefundable, date: date }],
             keepPayAtHotel: [{ keepPayAtHotel: keepPayAtHotel, date: date }],
-            applyPromotionForAllRoomsAndRatePlans: [{ applyPromotionForAllRoomsAndRatePlans: applyPromotionForAllRoomsAndRatePlans, date: date }],
-            // ratePlanAndRoomType: [{ roomTypeId: roomTypeId, ratePlanId: ratePlanId, date: date }],
+            applyPromotionForAllRoomsAndRatePlans: [{ applyPromotionForAllRoomsAndRatePlans: applyPromotionForAllRoomsAndRatePlans, date: date }],  
             whereToApplyPromotion: [{ whereToApplyPromotion: whereToApplyPromotion, date: date }],
             promotionName: [{ promotionName: promotionName, date: date }],
             ratePlanAndRoomType
