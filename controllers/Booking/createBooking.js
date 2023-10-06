@@ -2,6 +2,7 @@ const randomstring = require('randomstring');
 const bookingModel = require('../../models/Bookings/bookingPending');
 const propertyModel = require('../../models/Onboarding/propertys');
 const inventoryModel = require('../../models/manageInventory/manageInventory');
+const dumpInventoryModel = require('../../models/manageInventory/dataDumpInventoryRates')
 
 module.exports = async (req, res) => {
     try {
@@ -23,7 +24,7 @@ module.exports = async (req, res) => {
             return res.status(400).json({ message: "Check-in or check-out date must not be older than today's date" });
         }
 
-        //check in date must not be equal to checkout date
+        // Check if check-in date is equal to the checkout date
         if (checkInDateObj === checkOutDateObj) {
             return res.status(400).json({ message: "Check-in date and check-out date must not be equal" });
         }
@@ -85,12 +86,56 @@ module.exports = async (req, res) => {
                     'manageInventory.date': dateToCheck
                 });
 
+                const newInventoryEntry = await inventoryModel.findOne({
+                    roomTypeId: roomTypeIdToCheck
+                });
+
+                const { Inventory } = newInventoryEntry;
+                let baseInventoryValue = parseInt(Inventory[0].baseInventory);
+
                 if (!inventoryEntry || !inventoryEntry.manageInventory.some(entry => entry.date === dateToCheck)) {
-                    return res.status(400).json({ message: `Inventory not added for room type ${roomTypeIdToCheck} on ${dateToCheck}` });
+
+                    // Calculate the inventory value for the new object
+                    const calculatedInventoryValue = baseInventoryValue - roomTypeCounts[roomTypeIdToCheck];
+
+                    // Construct the new inventory object
+                    const newInventoryObject = {
+                        inventory: calculatedInventoryValue.toString(),
+                        modifiedDate: dateToCheck,
+                        date: dateToCheck,
+                        isBlocked: 'false'
+                    };
+
+                    // Add the new inventory object to the manageInventory array
+                    await inventoryModel.updateOne(
+                        {
+                            roomTypeId: roomTypeIdToCheck,
+                            // 'manageInventory.date': dateToCheck
+                        },
+                        {
+                            $push: {
+                                'manageInventory': newInventoryObject
+                            }
+                        }
+                    );
+
+                    // Add the new inventory object to the manageInventory array
+                    await dumpInventoryModel.updateOne(
+                        {
+                            roomTypeId: roomTypeIdToCheck,
+                            // 'manageInventory.date': dateToCheck
+                        },
+                        {
+                            $push: {
+                                'manageInventory': newInventoryObject
+                            }
+                        }
+                    );
+
                 }
 
                 // Get the available inventory count for this date and room type
-                const matchingDateEntry = inventoryEntry.manageInventory.find(entry => entry.date === dateToCheck);
+                const matchingDateEntry = newInventoryEntry.manageInventory.find(entry => entry.date === dateToCheck);
                 const availableInventory = parseInt(matchingDateEntry.inventory);
 
                 // Check if there's enough inventory for the current roomTypeId
@@ -98,39 +143,11 @@ module.exports = async (req, res) => {
                     return res.status(400).json({ message: `Not enough inventory available for room type ${roomTypeIdToCheck} on ${dateToCheck}` });
                 }
             }
-    
-            // Create booking record
-            const newBooking = new bookingModel({
-                propertyId,
-                bookingId: randomstring.generate(8),
-                checkInDate,
-                checkOutDate,
-                roomDetails,
-                roomNights,
-                totalRoomRate,
-                totalTax,
-                totalAmount,
-                bookingStatus,
-                paymentStatus,
-                paymentMode,
-                madeBy,
-                createdAt: new Date().toLocaleString("en-IN", { timeZone: "Asia/Kolkata" })
-            });
-    
-            // Save record
-            await newBooking.save();
-            // io.emit('newBooking', newBooking);
-            return res.status(200).json({ message: "Booking saved", bookingId: newBooking.bookingId });
-            
-        } 
+        }
+
         const currentTime = new Date();
         const timestamp = Math.floor(currentTime / 1000);
-        // Create a new Date object from the timestamp (in milliseconds)
-        // const date = new Date(timestamp * 1000);
 
-        // Format the date as a string
-        // const formattedDate = date.toLocaleString("en-IN", { timeZone: "Asia/Kolkata" });
-        // console.log(formattedDate)
         // Create booking record
         const newBooking = new bookingModel({
             propertyId,
@@ -148,7 +165,7 @@ module.exports = async (req, res) => {
             paymentMode,
             madeBy,
             timeStamp: timestamp,
-            createdAt: new Date().toLocaleString("en-IN", { timeZone: "Asia/Kolkata" })
+            createdAt: currentTime.toLocaleString("en-IN", { timeZone: "Asia/Kolkata" })
         });
 
         // Save record
@@ -158,5 +175,4 @@ module.exports = async (req, res) => {
         console.log(err);
         return res.status(500).json({ message: "Internal Server Error" });
     }
-    
 };
