@@ -6,30 +6,17 @@ const { parse, max } = require("date-fns");
 
 module.exports = async (req, res) => {
   const from = req.query.from;
-  console.log(from)
   const to = req.query.to;
 
   // Find manageInventory items within the date range
   const filteredManageInventory = await manageInventory.find({
-    propertyId: req.body.propertyId,
+    propertyId: req.query.propertyId,
     "manageInventory.isBlocked": "false",
     "manageInventory.date": {
       $gte: from,
       $lte: to,
     },
   });
-
-//   const rate = await managerates.find({
-//     propertyId: req.body.propertyId,
-//     "manageRate.date": {
-//       $gte: from,
-//       $lte: to,
-//     },
-//   });
-
-
-//   console.log(rate)
-
   // Initialize an object to store minimum inventory values by roomTypeId
   const minInventoryByRoomTypeId = {};
 
@@ -59,7 +46,7 @@ module.exports = async (req, res) => {
       const value = minInventoryByRoomTypeId[key];
       var data = await roomDetails.findOne({ roomTypeId: key });
       const data1 = await roomImages.findOne({ roomTypeId: key });
-      const ratedata = await managerates.findOne({roomTypeId:key ,"manageRate.date": { $gte: from, $lte: to,} ,propertyId: req.body.propertyId})
+      const ratedata = await managerates.findOne({roomTypeId:key ,"manageRate.date": { $gte: from, $lte: to,} ,propertyId: req.query.propertyId})
       console.log(ratedata)
       
       var inventory = (data.numberOfRooms && data.numberOfRooms[0] && data.numberOfRooms[0].numberOfRooms) || "";
