@@ -12,7 +12,7 @@ module.exports = async function fetchBookingsByPropertyId(req, res) {
       // Create a query object with propertyId and date filters
       const query = {
         propertyId,
-        checkInDate: { $lte: startDate },  // Check-in date is greater than or equal to startDate
+        checkInDate: { $gte: startDate },  // Check-in date is greater than or equal to startDate
         checkOutDate: { $gte: endDate },    // Check-out date is less than or equal to endDate
       };
 
