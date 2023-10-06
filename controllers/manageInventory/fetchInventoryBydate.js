@@ -1,77 +1,90 @@
 const manageInventory = require("../../models/manageInventory/manageInventory");
+const managerates = require("../../models/manageInventory/manageRates");
 const roomDetails = require("../../models/Rooms/roomTypeDetails");
-const images = require('../../models/Images/roomTypeImages')
-const { parse, format } = require("date-fns");
+const roomImages = require("../../models/Images/roomTypeImages");
+const { parse, max } = require("date-fns");
 
 module.exports = async (req, res) => {
-  const manageRoomsDetails = await manageInventory.find({
-    propertyId: req.body.propertyId, isBlocked : "false"
-});
-
-  const dateFormat = "yy-mm-dd"; // Use "yy-MM-dd" format
-  
   const from = req.query.from;
+  console.log(from)
   const to = req.query.to;
-  
-  // Assuming "from" and "to" are in the format "yy-mm-dd", you can parse them like this:
-  const fromDate = parse(from, dateFormat, new Date());
-  const toDate = parse(to, dateFormat, new Date());   // Replace with your desired end date
 
-  const roomTypeIdCounts = {};
+  // Find manageInventory items within the date range
+  const filteredManageInventory = await manageInventory.find({
+    propertyId: req.body.propertyId,
+    "manageInventory.isBlocked": "false",
+    "manageInventory.date": {
+      $gte: from,
+      $lte: to,
+    },
+  });
 
-manageRoomsDetails.forEach((item) => {
+//   const rate = await managerates.find({
+//     propertyId: req.body.propertyId,
+//     "manageRate.date": {
+//       $gte: from,
+//       $lte: to,
+//     },
+//   });
+
+
+//   console.log(rate)
+
+  // Initialize an object to store minimum inventory values by roomTypeId
+  const minInventoryByRoomTypeId = {};
+
+  // Group inventory items by roomTypeId and find the minimum value
+  filteredManageInventory.forEach((item) => {
     const { roomTypeId, manageInventory } = item;
 
-    // Filter the manageInventory items within the date range
-    const filteredInventory = manageInventory.filter((inventoryItem) => {
-        const modifiedDate = new Date(inventoryItem.modifiedDate);
-        return modifiedDate >= fromDate && modifiedDate <= toDate;
-    });
-
-    // Calculate the count for the filtered inventory items
-    const count = filteredInventory.length;
-
-    if (!roomTypeIdCounts[roomTypeId]) {
-        roomTypeIdCounts[roomTypeId] = 0;
+    if (!minInventoryByRoomTypeId[roomTypeId]) {
+      minInventoryByRoomTypeId[roomTypeId] = Number.MAX_SAFE_INTEGER;
     }
 
-    roomTypeIdCounts[roomTypeId] += count;
-});
-
-
-
-
-  let minKey = null;
-  let minValue = Infinity;
-  
-  for (const key in roomTypeIdCounts) {
-      if (roomTypeIdCounts.hasOwnProperty(key)) {
-          const value = roomTypeIdCounts[key];
-          if (value < minValue) {
-              minKey = key;
-              minValue = value;
-          }
+    manageInventory.forEach((inventoryItem) => {
+      const inventory = parseFloat(inventoryItem.inventory);
+      if (!isNaN(inventory)) {
+        minInventoryByRoomTypeId[roomTypeId] = Math.min(
+          minInventoryByRoomTypeId[roomTypeId],
+          inventory
+        );
       }
+    });
+  });
+
+  const details = [];
+
+  for (const key in minInventoryByRoomTypeId) {
+    if (minInventoryByRoomTypeId.hasOwnProperty(key)) {
+      const value = minInventoryByRoomTypeId[key];
+      var data = await roomDetails.findOne({ roomTypeId: key });
+      const data1 = await roomImages.findOne({ roomTypeId: key });
+      const ratedata = await managerates.findOne({roomTypeId:key ,"manageRate.date": { $gte: from, $lte: to,} ,propertyId: req.body.propertyId})
+      console.log(ratedata)
+      
+      var inventory = (data.numberOfRooms && data.numberOfRooms[0] && data.numberOfRooms[0].numberOfRooms) || "";
+      var rateData = (ratedata.manageRate && ratedata.manageRate[0] && ratedata.manageRate[0].price) || "";
+      var maxOccupancy = (data.maxOccupancy && data.maxOccupancy[0] && data.maxOccupancy[0].numberOfRooms) || "";
+      var roomName = (data.roomName && data.roomName[0] && data.roomName[0].roomName) || "";
+      var images = data1.roomTypeImages || []; // Ensure it's an array or initialize as an empty array if it's not defined
+  
+      
+      if (!images) {
+        images = "";
+      }
+
+      const all = {
+        roomPrice : rateData,
+        roomTypeId :key,
+        inventory,
+        maxOccupancy,
+        roomName,
+        images,
+      };
+
+      details.push(all);
+    }
   }
-  console.log(minKey , minValue)
 
-  if(minValue >= 0){
-
-   const data = await roomDetails.findOne({roomTypeId : minKey })
-   const getimages = await images.findOne({roomTypeId : minKey})
-
-
-   //return res.status(200).json({data})
-
-   const add = {
-    roomType: (data.roomType && data.roomType[0] && data.roomType[0].roomType) || "",
-    number_of_rooms: (data.numberOfRooms && data.numberOfRooms[0] && data.numberOfRooms[0].numberOfRooms) || "",
-    maxOccupancy: (data.maxOccupancy && data.maxOccupancy[0] && data.maxOccupancy[0].maxOccupancy) || "",
-    images: (getimages.roomTypeImages && getimages.roomTypeImages[0] && getimages.roomTypeImages[0].image) || ""
-};
-
-   return res.status(200).json({add})
-   
-   
-  }
+  return res.send(details)
 };
