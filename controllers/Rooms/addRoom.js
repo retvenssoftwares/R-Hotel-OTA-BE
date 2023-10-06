@@ -5,6 +5,7 @@ const RoomType = require("../../models/Rooms/roomTypeDetails");
 const roomImage = require("../../models/Images/roomTypeImages");
 const admin = require("../../models/Onboarding/registrations");
 const inventoryModel = require("../../models/manageInventory/manageInventory")
+const dumpInventoryModel = require('../../models/manageInventory/dataDumpInventoryRates')
 const randomstring = require("randomstring");
 // const io = require('socket.io')();
 
@@ -92,6 +93,18 @@ module.exports = async (req, res) => {
 
         await createInventory.save();
         // io.emit('roomAdded', { roomTypeId: roomTypeId });
+
+        const createDumpInventory = new dumpInventoryModel({
+            propertyId: propertyId,
+            roomTypeId: roomTypeId,
+            Inventory: [{
+                baseInventory: numberOfRooms,
+                modifiedDate: new Date().toLocaleString("en-IN", { timeZone: "Asia/Kolkata" })
+            }],
+            date: new Date().toLocaleString("en-IN", { timeZone: "Asia/Kolkata" })
+        })
+
+        await createDumpInventory.save();
         res.status(201).json({ message: 'room type added  successfully', roomTypeId: roomTypeId });
     } catch (error) {
         console.log(error)
