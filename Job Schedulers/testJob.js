@@ -105,10 +105,10 @@ const removeOldBookings = async () => {
 
     const currentTime = Math.floor(new Date() / 1000); // Convert to seconds
     const twentyFourHoursAgo = currentTime - 24 * 60 * 60;
-     console.log("current time ", currentTime)
+    //  console.log("current time ", currentTime)
     // Calculate the date and time 24 hours ago from the current time
 
-     console.log(twentyFourHoursAgo)
+    //  console.log(twentyFourHoursAgo)
     // Remove booking records with createdAt timestamps older than 24 hours
     const bookings = await pendingBookingModel.deleteMany({
       bookingStatus: "Pending",
