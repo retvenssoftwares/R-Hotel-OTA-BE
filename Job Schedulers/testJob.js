@@ -3,10 +3,11 @@ const cron = require('node-cron');
 const pendingBookingModel = require('../models/Bookings/bookingPending');
 const bookingModel = require('../models/Bookings/bookings');
 const manageInventoryModel = require('../models/manageInventory/manageInventory');
+const dumpInventoryModel = require('../models/manageInventory/dataDumpInventoryRates')
 const io = require('socket.io')();
 // Define a cron job pattern to run every 5 minutes
 const cronPattern = '*/5 * * * *';
-  
+
 // Define the task you want to run
 const moveConfirmedBookingsTask = async () => {
   try {
@@ -41,38 +42,52 @@ const moveConfirmedBookingsTask = async () => {
 
       // console.log('Matching Inventory Records:', matchingInventoryRecords);
 
-
       // Iterate through matchingInventoryRecords and reduce inventory based on date intervals
       for (const booking of confirmedBookings) {
         const checkInDate = new Date(booking.checkInDate);
         const checkOutDate = new Date(booking.checkOutDate);
 
-        matchingInventoryRecords.forEach(record => {
+        // Iterate through matchingInventoryRecords for each booking
+        for (const record of matchingInventoryRecords) {
           const inventoryEntries = record.manageInventory || [];
-          inventoryEntries.forEach(entry => {
+          const roomTypeIdOccurrences = roomTypeIds.filter((id) => id === record.roomTypeId).length;
+          const reductionValue = roomTypeIdOccurrences;
+
+          // Store updated inventory entries
+          const updatedInventoryEntries = [];
+
+          inventoryEntries.forEach((entry) => {
             const entryDate = new Date(entry.date);
             if (entryDate >= checkInDate && entryDate <= checkOutDate) {
-              // Calculate the reduction value based on the number of occurrences of the roomTypeId
-              const roomTypeIdOccurrences = roomTypeIds.filter(id => id === record.roomTypeId).length;
-              const reductionValue = roomTypeIdOccurrences;
-
               // Reduce the inventory value
-              entry.inventory -= reductionValue;              
-             
+              entry.inventory -= reductionValue;
+              updatedInventoryEntries.push(entry);
+              // console.log(entry.inventory);
             }
           });
-        });
-      }
 
-     
+          // Push the updated inventory entries into dataDumpInventoryRates
+          if (reductionValue > 0 && updatedInventoryEntries.length > 0) {
+            // Find the corresponding record in dataDumpInventoryRates
+            const correspondingRecord = await dumpInventoryModel.findOne({ roomTypeId: record.roomTypeId });
+
+            // Push the updated entries into its manageInventory array
+            if (correspondingRecord) {
+              correspondingRecord.manageInventory.push(...updatedInventoryEntries);
+              await correspondingRecord.save();
+              console.log(`Updated dataDumpInventoryRates for roomTypeId ${record.roomTypeId}`);
+            }
+          }
+        }
+      }
 
       // Save the updated matchingInventoryRecords with reduced inventory
       await Promise.all(matchingInventoryRecords.map(record => record.save()));
 
-      io.emit("inventoryUpdate",matchingInventoryRecords)
+      io.emit("inventoryUpdate", matchingInventoryRecords)
 
       console.log('Inventory Reduction Completed.'); // Replace with your actual query to get updated inventory
-  
+
     } else {
       console.log('No confirmed bookings to move at ', new Date().toLocaleString("en-IN", { timeZone: "Asia/Kolkata" }));
     }
@@ -87,13 +102,13 @@ const scheduledTask = cron.schedule(cronPattern, moveConfirmedBookingsTask);
 //job to remove old pending booking records
 const removeOldBookings = async () => {
   try {
-    
+
     const currentTime = Math.floor(new Date() / 1000); // Convert to seconds
     const twentyFourHoursAgo = currentTime - 24 * 60 * 60;
-    // console.log("current time ", currentTime)
+    //  console.log("current time ", currentTime)
     // Calculate the date and time 24 hours ago from the current time
 
-    // console.log(twentyFourHoursAgo)
+    //  console.log(twentyFourHoursAgo)
     // Remove booking records with createdAt timestamps older than 24 hours
     const bookings = await pendingBookingModel.deleteMany({
       bookingStatus: "Pending",

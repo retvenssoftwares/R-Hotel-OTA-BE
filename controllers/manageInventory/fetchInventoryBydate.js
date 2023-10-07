@@ -2,6 +2,8 @@ const manageInventory = require("../../models/manageInventory/manageInventory");
 const managerates = require("../../models/manageInventory/manageRates");
 const roomDetails = require("../../models/Rooms/roomTypeDetails");
 const roomImages = require("../../models/Images/roomTypeImages");
+const  rateType =  require("../../models/Rooms/rateType")
+const ratePlane = require("../../models/Rooms/ratePlan")
 const { parse, max } = require("date-fns");
 
 module.exports = async (req, res) => {
@@ -44,17 +46,25 @@ module.exports = async (req, res) => {
   for (const key in minInventoryByRoomTypeId) {
     if (minInventoryByRoomTypeId.hasOwnProperty(key)) {
       const value = minInventoryByRoomTypeId[key];
-      var data = await roomDetails.findOne({ roomTypeId: key });
+      var data = await roomDetails.findOne({ roomTypeId: key});
       const data1 = await roomImages.findOne({ roomTypeId: key });
-      const ratedata = await managerates.findOne({roomTypeId:key ,"manageRate.date": { $gte: from, $lte: to,} ,propertyId: req.query.propertyId})
-      console.log(ratedata)
+      const ratedata = await managerates.findOne({roomTypeId:key ,"manageRate.date": { $gte: from, $lte: to} ,propertyId: req.query.propertyId})
+     const ratetype = await rateType.findOne({roomTypeId : key,propertyId: req.query.propertyId})
+     const rateplane = await ratePlane.findOne({roomTypeId:key ,propertyId: req.query.propertyId })
       
       var inventory = (data.numberOfRooms && data.numberOfRooms[0] && data.numberOfRooms[0].numberOfRooms) || "";
-      var rateData = (ratedata.manageRate && ratedata.manageRate[0] && ratedata.manageRate[0].price) || "";
+      var rateData = "";
+
+      if (ratedata && ratedata.manageRate && ratedata.manageRate[0] && ratedata.manageRate[0].price) {
+        rateData = ratedata.manageRate[0].price;
+      }
       var maxOccupancy = (data.maxOccupancy && data.maxOccupancy[0] && data.maxOccupancy[0].numberOfRooms) || "";
       var roomName = (data.roomName && data.roomName[0] && data.roomName[0].roomName) || "";
       var images = data1.roomTypeImages || []; // Ensure it's an array or initialize as an empty array if it's not defined
-  
+      var ratetypedata = ratetype.rateTypeId || ""
+      var ratePlan = rateplane.ratePlanId || ""
+
+      
       
       if (!images) {
         images = "";
@@ -67,6 +77,8 @@ module.exports = async (req, res) => {
         maxOccupancy,
         roomName,
         images,
+        rateTypeId : ratetypedata,
+        ratePlanId : ratePlan
       };
 
       details.push(all);
