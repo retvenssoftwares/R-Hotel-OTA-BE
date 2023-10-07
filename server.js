@@ -7,16 +7,12 @@ const socketIo = require('socket.io');
 const bodyParser = require('body-parser');
 const path = require('path')
 
-
-
 const mongoose = require('mongoose');
 
 const app = express();
 const server = http.createServer(app);
 const io = socketIo(server);
 const port = process.env.PORT || 8000;
-
-
 
 // app.use(express.static('R-Hotel-OTA-BE'));
 app.use(express.static(path.join(__dirname, 'R-Hotel-OTA-BE')));
@@ -41,8 +37,6 @@ io.on('connection', (socket) => {
     });
 });
   
-
-
 //accountCreation
 const registration = require('./routers/accountCreation/signUpRouter');
 const login = require('./routers/accountCreation/loginRouter');
@@ -134,10 +128,7 @@ const patchRates = require('./routers/manageInventory/patchRatesRouter')
 const getAvailableInvetory = require('./routers/manageInventory/fetchInventoryRouter');
 const blockUnBlockInventory = require('./routers/manageInventory/blockUnblockInventoryRouter')
 
-
-
 //reports
-
 const getRevenueDetailsData = require("./routers/Report/revenueGenwratedOfPropertyRounter")
 const grossrevenue = require("./routers/Report/totalGrossRevenueRouter")
 const avgrate = require("./routers/Report/avgSellingPriceRouter")
@@ -235,7 +226,6 @@ app.use(getAvailableInvetory)
 app.use(country)
 
 //reports
-
 app.use(getRevenueDetailsData)
 app.use(grossrevenue)
 app.use(avgrate)
