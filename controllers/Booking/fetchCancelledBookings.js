@@ -5,29 +5,40 @@ const ratePlan = require('../../models/Rooms/ratePlan')
 module.exports = async function fetchBookingsByPropertyId(req, res) {
   try {
     const { propertyId } = req.query;
-    const { startDate, endDate } = req.query;
-
-   
+    const { startDate, endDate, requestType } = req.query;
+    var query = {};
+    if (requestType === 'checkIn') {
       // Create a query object with propertyId and date filters
-      const query = {
+      query = {
         propertyId,
-        checkInDate: { $gte: startDate },  // Check-in date is greater than or equal to startDate
-        checkOutDate: { $lte: endDate },    // Check-out date is less than or equal to endDate
+        checkInDate: { $gte: startDate, $lte: endDate },  // Check-in date is greater than or equal to startDate
+        // checkOutDate: { $lte: endDate },    // Check-out date is less than or equal to endDate
       };
-
-      const booking = await cancelledBookings.find(query,{
-        checkOutDate: 1,
+    }
+    else if (requestType === 'checkOut') {
+      query = {
+        propertyId,
+        // checkInDate: { $gte: startDate, $lte: endDate },  // Check-in date is greater than or equal to startDate
+        checkOutDate: { $lte: endDate, $gte: startDate, },    // Check-out date is less than or equal to endDate
+      };
+    }
+    const booking = await cancelledBookings.find(query, {
+      checkOutDate: 1,
       checkInDate: 1,
-      bookingId:1,
-      "roomDetails.ratePlanId":1,
+      bookingId: 1,
+      "roomDetails.ratePlanId": 1,
       "roomDetails.guestPhoneNumber": 1,
       "roomDetails.guestFirstName": 1,
       "roomDetails.guestLastName": 1,
       totalAmount: 1,
       _id: 0, // Exclude the _id field from the response
-      });
-     // Manually populate the ratePlanName
-     const populatedBookings = await Promise.all(
+    });
+
+    if (!booking) {
+      return res.status(404).json({ message: "No cancelled bookings" })
+    }
+    // Manually populate the ratePlanName
+    const populatedBookings = await Promise.all(
       booking.map(async (booking) => {
         const ratePlanId = booking.roomDetails[0].ratePlanId; // Assuming a single ratePlanId per booking
         const ratePlanData = await ratePlan.findOne({ ratePlanId: ratePlanId });
@@ -47,9 +58,9 @@ module.exports = async function fetchBookingsByPropertyId(req, res) {
         ratePlanName: ratePlanName[0].ratePlanName, // Assuming a single ratePlanName per booking
       };
     });
-    
+
     res.status(200).json(cleanedBookings);
-    
+
   } catch (error) {
     console.error('Error fetching bookings:', error);
     res.status(500).json({ error: 'An error occurred while fetching bookings' });
