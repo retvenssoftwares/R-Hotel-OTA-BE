@@ -33,13 +33,17 @@ module.exports = async (req, res) => {
     manageInventory.forEach((inventoryItem) => {
       const inventory = parseFloat(inventoryItem.inventory);
       if (!isNaN(inventory)) {
+        console.log(inventory)
         minInventoryByRoomTypeId[roomTypeId] = Math.min(
           minInventoryByRoomTypeId[roomTypeId],
           inventory
         );
+        console.log("b",minInventoryByRoomTypeId[roomTypeId])
       }
     });
   });
+
+  console.log(minInventoryByRoomTypeId)
 
   const details = [];
 
@@ -52,7 +56,7 @@ module.exports = async (req, res) => {
      const ratetype = await rateType.findOne({roomTypeId : key,propertyId: req.query.propertyId})
      const rateplane = await ratePlane.findOne({roomTypeId:key ,propertyId: req.query.propertyId })
       
-      var inventory = (data.numberOfRooms && data.numberOfRooms[0] && data.numberOfRooms[0].numberOfRooms) || "";
+      //var inventory = (data.numberOfRooms && data.numberOfRooms[0] && data.numberOfRooms[0].numberOfRooms) || "";
       var rateData = "";
 
       if (ratedata && ratedata.manageRate && ratedata.manageRate[0] && ratedata.manageRate[0].price) {
@@ -73,7 +77,7 @@ module.exports = async (req, res) => {
       const all = {
         roomPrice : rateData,
         roomTypeId :key,
-        inventory,
+        inventory :value,
         maxOccupancy,
         roomName,
         images,
