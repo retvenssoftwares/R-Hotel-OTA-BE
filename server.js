@@ -1,5 +1,6 @@
 require('dotenv').config();
 require('./Job Schedulers/testJob')
+require('./Job Schedulers/deleteOldBookings')
 const cors = require('cors');
 const express = require('express');
 const http = require('http');
