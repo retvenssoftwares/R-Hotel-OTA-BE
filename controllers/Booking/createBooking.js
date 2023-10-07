@@ -3,6 +3,7 @@ const bookingModel = require('../../models/Bookings/bookingPending');
 const propertyModel = require('../../models/Onboarding/propertys');
 const inventoryModel = require('../../models/manageInventory/manageInventory');
 const dumpInventoryModel = require('../../models/manageInventory/dataDumpInventoryRates')
+const cancelBooking = require("../../models/Bookings/cancelBooking")
 
 module.exports.createBooking = async (req, res) => {
     try {
@@ -209,7 +210,7 @@ module.exports.cancelledBooking = async (req, res) => {
     // Determine refund status (true or false) based on your business logic
 
     // Create a new record in the canclebooking collection
-    const cancelledBooking = new canclebooking({
+    const cancelledBooking = new cancelBooking({
       bookingId: originalBooking.bookingId,
       userId: originalBooking.userId,
       propertyId: originalBooking.propertyId,
