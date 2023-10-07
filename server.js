@@ -1,5 +1,6 @@
 require('dotenv').config();
 require('./Job Schedulers/testJob')
+require('./Job Schedulers/deleteOldBookings')
 const cors = require('cors');
 const express = require('express');
 const http = require('http');
@@ -7,16 +8,12 @@ const socketIo = require('socket.io');
 const bodyParser = require('body-parser');
 const path = require('path')
 
-
-
 const mongoose = require('mongoose');
 
 const app = express();
 const server = http.createServer(app);
 const io = socketIo(server);
 const port = process.env.PORT || 8000;
-
-
 
 // app.use(express.static('R-Hotel-OTA-BE'));
 app.use(express.static(path.join(__dirname, 'R-Hotel-OTA-BE')));
@@ -35,13 +32,11 @@ app.use((req, res, next) => {
 // Socket.IO setup
 io.on('connection', (socket) => {
     console.log('A user connected');
-  
+
     socket.on('disconnect', () => {
-      console.log('User disconnected');
+        console.log('User disconnected');
     });
 });
-  
-
 
 //accountCreation
 const registration = require('./routers/accountCreation/signUpRouter');
@@ -53,7 +48,7 @@ const getAmenities = require('./routers/Amenities/getAmenitiesRouter')
 const fetchAmenityType = require('./routers/Amenities/fetchAmenityTypeRouter')
 const fetchAmenityName = require('./routers/Amenities/fetchAmenityNameRouter')
 const patchAmenityProperty = require('./routers/Amenities/patchAmenityPropertyRouter');
-const fetchAmenityCategory =  require('./routers/Amenities/fetchAmenityCategoryRouter');
+const fetchAmenityCategory = require('./routers/Amenities/fetchAmenityCategoryRouter');
 const fetchRoomTypeAmenity = require('./routers/Amenities/getRoomAmenitiesRouter')
 
 //Inclusions
@@ -70,19 +65,20 @@ const getImageOgRoomType = require('./routers/Images/getRoomTypeAndPropertyImage
 //Booking
 const createBookingRouter = require('./routers/Bookings/createBookingRouter')
 const patchBooking = require('./routers/Bookings/patchBookingRouter')
-const fetchBooking =require('./routers/Bookings/fetchBookingByPorpertyIdRouter')
-const fetchCheckOutBooking =require('./routers/Bookings/fetchCheckOutBookingByPropertyIdRouter')
+const fetchBooking = require('./routers/Bookings/fetchBookingByPorpertyIdRouter')
+const fetchCheckOutBooking = require('./routers/Bookings/fetchCheckOutBookingByPropertyIdRouter')
 //const patchBooking = require('./routers/Bookings/patchBookingRouter');
 const getUserBookings = require('./routers/Bookings/getBookingsByUserIdRouter')
 const getBookingData = require('./routers/Bookings/getBookingDetailsRouter')
-const checkInPendingBooking =require('./routers/Bookings/fetchCheckInPendingBookingByPropertyRouter')
-const checkOutPendingBooking =require('./routers/Bookings/fetchCheckOutPendingBookingByPropertyRouter')
-const fetchPaymentData =require('./routers/Bookings/fetchPaymentDataByCheckInAndOutRouter')
+const checkInPendingBooking = require('./routers/Bookings/fetchCheckInPendingBookingByPropertyRouter')
+const checkOutPendingBooking = require('./routers/Bookings/fetchCheckOutPendingBookingByPropertyRouter')
+const fetchPaymentData = require('./routers/Bookings/fetchPaymentDataByCheckInAndOutRouter');
+const fetchCancelledBookings = require('./routers/Bookings/fetchCancelledBookingsRouter')
 
 //Onboarding
-const property =require('./routers/Onboarding/addPropertyRouter');
-const getProperty =require('./routers/Onboarding/getPropertyRouter');
-const updateproperty =require('./routers/Onboarding/patchPropertyDetailsRouter');
+const property = require('./routers/Onboarding/addPropertyRouter');
+const getProperty = require('./routers/Onboarding/getPropertyRouter');
+const updateproperty = require('./routers/Onboarding/patchPropertyDetailsRouter');
 const getAllUserProperties = require('./routers/Onboarding/getAllUserProperties')
 const selectAmenitiesInRoom = require('./routers/Amenities/selectAmenitiesInRoomTypeRouter')
 const fetchAllProperty = require('./routers/Onboarding/getAllPropertyRouter')
@@ -111,19 +107,19 @@ const getPromotion = require('./routers/Promotion/getPromotionByPropertyIdRouter
 //room
 const fetchRoomTypeList = require('./routers/Room/roomTypelistFetchRouter')
 const fetchRoomType = require('./routers/Room/fetchRoomTypeByPropertyIdRouter')
-const addRoom =require('./routers/Room/addRoomRouter')
-const fetchRoom =require('./routers/Room/getRoomRouter')
-const  patchRoom =require('./routers/Room/patchAddRoomRouter')
+const addRoom = require('./routers/Room/addRoomRouter')
+const fetchRoom = require('./routers/Room/getRoomRouter')
+const patchRoom = require('./routers/Room/patchAddRoomRouter')
 const addRatePlan = require('./routers/Room/addRatePlanRouter')
 const addRateType = require('./routers/Room/addRateTypeRouter');
-const fetchBedName =require('./routers/Room/getBedTypeNameRouter');
-const fetchRatePlan =require('./routers/Room/getRatePlanByRoomTypeRouter');
-const getRatePlan =require('./routers/Room/getRatePlanByPropertyIdRouter');
+const fetchBedName = require('./routers/Room/getBedTypeNameRouter');
+const fetchRatePlan = require('./routers/Room/getRatePlanByRoomTypeRouter');
+const getRatePlan = require('./routers/Room/getRatePlanByPropertyIdRouter');
 const editRateType = require('./routers/Room/patchRateTypeRouter')
 const getRatePlanById = require('./routers/Room/getRatePlanByIdRouter')
 const getRoomType = require('./routers/Room/getRoomTypeByPropertyIdRouter');
 const getRateType = require('./routers/Room/fetchRateTypeByRateIdRouter')
-const editRatePlan =  require('./routers/Room/patchRatePlanRouter')
+const editRatePlan = require('./routers/Room/patchRatePlanRouter')
 const getRateTypesByRoomId = require('./routers/Room/getRateTypesByRoomIdRouter')
 
 //ManageInventory
@@ -134,10 +130,7 @@ const patchRates = require('./routers/manageInventory/patchRatesRouter')
 const getAvailableInvetory = require('./routers/manageInventory/fetchInventoryRouter');
 const blockUnBlockInventory = require('./routers/manageInventory/blockUnblockInventoryRouter')
 
-
-
 //reports
-
 const getRevenueDetailsData = require("./routers/Report/revenueGenwratedOfPropertyRounter")
 const grossrevenue = require("./routers/Report/totalGrossRevenueRouter")
 const avgrate = require("./routers/Report/avgSellingPriceRouter")
@@ -201,6 +194,7 @@ app.use(getBookingData)
 app.use(getUserBookings);
 app.use(checkInPendingBooking)
 app.use(checkOutPendingBooking)
+app.use(fetchCancelledBookings)
 app.use(fetchPaymentData)
 
 //inventory
@@ -235,7 +229,6 @@ app.use(getAvailableInvetory)
 app.use(country)
 
 //reports
-
 app.use(getRevenueDetailsData)
 app.use(grossrevenue)
 app.use(avgrate)

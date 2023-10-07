@@ -197,7 +197,7 @@ module.exports.cancelledBooking = async (req, res) => {
     // Check if the booking is eligible for cancellation (e.g., before check-in date)
     const current = new Date();
     const formattedDate = format(current, "yyyy-MM-dd");
-    console.log(formattedDate)
+    // console.log(formattedDate)
     const checkInDate = originalBooking.checkInDate;
     const refund = req.body.refund
 

@@ -19,6 +19,11 @@ module.exports = async (req, res) => {
       $lte: to,
     },
   });
+
+
+  if(from >= to){
+    return res.status(200).json({message : "date is not valid"})
+  }
   // Initialize an object to store minimum inventory values by roomTypeId
   const minInventoryByRoomTypeId = {};
 
