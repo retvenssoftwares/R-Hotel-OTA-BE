@@ -4,7 +4,7 @@ const propertyModel = require('../../models/Onboarding/propertys');
 const inventoryModel = require('../../models/manageInventory/manageInventory');
 const dumpInventoryModel = require('../../models/manageInventory/dataDumpInventoryRates')
 
-module.exports = async (req, res) => {
+module.exports.createBooking = async (req, res) => {
     try {
         const { userId, propertyId, checkInDate, checkOutDate, roomDetails, roomNights, totalRoomRate, totalTax, totalAmount, bookingStatus, paymentStatus, paymentMode, madeBy } = req.body;
         const findProperty = await propertyModel.find({ propertyId: propertyId });
@@ -56,7 +56,7 @@ module.exports = async (req, res) => {
                 if (inventoryEntry && inventoryEntry.manageInventory) {
                     const matchingDateEntry = inventoryEntry.manageInventory.find(entry => entry.date === dateString && entry.isBlocked === 'true');
                     if (matchingDateEntry) {
-                        return res.status(400).json({ message: `Inventory is blocked for room type ${roomTypeIdToCheck} on ${dateString}` });
+                        return res.status(400).json({ message: "Inventory is blocked for room type ${roomTypeIdToCheck} on ${dateString}" });
                     }
                 }
             }
@@ -140,7 +140,7 @@ module.exports = async (req, res) => {
 
                 // Check if there's enough inventory for the current roomTypeId
                 if (roomTypeCounts[roomTypeIdToCheck] > availableInventory || availableInventory === 0) {
-                    return res.status(400).json({ message: `Not enough inventory available for room type ${roomTypeIdToCheck} on ${dateToCheck}` });
+                    return res.status(400).json({ message:" Not enough inventory available for room type ${roomTypeIdToCheck} on ${dateToCheck"});
                 }
             }
         }
@@ -175,4 +175,68 @@ module.exports = async (req, res) => {
         console.log(err);
         return res.status(500).json({ message: "Internal Server Error" });
     }
+};
+
+
+
+const booking = require("../../models/Bookings/bookings");
+const { parse ,format } = require("date-fns");
+
+module.exports.cancelledBooking = async (req, res) => {
+  const bookingId = req.params.bookingId;
+
+  try {
+    // Find the original booking based on bookingId
+    const originalBooking = await booking.findOne({ bookingId: bookingId });
+
+    if (!originalBooking) {
+      return res.status(404).json({ message: "Booking not found" });
+    }
+
+    // Check if the booking is eligible for cancellation (e.g., before check-in date)
+    const current = new Date();
+    const formattedDate = format(current, "yyyy-MM-dd");
+    console.log(formattedDate)
+    const checkInDate = originalBooking.checkInDate;
+    const refund = req.body.refund
+
+    if (checkInDate <= formattedDate) {
+      return res
+        .status(500)
+        .json({ message: "Booking cannot be cancelled after check-in" });
+    }
+
+    // Determine refund status (true or false) based on your business logic
+
+    // Create a new record in the canclebooking collection
+    const cancelledBooking = new canclebooking({
+      bookingId: originalBooking.bookingId,
+      userId: originalBooking.userId,
+      propertyId: originalBooking.propertyId,
+      checkInDate: originalBooking.checkInDate,
+      checkOutDate: originalBooking.checkOutDate,
+      roomDetails: originalBooking.roomDetails,
+      roomNights: originalBooking.roomNights,
+      totalRoomRate: originalBooking.totalRoomRate,
+      totalTax: originalBooking.totalTax,
+      totalAmount: originalBooking.totalAmount,
+      bookingStatus: originalBooking.bookingStatus,
+      paymentStatus: originalBooking.paymentStatus,
+      paymentMode: originalBooking.paymentMode,
+      madeBy: originalBooking.madeBy,
+      createdAt: originalBooking.createdAt,
+      timeStamp: originalBooking.timeStamp,
+      refundStatus: refund,
+      // Include other relevant fields from the original booking
+    });
+
+    // Save the cancelled booking
+    await cancelledBooking.save();
+    await booking.deleteOne({bookingId : bookingId})
+
+    return res.status(200).json({ message: "Booking cancelled"});
+  } catch (err) {
+    console.error(err);
+    return res.status(500).json({ message: "Internal Server Error" });
+  }
 };
