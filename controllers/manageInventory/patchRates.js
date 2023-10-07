@@ -13,6 +13,7 @@ module.exports = async (req, res) => {
             return res.status(404).json({ message: "Rates not found for the given roomTypeId" });
         }
         let { roomTypeId } = findRates
+        // console.log(roomTypeId)
         const findRoomTypeId = await dumpInventoryRatesModel.findOne({ roomTypeId })
 
         if (!findRates.manageRate) {
@@ -60,17 +61,45 @@ module.exports = async (req, res) => {
                 // If the date exists, update the price and modified date
                 existingEntry.price = price;
                 existingEntry.modifiedDate = new Date().toLocaleString("en-IN", { timeZone: "Asia/Kolkata" });
-                findRoomTypeId.manageRate.push({ date: dateString, price, rateTypeId: rateTypeId, modifiedDate: new Date().toLocaleString("en-IN", { timeZone: "Asia/Kolkata" }) });
+                // findRoomTypeId.manageRate.push({ date: dateString, price, rateTypeId: rateTypeId, modifiedDate: new Date().toLocaleString("en-IN", { timeZone: "Asia/Kolkata" }) });
+                const updatedDumpDocument = await dumpInventoryRatesModel.findOneAndUpdate(
+                    { roomTypeId: roomTypeId },
+                    {
+                        $push: { manageRate: { rateTypeId, date: dateString, price, modifiedDate: new Date().toLocaleString("en-IN", { timeZone: "Asia/Kolkata" }) } },
+                    },
+                    {
+                        new: true,
+                    }
+                );
             } else {
                 // If the date does not exist, add a new entry
-                findRates.manageRate.push({ date: dateString, price, modifiedDate: new Date().toLocaleString("en-IN", { timeZone: "Asia/Kolkata" }) });
-                findRoomTypeId.manageRate.push({ date: dateString, price, rateTypeId: rateTypeId, modifiedDate: new Date().toLocaleString("en-IN", { timeZone: "Asia/Kolkata" }) });
+                // findRates.manageRate.push({ date: dateString, price, modifiedDate: new Date().toLocaleString("en-IN", { timeZone: "Asia/Kolkata" }) });
+                // findRoomTypeId.manageRate.push({ date: dateString, price, rateTypeId: rateTypeId, modifiedDate: new Date().toLocaleString("en-IN", { timeZone: "Asia/Kolkata" }) });
+                const updatedDocument = await rateModel.findOneAndUpdate(
+                    { rateTypeId: rateTypeId },
+                    {
+                        $push: { manageRate: { rateTypeId, date: dateString, price, modifiedDate: new Date().toLocaleString("en-IN", { timeZone: "Asia/Kolkata" }) } },
+                    },
+                    {
+                        new: true,
+                    }
+                );
+
+                const updatedDumpDocument = await dumpInventoryRatesModel.findOneAndUpdate(
+                    { roomTypeId: roomTypeId },
+                    {
+                        $push: { manageRate: { rateTypeId, date: dateString, price, modifiedDate: new Date().toLocaleString("en-IN", { timeZone: "Asia/Kolkata" }) } },
+                    },
+                    {
+                        new: true,
+                    }
+                );
             }
         }
 
         // Save the updated price document
         await findRates.save();
-        await findRoomTypeId.save();
+        // await findRoomTypeId.save();
 
         return res.status(200).json({ message: "Rates updated successfully" });
 
