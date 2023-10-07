@@ -174,4 +174,4 @@ const cancleBooking = mongoose.Schema({
 
 })
 
-module.exports = mongoose.model('cancleBooking', cancleBooking);
+module.exports = mongoose.model('cancelBooking', cancleBooking);
