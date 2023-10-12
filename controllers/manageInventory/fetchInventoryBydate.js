@@ -11,14 +11,7 @@ const rates = require("../../models/manageInventory/manageRates");
 module.exports = async (req, res) => {
   const from = req.query.from;
   const to = req.query.to;
-  const propertyId = req.query.propertyId
 
-  // Find manageInventory items within the date range
-
-  // const filterdata = await manageInventory.find({ propertyId: req.query.propertyId})
-  // console.log(filterdata)
-
-  
 
   const filteredManageInventory = await manageInventory.aggregate([
     {
@@ -70,7 +63,7 @@ module.exports = async (req, res) => {
 
       // room Images of that room 
       const roomImageData = await roomImageCollection.findOne({roomTypeId : room.roomTypeId})
-      console.log("ttttttttttttttttttt",roomImageData)
+     
 
       // array of roomImages 
       const roomImage = roomImageData.roomTypeImages || ""
@@ -188,7 +181,7 @@ module.exports = async (req, res) => {
       for(const rate of ratedata){
         for(const ratedetails of rate.manageRate){
 
-          //const datedetails = ratedetails.date
+          const datedetails = ratedetails.date
           // console.log(datedetails)
 
           //const stringDate = datedetails.split("-")
@@ -196,8 +189,17 @@ module.exports = async (req, res) => {
           //const formatedDate = stringDate[2] + "/" +stringDate[1] + "/" + stringDate[0]
          // console.log(formatedDate)
           
-          const ratePlaneData = await ratePlane.findOne({roomTypeId: key,propertyId: req.query.propertyId});
-          //console.log("fghjb",ratePlaneData)
+         const ratePlaneData = await ratePlane.aggregate([
+          {
+            $match: {
+              roomTypeId: key,
+              propertyId: req.query.propertyId,
+              "startDate.startDate": {$gte : datedetails },
+              "endDate.endDate": { $lte: datedetails }
+            }
+          }
+        ]);
+          console.log("fghjb",ratePlaneData)
           
           if (ratePlaneData) {
             ratedetails.roomTypeId = ratePlaneData.roomTypeId;
@@ -211,7 +213,11 @@ module.exports = async (req, res) => {
             ratedetails.inventory = value
           
             // Add ratePlaneName to the ratedetails object
-            ratedetails.ratePlaneName = ratePlaneData.ratePlanName[0].ratePlanName;
+            if (ratePlaneData.ratePlanName && ratePlaneData.ratePlanName.length > 0) {
+              ratedetails.ratePlaneName = ratePlaneData.ratePlanName[0].ratePlanName;
+            } else {
+              ratedetails.ratePlaneName = ""; // Set to an empty string if ratePlanName is not available
+            }
             rateArray.push(ratedetails);
           }
           

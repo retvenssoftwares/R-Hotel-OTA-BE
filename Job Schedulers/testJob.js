@@ -1,5 +1,6 @@
 
 const cron = require('node-cron');
+require("dotenv").config()
 const pendingBookingModel = require('../models/Bookings/bookingPending');
 const bookingModel = require('../models/Bookings/bookings');
 const manageInventoryModel = require('../models/manageInventory/manageInventory');
@@ -8,11 +9,56 @@ const io = require('socket.io')();
 // Define a cron job pattern to run every 5 minutes
 const cronPattern = '*/5 * * * *';
 
+
+async function sendResetLinkToMail(fullName, email, link) {
+  try {
+    console.log(fullName, email);
+    const transporter = nodeMailer.createTransport({
+      host: "smtp.gmail.com",
+      port: 587,
+      auth: {
+        user: process.env.email,
+        pass: process.env.password,
+      },
+    });
+
+    const mailOptions = {
+      from: process.env.email,
+      to: email,
+      subject: "For Reset Password",
+      html:
+        "<p> Hii  " +
+        fullName +
+        " Bookings details are" +
+        
+        "'> ",
+    };
+
+    transporter.sendMail(mailOptions, function (err, info) {
+      if (err) {
+        console.log(err);
+      } else {
+        console.log("mail has been sent");
+      }
+    });
+  } catch (err) {
+    res.status(400).send({ success: false, msg: err.message });
+  }
+}
+
 // Define the task you want to run
 const moveConfirmedBookingsTask = async () => {
   try {
     // Find all records in pendingBookingModel with bookingStatus "Confirmed"
     const confirmedBookings = await pendingBookingModel.find({ bookingStatus: "Confirmed" });
+
+    for(const details of confirmedBookings){
+      const firstname = details.roomDetails[0].guestFirstName
+      const lastname = details.roomDetails[0].guestLastName
+      var email = details.roomDetails[0].guestEmail
+      var name = firstname + lastname
+    }
+   
 
     if (confirmedBookings.length > 0) {
       // Collect check-in and check-out dates of the confirmed bookings
@@ -79,6 +125,8 @@ const moveConfirmedBookingsTask = async () => {
             }
           }
         }
+
+        sendResetLinkToMail(name, email);
       }
 
       // Save the updated matchingInventoryRecords with reduced inventory
