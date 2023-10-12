@@ -1,41 +1,44 @@
-const Booking = require('../../models/Bookings/bookings');
+const cancelledBookings = require('../../models/Bookings/cancelBooking');
 const ratePlan = require('../../models/Rooms/ratePlan')
 
 // Function to fetch all data between startDate and endDate
 module.exports = async function fetchBookingsByPropertyId(req, res) {
   try {
-    const { propertyId } = req.params;
+    const { propertyId } = req.query;
     const { startDate, endDate, requestType } = req.query;
-//     const propertyIds = await Booking.findOne({ propertyId:propertyId })
-//     console.log(propertyIds)
-// if(!propertyIds){
-//   return res.status(404).json({message:'property Not found'})
-// }
-
-    // Check if requestType is "checkIn"
+    var query = {};
     if (requestType === 'checkIn') {
       // Create a query object with propertyId and date filters
-      const query = {
+      query = {
         propertyId,
-        checkInDate: { $gte: startDate },  // Check-in date is greater than or equal to startDate
-        checkOutDate: { $lte: endDate },    // Check-out date is less than or equal to endDate
+        checkInDate: { $gte: startDate, $lte: endDate },  // Check-in date is greater than or equal to startDate
+        // checkOutDate: { $lte: endDate },    // Check-out date is less than or equal to endDate
       };
-
-      const booking = await Booking.find(query,{
-        checkOutDate: 1,
+    }
+    else if (requestType === 'checkOut') {
+      query = {
+        propertyId,
+        // checkInDate: { $gte: startDate, $lte: endDate },  // Check-in date is greater than or equal to startDate
+        checkOutDate: { $lte: endDate, $gte: startDate, },    // Check-out date is less than or equal to endDate
+      };
+    }
+    const booking = await cancelledBookings.find(query, {
+      checkOutDate: 1,
       checkInDate: 1,
-      bookingId:1,
-      "roomDetails.ratePlanId":1,
+      bookingId: 1,
+      "roomDetails.ratePlanId": 1,
       "roomDetails.guestPhoneNumber": 1,
       "roomDetails.guestFirstName": 1,
       "roomDetails.guestLastName": 1,
       totalAmount: 1,
-      // Exclude the _id field from the response
-      });
+      _id: 0, // Exclude the _id field from the response
+    });
 
-
-     // Manually populate the ratePlanName
-     const populatedBookings = await Promise.all(
+    if (!booking) {
+      return res.status(404).json({ message: "No cancelled bookings" })
+    }
+    // Manually populate the ratePlanName
+    const populatedBookings = await Promise.all(
       booking.map(async (booking) => {
         const ratePlanId = booking.roomDetails[0].ratePlanId; // Assuming a single ratePlanId per booking
         const ratePlanData = await ratePlan.findOne({ ratePlanId: ratePlanId });
@@ -56,17 +59,11 @@ module.exports = async function fetchBookingsByPropertyId(req, res) {
       };
     });
 
-
-
-    console.log(cleanedBookings);
     res.status(200).json(cleanedBookings);
-    } else {
-      // If requestType is not "checkIn", send a response
-      res.status(400).json({ message: 'Please specify requestType as "checkIn"' });
-    }
 
   } catch (error) {
     console.error('Error fetching bookings:', error);
     res.status(500).json({ error: 'An error occurred while fetching bookings' });
   }
-};
+}
+

@@ -58,17 +58,51 @@ module.exports = async (req, res) => {
                 // If the date exists, update the inventory
                 existingEntry.inventory = inventory;
                 existingEntry.modifiedDate = new Date().toLocaleString("en-IN", { timeZone: "Asia/Kolkata" });
-                findDumpInventory.manageInventory.push({ date: dateString, inventory, isBlocked: 'false', modifiedDate: new Date().toLocaleString("en-IN", { timeZone: "Asia/Kolkata" }) });
+                // findDumpInventory.manageInventory.push({ date: dateString, inventory, isBlocked: 'false', modifiedDate: new Date().toLocaleString("en-IN", { timeZone: "Asia/Kolkata" }) });
+
+                const updatedDumpDocument = await dumpInventoryRatesModel.findOneAndUpdate(
+                    { roomTypeId: roomTypeId },
+                    {
+                        $push: { manageInventory: { date: dateString, inventory, isBlocked: 'false', modifiedDate: new Date().toLocaleString("en-IN", { timeZone: "Asia/Kolkata" }) } },
+
+                    },
+                    {
+                        new: true,
+                    }
+                );
+
+                if (!updatedDumpDocument) {
+                    return res.status(404).json({ message: "Document not found" });
+                }
             } else {
                 // If the date does not exist, add a new entry
-                findDumpInventory.manageInventory.push({ date: dateString, inventory, isBlocked: 'false', modifiedDate: new Date().toLocaleString("en-IN", { timeZone: "Asia/Kolkata" }) });
-                findInventory.manageInventory.push({ date: dateString, inventory, isBlocked: 'false', modifiedDate: new Date().toLocaleString("en-IN", { timeZone: "Asia/Kolkata" }) });
+                // findDumpInventory.manageInventory.push({ date: dateString, inventory, isBlocked: 'false', modifiedDate: new Date().toLocaleString("en-IN", { timeZone: "Asia/Kolkata" }) });
+                // findInventory.manageInventory.push({ date: dateString, inventory, isBlocked: 'false', modifiedDate: new Date().toLocaleString("en-IN", { timeZone: "Asia/Kolkata" }) });
+                const updatedDocument = await inventoryModel.findOneAndUpdate(
+                    { roomTypeId: roomTypeId },
+                    {
+                        $push: { manageInventory: { date: dateString, inventory, isBlocked: 'false', modifiedDate: new Date().toLocaleString("en-IN", { timeZone: "Asia/Kolkata" }) } },
+                    },
+                    {
+                        new: true,
+                    }
+                );
+
+                const updatedDumpDocument = await dumpInventoryRatesModel.findOneAndUpdate(
+                    { roomTypeId: roomTypeId },
+                    {
+                        $push: { manageInventory: { date: dateString, inventory, isBlocked: 'false', modifiedDate: new Date().toLocaleString("en-IN", { timeZone: "Asia/Kolkata" }) } },
+                    },
+                    {
+                        new: true,
+                    }
+                );
             }
         }
 
         // Save the updated inventory document
         await findInventory.save();
-        await findDumpInventory.save();
+        // await findDumpInventory.save();
 
         return res.status(200).json({ message: "Inventory updated successfully" });
     } catch (err) {
