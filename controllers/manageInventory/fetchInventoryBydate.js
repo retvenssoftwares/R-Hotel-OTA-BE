@@ -199,7 +199,7 @@ module.exports = async (req, res) => {
             }
           }
         ]);
-          console.log("fghjb",ratePlaneData)
+          //console.log("fghjb",ratePlaneData)
           
           if (ratePlaneData) {
             ratedetails.roomTypeId = ratePlaneData.roomTypeId;

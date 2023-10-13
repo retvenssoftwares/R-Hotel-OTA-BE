@@ -3,16 +3,18 @@ const cron = require('node-cron');
 require("dotenv").config()
 const pendingBookingModel = require('../models/Bookings/bookingPending');
 const bookingModel = require('../models/Bookings/bookings');
+const property = require("../models/Onboarding/propertys")
+const ratePlane = require("../models/Rooms/ratePlan")
 const manageInventoryModel = require('../models/manageInventory/manageInventory');
 const dumpInventoryModel = require('../models/manageInventory/dataDumpInventoryRates')
+const nodeMailer = require("nodemailer")
 const io = require('socket.io')();
 // Define a cron job pattern to run every 5 minutes
-const cronPattern = '*/5 * * * *';
+const cronPattern = '*/1 * * * *';
 
 
-async function sendResetLinkToMail(fullName, email, link) {
+async function sendResetLinkToMail(name, email, bookingId, location, gender, reservationId, ratePlan, guestPhone, checkInDate, checkOutDate, propertyDetails, bookingStatus, paymentStatus) {
   try {
-    console.log(fullName, email);
     const transporter = nodeMailer.createTransport({
       host: "smtp.gmail.com",
       port: 587,
@@ -25,41 +27,81 @@ async function sendResetLinkToMail(fullName, email, link) {
     const mailOptions = {
       from: process.env.email,
       to: email,
-      subject: "For Reset Password",
-      html:
-        "<p> Hii  " +
-        fullName +
-        " Bookings details are" +
-        
-        "'> ",
+      subject: `Booking Details for Booking ID: ${bookingId}`,
+      html: `
+        <div style="font-family: Arial, sans-serif; color: #333;">
+          <h2>Hi ${name},</h2>
+          <p>Here are your booking details:</p>
+          <table style="width: 100%; border-collapse: collapse;">
+            <tr style="background-color: #f2f2f2;">
+              <td style="padding: 10px; border: 1px solid #ddd;">Location</td>
+              <td style="padding: 10px; border: 1px solid #ddd;">${location}</td>
+            </tr>
+            <tr style="background-color: #f2f2f2;">
+              <td style="padding: 10px; border: 1px solid #ddd;">Gender</td>
+              <td style="padding: 10px; border: 1px solid #ddd;">${gender}</td>
+            </tr>
+            <tr style="background-color: #f2f2f2;">
+              <td style="padding: 10px; border: 1px solid #ddd;">Reservation ID</td>
+              <td style="padding: 10px; border: 1px solid #ddd;">${reservationId}</td>
+            </tr>
+            <tr style="background-color: #f2f2f2;">
+              <td style="padding: 10px; border: 1px solid #ddd;">Rate Plan</td>
+              <td style="padding: 10px; border: 1px solid #ddd;">${ratePlan}</td>
+            </tr>
+            <tr style="background-color: #f2f2f2;">
+              <td style="padding: 10px; border: 1px solid #ddd;">Guest Phone</td>
+              <td style="padding: 10px; border: 1px solid #ddd;">${guestPhone}</td>
+            </tr>
+            <tr style="background-color: #f2f2f2;">
+              <td style="padding: 10px; border: 1px solid #ddd;">Check-In Date</td>
+              <td style="padding: 10px; border: 1px solid #ddd;">${checkInDate}</td>
+            </tr>
+            <tr style="background-color: #f2f2f2;">
+              <td style="padding: 10px; border: 1px solid #ddd;">Check-Out Date</td>
+              <td style="padding: 10px; border: 1px solid #ddd;">${checkOutDate}</td>
+            </tr>
+            <tr style="background-color: #f2f2f2;">
+              <td style="padding: 10px; border: 1px solid #ddd;">Property ID</td>
+              <td style="padding: 10px; border: 1px solid #ddd;">${propertyDetails}</td>
+            </tr>
+            <tr style="background-color: #f2f2f2;">
+              <td style="padding: 10px; border: 1px solid #ddd;">Booking Status</td>
+              <td style="padding: 10px; border: 1px solid #ddd;">${bookingStatus}</td>
+            </tr>
+            <tr style="background-color: #f2f2f2;">
+              <td style="padding: 10px; border: 1px solid #ddd;">Payment Status</td>
+              <td style="padding: 10px; border: 1px solid #ddd;">${paymentStatus}</td>
+            </tr>
+          </table>
+
+          <p style="margin-top: 20px;">
+            If you have any questions, feel free to <a href="https://www.retvensservices.com" style="text-decoration: none; color: #007bff;">contact us</a>.<br/>
+            <img src="https://static.wixstatic.com/media/deab04_b9b37b349ee844a08386c5574cab99af~mv2.png/v1/crop/x_0,y_18,w_1141,h_449/fill/w_222,h_87,al_c,q_85,usm_0.66_1.00_0.01,enc_auto/WIth%20out%20BG_edited.png" alt="Company Icon" style="margin-top: 20px; max-width: 150px; height: auto; display: block;" />
+          </p>
+        </div>
+      `,
     };
 
     transporter.sendMail(mailOptions, function (err, info) {
       if (err) {
         console.log(err);
       } else {
-        console.log("mail has been sent");
+        console.log("Mail has been sent");
       }
     });
   } catch (err) {
-    res.status(400).send({ success: false, msg: err.message });
+    console.log(err);
   }
 }
+
+
 
 // Define the task you want to run
 const moveConfirmedBookingsTask = async () => {
   try {
     // Find all records in pendingBookingModel with bookingStatus "Confirmed"
-    const confirmedBookings = await pendingBookingModel.find({ bookingStatus: "Confirmed" });
-
-    for(const details of confirmedBookings){
-      const firstname = details.roomDetails[0].guestFirstName
-      const lastname = details.roomDetails[0].guestLastName
-      var email = details.roomDetails[0].guestEmail
-      var name = firstname + lastname
-    }
-   
-
+    const confirmedBookings = await pendingBookingModel.find({ bookingStatus: "Confirmed" });   
     if (confirmedBookings.length > 0) {
       // Collect check-in and check-out dates of the confirmed bookings
       const checkInDates = confirmedBookings.map(booking => booking.checkInDate);
@@ -126,13 +168,37 @@ const moveConfirmedBookingsTask = async () => {
           }
         }
 
-        sendResetLinkToMail(name, email);
+        
+      }
+
+      for (const details of confirmedBookings){
+        const mailbooking = await bookingModel.findOne({bookingId : details.bookingId})
+        const propertyName = await property.findOne({propertyId:mailbooking.propertyId})
+       // var {propertyDetails} = propertyName
+        var propertyDetails = propertyName.propertyName && propertyName.propertyName.length > 0 ? propertyName.propertyName[0].propertyName : null;
+        var { bookingId, checkInDate ,checkOutDate,bookingStatus,paymentStatus} = mailbooking
+        if (details.roomDetails && details.roomDetails.length > 0) {
+          for (const roomDetail of details.roomDetails) {
+            const { guestFirstName, guestLastName, guestEmail, guestLocation , guestGender, reservationId , guestPhoneNumber } = roomDetail;
+            const ratePlanedata = await ratePlane.findOne({ ratePlanId: roomDetail.ratePlanId });
+            const ratePlanName = ratePlanedata.ratePlanName && ratePlanedata.ratePlanName.length > 0 ? ratePlanedata.ratePlanName[0].ratePlanName : null;
+            var name = guestFirstName + ' ' + guestLastName;
+            var email= guestEmail
+            var location = guestLocation
+            var gender = guestGender
+            var reservationNumber = reservationId
+            var ratePlan = ratePlanName
+            var guestPhone= guestPhoneNumber 
+            sendResetLinkToMail(name,email,bookingId,location,gender,reservationNumber,ratePlan,guestPhone,checkInDate,checkOutDate,propertyDetails, bookingStatus,paymentStatus);
+          }
+          
+        }
       }
 
       // Save the updated matchingInventoryRecords with reduced inventory
       await Promise.all(matchingInventoryRecords.map(record => record.save()));
 
-      io.emit("inventoryUpdate", matchingInventoryRecords)
+      // io.emit("inventoryUpdate", matchingInventoryRecords)
 
       console.log('Inventory Reduction Completed.'); // Replace with your actual query to get updated inventory
 
