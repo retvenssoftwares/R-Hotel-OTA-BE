@@ -39,10 +39,10 @@ jobs:
           ls
           npm i
 
-      # - name: Create env file
-      #   run: |
-      #     ls
-      #     echo "${{ secrets.ENV_FILE }}" > .env
+      - name: Create env file
+        run: |
+          ls
+          echo "${{ secrets.ENV_FILE }}" > .env
           
 
         # this pm2 start function is used when server is restarted 
