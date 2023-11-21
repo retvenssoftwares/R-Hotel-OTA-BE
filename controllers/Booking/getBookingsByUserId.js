@@ -4,7 +4,7 @@ const propertyModel = require('../../models/Onboarding/propertys');
 
 module.exports = async (req, res) => {
     try {
-        const findBookings = await bookingModel.find({ userId: req.params.userId }, 'userId propertyId checkInDate checkOutDate bookingId bookingStatus paymentStatus');
+        const findBookings = await bookingModel.find({ userId: req.params.userId }, 'userId propertyId checkInDate checkOutDate bookingId bookingStatus paymentStatus roomDetails.guestFirstName');
 
         // Extract the propertyId from each booking record
         const propertyIds = findBookings.map(booking => booking.propertyId);

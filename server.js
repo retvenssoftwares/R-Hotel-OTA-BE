@@ -66,12 +66,12 @@ const getImageOgRoomType = require('./routers/Images/getRoomTypeAndPropertyImage
 const createBookingRouter = require('./routers/Bookings/createBookingRouter')
 const patchBooking = require('./routers/Bookings/patchBookingRouter')
 const fetchBooking = require('./routers/Bookings/fetchBookingByPorpertyIdRouter')
-const fetchCheckOutBooking = require('./routers/Bookings/fetchCheckOutBookingByPropertyIdRouter')
+
 //const patchBooking = require('./routers/Bookings/patchBookingRouter');
 const getUserBookings = require('./routers/Bookings/getBookingsByUserIdRouter')
 const getBookingData = require('./routers/Bookings/getBookingDetailsRouter')
 const checkInPendingBooking = require('./routers/Bookings/fetchCheckInPendingBookingByPropertyRouter')
-const checkOutPendingBooking = require('./routers/Bookings/fetchCheckOutPendingBookingByPropertyRouter')
+
 const fetchPaymentData = require('./routers/Bookings/fetchPaymentDataByCheckInAndOutRouter');
 const fetchCancelledBookings = require('./routers/Bookings/fetchCancelledBookingsRouter')
 
@@ -189,11 +189,10 @@ app.use(editRatePlan);
 app.use(createBookingRouter)
 app.use(patchBooking)
 app.use(fetchBooking)
-app.use(fetchCheckOutBooking)
 app.use(getBookingData)
 app.use(getUserBookings);
 app.use(checkInPendingBooking)
-app.use(checkOutPendingBooking)
+
 app.use(fetchCancelledBookings)
 app.use(fetchPaymentData)
 

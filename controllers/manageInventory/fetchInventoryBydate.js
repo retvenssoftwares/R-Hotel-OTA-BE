@@ -67,11 +67,11 @@ module.exports = async (req, res) => {
       if (ratedata && ratedata.manageRate && ratedata.manageRate[0] && ratedata.manageRate[0].price) {
         rateData = ratedata.manageRate[0].price;
       }
-      var maxOccupancy = (data.maxOccupancy && data.maxOccupancy[0] && data.maxOccupancy[0].numberOfRooms) || "";
+      var maxOccupancy = (data.maxOccupancy && data.maxOccupancy[0] && data.maxOccupancy[0].maxOccupancy) || "";
       var roomName = (data.roomName && data.roomName[0] && data.roomName[0].roomName) || "";
       var images = data1.roomTypeImages || []; // Ensure it's an array or initialize as an empty array if it's not defined
       var ratetypedata = ratetype.rateTypeId || ""
-      var ratePlan = rateplane.ratePlanId || ""
+     // var ratePlan = rateplane.ratePlanId || ""
 
       
       
@@ -87,7 +87,7 @@ module.exports = async (req, res) => {
         roomName,
         images,
         rateTypeId : ratetypedata,
-        ratePlanId : ratePlan
+       // ratePlanId : ratePlan
       };
 
       details.push(all);

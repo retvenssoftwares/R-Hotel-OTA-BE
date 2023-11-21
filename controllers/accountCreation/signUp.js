@@ -33,9 +33,9 @@ module.exports = async (req, res) => {
         // Create the variable by concatenating namePrefix and dobSuffix
         const generatedVariable = namePrefix + phoneSuffix;
 
-        if (genVariable !== generatedVariable) {
-            return res.status(400).json({ message: "invalid genvariable" })
-        }
+        // if (genVariable !== generatedVariable) {
+        //     return res.status(400).json({ message: "invalid genvariable" })
+        // }
 
         // this is the key which will be used for encryption and decryption the password
         const key = process.env.key;
