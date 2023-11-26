@@ -4,11 +4,10 @@ module.exports = async (req, res) => {
     try {
         const city = req.params.city;
 
-        if (city === "null") {
-            const  all = await property.find({})
-            return res.status(200).json({ all });
+        if (!city) {
+            const allProperties = await property.find({});
+            return res.status(200).json(allProperties);
         }
-
         // Search for properties with a matching city in the first object of the city array
         const properties = await property.find({
             'city.0.city': city
@@ -21,18 +20,17 @@ module.exports = async (req, res) => {
         // Modify the properties to include only the first object of each array (except amenities)
         const modifiedProperties = properties.map((property) => {
             return {
-                ...property.toObject(),
-                propertyAddress: property.propertyAddress[0],
-                propertyAddress1: property.propertyAddress1[0],
-                postCode: property.postCode[0],
-                location: property.location[0],
-                city: property.city[0],
-                propertyName: property.propertyName[0],
-                rating: property.rating[0],
-                checkInTime: property.checkInTime[0],
-                checkOutTime: property.checkOutTime[0],
-                coverPhoto: property.coverPhoto[0],
-                hotelLogo: property.hotelLogo[0],
+                propertyAddress: property.propertyAddress[0]?.propertyAddress || '',
+                propertyAddress1: property.propertyAddress1[0]?.propertyAddress1 || '',
+                postCode: property.postCode[0]?.postCode || '',
+                location: property.location[0]?.location || '',
+                city: property.city[0]?.city || '',
+                propertyName: property.propertyName[0]?.propertyName ||'',
+                rating: property.rating[0]?.rating || '',
+                checkInTime: property.checkInTime[0]?.checkOutTime || '',
+                checkOutTime: property.checkOutTime[0]?.checkOutFrom || '',
+                coverPhoto: property.coverPhoto[0]?.coverPhoto || '',
+                hotelLogo: property.hotelLogo[0]?.hotelLogo || '',
             };
         });
 

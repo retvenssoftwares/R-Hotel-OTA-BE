@@ -19,9 +19,6 @@ module.exports = async (req, res) => {
             rating: property.rating[0] || {},
             hotelLogo: property.hotelLogo[0] || {},
             coverPhoto: property.coverPhoto[0] || {},
-           
-           
-           
         }));
         
         return res.status(200).json(extractedData);

@@ -29,7 +29,7 @@
     "mongoose": "^7.0.3",
     "multer": "^1.4.5-lts.1",
     "node-cron": "^3.0.2",
-    "nodemailer": "^6.9.6",
+    "nodemailer": "^6.9.7",
     "nodemon": "^2.0.22",
     "randomstring": "^1.2.3",
     "socket.io": "^4.7.2"

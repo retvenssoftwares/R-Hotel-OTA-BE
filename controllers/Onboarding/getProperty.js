@@ -1,17 +1,26 @@
-
-
-
-const Property = require('../../models/Onboarding/propertys')
+const Property = require('../../models/Onboarding/propertys');
+const RoomType = require('../../models/Rooms/roomTypeDetails');
 
 module.exports = async (req, res) => {
     try {
         const propertyId = req.params.propertyId;
-        const property = await Property.findOne({ propertyId:propertyId });
+        const property = await Property.findOne({ propertyId: propertyId });
         if (!property) {
             return res.status(404).json({ error: 'property not found' });
         }
+
+        // Extracting roomTypeIds from the property object
+        const { roomType } = property;
         
-        // Extract the first item from each array
+        const roomTypIds = roomType.map((item)=>item.roomTypeId)
+        console.log(roomTypIds)
+        // Fetching room details based on the extracted roomTypeIds
+        const roomDetails = await RoomType.find({ roomTypeId: { $in: roomTypIds } }).select('roomTypeId roomType.roomType');
+        const simplifiedRoomDetails = roomDetails.map(({ roomTypeId, roomType }) => ({
+            roomTypeId,
+            roomType: roomType[0].roomType // Assuming each roomType array has only one object
+        }));
+        // Extracting specific data fields from the property object
         const {
             date,
             country,
@@ -23,7 +32,6 @@ module.exports = async (req, res) => {
             postCode,
             city,
             propertyName,
-            roomType,
             amenities,
             checkInTime,
             checkOutTime,
@@ -31,11 +39,9 @@ module.exports = async (req, res) => {
             hotelLogo,
             coverPhoto,
             location
-           
-            
         } = property;
 
-        // Create a new object with extracted data
+        // Creating a new object with extracted data
         const extractedData = {
             date,
             userId,
@@ -43,20 +49,18 @@ module.exports = async (req, res) => {
             country,
             propertyManagement,
             management,
-           // propertyAddress,
-            propertyAddress: propertyAddress[0] || {},
-           // propertyAddress1,
-            propertyAddress1: propertyAddress1[0] || {},
-            postCode: postCode[0] || {},
-            city: city[0] || {},
-            propertyName: propertyName[0] || {},
-            checkInTime: checkInTime[0] || {},
-            checkOutTime: checkOutTime[0] || {},
-            rating: rating[0] || {},
-            hotelLogo: hotelLogo[0] || {},
-            coverPhoto: coverPhoto[0] || {},
-            location: location[0] || {},
-            roomType,
+            propertyAddress: propertyAddress[0].propertyAddress || '',
+            propertyAddress1: propertyAddress1[0].propertyAddress1 || '',
+            postCode: postCode[0].postCode || '',
+            city: city[0].city || '',
+            propertyName: propertyName[0].propertyName || '',
+            checkInTime: checkInTime[0].checkInTime || '',
+            checkOutTime: checkOutTime[0].checkOutTime || '',
+            rating: rating[0].rating || '',
+            hotelLogo: hotelLogo[0].hotelLogo || '',
+            coverPhoto: coverPhoto[0].coverPhoto || '',
+            location: location[0].location || '',
+            roomType: simplifiedRoomDetails, // Assigning fetched room details
             amenities
         };
 
@@ -64,5 +68,4 @@ module.exports = async (req, res) => {
     } catch (error) {
         return res.status(500).json({ error: error.message });
     }
-}
-
+};

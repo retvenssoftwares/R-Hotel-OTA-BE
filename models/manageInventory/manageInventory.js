@@ -9,8 +9,6 @@ const ManageInventory = new mongoose.Schema({
         type: String,
         default: "",
     },
-    
-
     Inventory: [{
         baseInventory: {
             type: String,
