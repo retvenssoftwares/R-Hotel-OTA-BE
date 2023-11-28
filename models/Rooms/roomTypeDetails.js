@@ -26,7 +26,7 @@ const roomDetails = new mongoose.Schema({
         }
     }],
     numberOfRooms: [{
-        numberOfRooms: { type: String, default: "" },
+        numberOfRooms: { type: Number, default: "" },
         modifiedDate: {
             default: "",
             type: String

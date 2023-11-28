@@ -129,7 +129,7 @@ const patchInventory = require('./routers/manageInventory/patchInventoryRouter')
 const patchRates = require('./routers/manageInventory/patchRatesRouter')
 const getAvailableInvetory = require('./routers/manageInventory/fetchInventoryRouter');
 const blockUnBlockInventory = require('./routers/manageInventory/blockUnblockInventoryRouter')
-
+const checkRoomAvailability = require('./routers/manageInventory/checkRoomAvailability.js')
 //reports
 const getRevenueDetailsData = require("./routers/Report/revenueGenwratedOfPropertyRounter")
 const grossrevenue = require("./routers/Report/totalGrossRevenueRouter")
@@ -202,6 +202,7 @@ app.use(fetchInventory(io))
 app.use(patchRates)
 app.use(fetchRate)
 app.use(blockUnBlockInventory)
+app.use(checkRoomAvailability)
 
 //Onboarding
 app.use(property);

@@ -4,7 +4,7 @@ const inventoryController = require('../../controllers/manageInventory/getInvent
 
 module.exports = (io) => {
     // Define the route for fetching inventory
-    router.get('/getInventory/:propertyId', inventoryController(io))
+    router.get('/getInventory', inventoryController)
 
     return router;
 };

@@ -9,40 +9,16 @@ const ManageInventory = new mongoose.Schema({
         type: String,
         default: "",
     },
-    Inventory: [{
-        baseInventory: {
-            type: String,
-            default: "",
-        },
-        modifiedDate: {
-            type: String,
-            default: ""
-        }
-
-    }],
-
-    manageInventory: [{
-        inventory: {
-            type: String,
-            default: "",
-        },
-        modifiedDate: {
-            type: String,
-            default: ""
-        },
-        date: {
-            type: String,
-            default: ""
-        },
-        isBlocked: {
-            type: String,
-            default: 'false'
-        }
-    }],
-    date: {
-        type: String,
-        default: 'false'
-    }
+    manageInventory: {
+        addedInventory: [{
+            addedInventory: { type: Number, default: "" },
+            date: { type: String, default: "" }
+        }],
+        blockedInventory: [{
+            blockedInventory: { type: Number, default: "" },
+            date: { type: String, default: '' }
+        }],
+    },
 
 })
 

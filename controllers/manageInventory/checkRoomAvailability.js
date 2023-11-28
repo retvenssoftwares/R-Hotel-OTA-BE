@@ -1,7 +1,6 @@
 // const inventory = require('../../models/manageInventory/manageInventory');
 // const roomTypeModel = require('../../models/Rooms/roomTypeDetails');
-// const confirmBooking = require('../../models/Bookings/bookings')
-// const holdBooking = require('../../models/Bookings/bookingPending')
+
 // // ... (previous imports and setup)
 
 // const fetchRoomTypesHandler = async (req, res) => {
@@ -38,22 +37,19 @@
 //             return res.status(400).json({ message: "No room types found", statuscode: 400 });
 //         }
 
-//         const bookings = await confirmBooking.find({
-//             propertyId,
-//             checkInDate: { $lte: checkOutDateISO },
-//             checkOutDate: { $gte: checkInDateISO },
-//         });
-
 //         const calculatedData = [];
-
 //         for (const roomType of roomTypes) {
 //             const roomInventory = await inventory.findOne({ roomTypeId: roomType.roomTypeId });
 
 //             if (roomInventory) {
 //                 const { addedInventory, blockedInventory } = roomInventory.manageInventory;
 
+//                 let minAvailable = roomType.numberOfRooms; // Initialize with maximum possible value
+
+//                 // Generate a date range between start and end dates
 //                 const dateRange = generateDateRange(startDateObj, endDateObj);
 
+//                 // Calculate available inventory for each date
 //                 const availabilityByDate = dateRange.map(date => {
 //                     const added = addedInventory.find(item => item.date === date);
 //                     const block = blockedInventory.find(item => item.date === date);
@@ -61,49 +57,29 @@
 //                     const addedCount = added ? added.addedInventory : 0;
 //                     const blockedCount = block ? block.blockedInventory : 0;
 
-//                     let available = roomType.numberOfRooms + addedCount - blockedCount;
-
-//                     // Adjust inventory based on bookings within the date range
-//                     for (const booking of bookings) {
-//                         for (const roomDetail of booking.roomDetails) {
-//                             if (roomDetail.roomTypeId === roomType.roomTypeId) {
-//                                 const bookingStartDate = new Date(booking.checkInDate);
-//                                 const bookingEndDate = new Date(booking.checkOutDate);
-
-//                                 if (bookingStartDate <= new Date(date) && bookingEndDate >= new Date(date)) {
-//                                     // Reduce inventory for the booked room for each day of the booking
-//                                     available--;
-//                                 }
-//                             }
-//                         }
-//                     }
-
+//                     const available = roomType.numberOfRooms + addedCount - blockedCount;
+//                     minAvailable = Math.min(minAvailable, available);
 //                     return { date, available };
 //                 });
 
 //                 calculatedData.push({
 //                     roomTypeId: roomType.roomTypeId,
 //                     roomTypeName: roomType.roomTypeName,
-//                     numberOfRooms: roomType.numberOfRooms,
-//                     availabilityByDate,
+//                     numberOfRooms:roomType.numberOfRooms,
+//                     minAvailable,
 //                 });
 //             } else {
-//                 // Handle if room inventory is not available
-//                 const dateRange = generateDateRange(startDateObj, endDateObj);
-//                 const availabilityByDate = dateRange.map(date => ({
-//                     date,
-//                     available: roomType.numberOfRooms,
-//                 }));
-
+    
 //                 calculatedData.push({
 //                     roomTypeId: roomType.roomTypeId,
 //                     roomTypeName: roomType.roomTypeName,
-//                     numberOfRooms: roomType.numberOfRooms,
-//                     availabilityByDate,
+//                     numberOfRooms:roomType.numberOfRooms,
+//                     minAvailable: roomType.numberOfRooms,
 //                 });
 //             }
 //         }
 
+//         // Handle the calculated data, for example, sending it in the response
 //         return res.status(200).json({ data: calculatedData });
 
 //     } catch (err) {
@@ -133,6 +109,7 @@ const confirmBooking = require('../../models/Bookings/bookings');
 const holdBooking = require('../../models/Bookings/bookingPending');
 const inventory = require('../../models/manageInventory/manageInventory');
 const roomTypeModel = require('../../models/Rooms/roomTypeDetails');
+const roomTypeImage = require ('../../models/Images/roomTypeImages')
 
 const fetchRoomTypesHandler = async (req, res) => {
     const { propertyId, startDate, endDate } = req.query;
@@ -181,13 +158,26 @@ const fetchRoomTypesHandler = async (req, res) => {
 
         for (const roomType of roomTypes) {
             const roomInventory = await inventory.findOne({ roomTypeId: roomType.roomTypeId });
+            const roomTypeImages = await roomTypeImage.findOne({ propertyId, roomTypeId: roomType.roomTypeId });
+
+            let images = []; // Define images variable here
+
+            if (roomTypeImages && roomTypeImages.roomTypeImages) {
+                images = roomTypeImages.roomTypeImages
+                    .filter(image => image.displayStatus === '1') // Filter images by displayStatus
+                    .map(image => ({
+                        image: image.image,
+                    }));
+            }
 
             if (roomInventory) {
                 const { addedInventory, blockedInventory } = roomInventory.manageInventory;
 
                 const dateRange = generateDateRange(startDateObj, endDateObj);
 
-                const availabilityByDate = dateRange.map(date => {
+                let minAvailable = Infinity;
+
+                for (const date of dateRange) {
                     const added = addedInventory.find(item => item.date === date);
                     const block = blockedInventory.find(item => item.date === date);
 
@@ -222,27 +212,23 @@ const fetchRoomTypesHandler = async (req, res) => {
                         }
                     }
 
-                    return { date, available };
-                });
+                    minAvailable = Math.min(minAvailable, available);
+                }
 
                 calculatedData.push({
                     roomTypeId: roomType.roomTypeId,
                     roomTypeName: roomType.roomTypeName,
                     numberOfRooms: roomType.numberOfRooms,
-                    availabilityByDate,
+                    minAvailable,
+                    images: images || [],
                 });
             } else {
-                const dateRange = generateDateRange(startDateObj, endDateObj);
-                const availabilityByDate = dateRange.map(date => ({
-                    date,
-                    available: roomType.numberOfRooms,
-                }));
-
                 calculatedData.push({
                     roomTypeId: roomType.roomTypeId,
                     roomTypeName: roomType.roomTypeName,
                     numberOfRooms: roomType.numberOfRooms,
-                    availabilityByDate,
+                    minAvailable: roomType.numberOfRooms,
+                    images: images || [], 
                 });
             }
         }

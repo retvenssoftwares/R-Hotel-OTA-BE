@@ -13,32 +13,21 @@ const manageRates = new mongoose.Schema({
         type: String,
         default: "",
     },
-    ratePrice: [{
-        basePrice: {
-            type: String,
-            default: ""
-        },
-        modifiedDate: {
-            type: String,
-            default: ""
-        }
-    }],
-
     
-    manageRate: [{
-        price: {
-            type: String,
-            default: "",
-        },
-        modifiedDate: {
-            type: String,
-            default: ""
-        },
-        date: {
-            type: String, 
-            default: ''
-        }
-    }]
+    manageRates: {
+        price: [{
+            price: { type: String, default: '' },
+            date: { type: String, default: "" }
+        }],
+        extraChildRate: [{
+            date: { type: String, default: "" },
+            extraChildRate: { type: String, default: "" }
+        }],
+        extraAdultRate: [{
+            date: { type: String, default: "" },
+            extraAdultRate: { type: String, default: "" }
+        }],
+    }
 
 })
 

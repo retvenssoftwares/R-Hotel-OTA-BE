@@ -1,5 +1,6 @@
 const Property = require('../../models/Onboarding/propertys');
 const RoomType = require('../../models/Rooms/roomTypeDetails');
+const amenityModel = require('../../models/Amenities/amenities')
 
 module.exports = async (req, res) => {
     try {
@@ -13,7 +14,7 @@ module.exports = async (req, res) => {
         const { roomType } = property;
         
         const roomTypIds = roomType.map((item)=>item.roomTypeId)
-        console.log(roomTypIds)
+        // console.log(roomTypIds)
         // Fetching room details based on the extracted roomTypeIds
         const roomDetails = await RoomType.find({ roomTypeId: { $in: roomTypIds } }).select('roomTypeId roomType.roomType');
         const simplifiedRoomDetails = roomDetails.map(({ roomTypeId, roomType }) => ({
@@ -41,6 +42,18 @@ module.exports = async (req, res) => {
             location
         } = property;
 
+
+        ///Amenity
+        const amenitiesIds = amenities.map((item)=>item.amenitiesId)
+        //console.log(amenitiesIds)
+        const amenityDetails = await amenityModel.find({ amenityId: { $in: amenitiesIds } }).select('amenityId amenityName');
+       // console.log(amenityDetails)
+        const simplifiedAmenityDetails = amenityDetails.map(({ amenityId, amenityName }) => ({
+            amenityId:amenityId,
+            amenityName: amenityName// Assuming each roomType array has only one object
+        }));
+
+
         // Creating a new object with extracted data
         const extractedData = {
             date,
@@ -61,7 +74,7 @@ module.exports = async (req, res) => {
             coverPhoto: coverPhoto[0].coverPhoto || '',
             location: location[0].location || '',
             roomType: simplifiedRoomDetails, // Assigning fetched room details
-            amenities
+            amenities:simplifiedAmenityDetails
         };
 
         return res.status(200).json(extractedData);

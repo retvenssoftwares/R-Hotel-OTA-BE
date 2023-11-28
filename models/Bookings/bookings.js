@@ -24,6 +24,10 @@ const bookingSchema = mongoose.Schema({
         default: ""
     },
     roomDetails: [{
+        guestId:{
+            type: String,
+            default: ""
+        },
         roomTypeId: {
             type: String,
             default: ""
@@ -34,7 +38,7 @@ const bookingSchema = mongoose.Schema({
         },
         reservationId: {
             type: String,
-            default: randomstring.generate(15)
+            default:''
         },
         guestGender: {
             type: String,

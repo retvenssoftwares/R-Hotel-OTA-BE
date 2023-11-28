@@ -3,10 +3,6 @@ const { ObjectId } = mongoose.Schema;
 const randomstring = require('randomstring')
 
 const bookingSchema = mongoose.Schema({
-    userId: {
-        type: String,
-        default: ''
-    },
     propertyId: {
         type: String,
         default: ""
@@ -24,6 +20,11 @@ const bookingSchema = mongoose.Schema({
         default: ""
     },
     roomDetails: [{
+        guestId:{
+            type: String,
+            default: ""
+        },
+        
         roomTypeId: {
             type: String,
             default: ""
@@ -34,7 +35,7 @@ const bookingSchema = mongoose.Schema({
         },
         reservationId: {
             type: String,
-            default: randomstring.generate(15)
+            default: ''
         },
         guestGender: {
             type: String,
