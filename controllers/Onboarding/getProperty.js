@@ -1,6 +1,7 @@
 const Property = require('../../models/Onboarding/propertys');
 const RoomType = require('../../models/Rooms/roomTypeDetails');
 const amenityModel = require('../../models/Amenities/amenities')
+const propertyImageModel = require('../../models/Images/propertyImages')
 
 module.exports = async (req, res) => {
     try {
@@ -9,10 +10,14 @@ module.exports = async (req, res) => {
         if (!property) {
             return res.status(404).json({ error: 'property not found' });
         }
+          // Fetch property images based on propertyId
+      // Fetching property images based on propertyId
+      const propertyImages = await propertyImageModel.findOne({ propertyId: propertyId }).select('propertyImages.image');
+      const extractedImages = propertyImages ? propertyImages.propertyImages.map(imageObj => ({ image: imageObj.image })) : [];
+
 
         // Extracting roomTypeIds from the property object
         const { roomType } = property;
-        
         const roomTypIds = roomType.map((item)=>item.roomTypeId)
         // console.log(roomTypIds)
         // Fetching room details based on the extracted roomTypeIds
@@ -44,14 +49,19 @@ module.exports = async (req, res) => {
 
 
         ///Amenity
-        const amenitiesIds = amenities.map((item)=>item.amenitiesId)
-        //console.log(amenitiesIds)
-        const amenityDetails = await amenityModel.find({ amenityId: { $in: amenitiesIds } }).select('amenityId amenityName');
-       // console.log(amenityDetails)
-        const simplifiedAmenityDetails = amenityDetails.map(({ amenityId, amenityName }) => ({
-            amenityId:amenityId,
-            amenityName: amenityName// Assuming each roomType array has only one object
-        }));
+        const selectedAmenities = amenities
+        .filter(item => item.isSelected === 'true')
+        .map(item => item.amenitiesId);
+    
+    const amenityDetails = await amenityModel
+        .find({ amenityId: { $in: selectedAmenities } })
+        .select('amenityId amenityName');
+    
+    const simplifiedAmenityDetails = amenityDetails.map(({ amenityId, amenityName }) => ({
+        amenityId,
+        amenityName
+    }));
+    
 
 
         // Creating a new object with extracted data
@@ -74,7 +84,8 @@ module.exports = async (req, res) => {
             coverPhoto: coverPhoto[0].coverPhoto || '',
             location: location[0].location || '',
             roomType: simplifiedRoomDetails, // Assigning fetched room details
-            amenities:simplifiedAmenityDetails
+            amenities:simplifiedAmenityDetails,
+            propertyImages:extractedImages,
         };
 
         return res.status(200).json(extractedData);

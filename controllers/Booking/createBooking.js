@@ -27,7 +27,6 @@ module.exports.createBooking = async (req, res) => {
     const modifiedRoomDetails = roomDetails.map(detail => ({
         ...detail,
         reservationId: randomstring.generate(15),
-        guestId:randomstring.generate(15)
       }));
 
       // Create a new booking instance

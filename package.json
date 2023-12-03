@@ -19,6 +19,7 @@
   },
   "homepage": "https://github.com/retvenssoftwares/R-Hotel-OTA-BE#readme",
   "dependencies": {
+    "@sendgrid/mail": "^7.7.0",
     "aws-sdk": "^2.1460.0",
     "cors": "^2.8.5",
     "date-fns": "^2.30.0",

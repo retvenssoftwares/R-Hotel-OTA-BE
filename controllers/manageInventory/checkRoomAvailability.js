@@ -109,13 +109,23 @@ const confirmBooking = require('../../models/Bookings/bookings');
 const holdBooking = require('../../models/Bookings/bookingPending');
 const inventory = require('../../models/manageInventory/manageInventory');
 const roomTypeModel = require('../../models/Rooms/roomTypeDetails');
+const rateTypeModel = require('../../models/Rooms/rateType')
 const roomTypeImage = require ('../../models/Images/roomTypeImages')
-
+const ratPlanModel = require('../../models/Rooms/ratePlan')
+const amenityModel = require('../../models/Amenities/amenities')
 const fetchRoomTypesHandler = async (req, res) => {
-    const { propertyId, startDate, endDate } = req.query;
+    const { propertyId, startDate, endDate, maxOccupancy } = req.query;
     try {
         const startDateObj = new Date(startDate);
         const endDateObj = new Date(endDate);
+
+        let matchQuery = {
+            propertyId,
+        };
+
+        if (maxOccupancy) {
+            matchQuery["maxOccupancy.maxOccupancy"] = { $gte: maxOccupancy };
+        }
 
         if (startDateObj > endDateObj) {
             return res.status(400).json({ message: "Check-in date cannot be greater than check-out date", statuscode: 400 });
@@ -127,17 +137,32 @@ const fetchRoomTypesHandler = async (req, res) => {
         }
 
         const roomTypes = await roomTypeModel.aggregate([
-            { $match: { propertyId } },
+          {
+                $match: matchQuery,
+            },
             {
                 $project: {
                     roomTypeId: 1,
+                    baseRate:{$arrayElemAt:["$baseRate.baseRate",0]},
+                    baseAdult:{$arrayElemAt:["$baseAdult.baseAdult",0]},
+                    baseChild:{$arrayElemAt:["$baseChild.baseChild",0]},
+                    maxAdult:{$arrayElemAt:["$maxAdult.maxAdult",0]},
+                    maxChild:{$arrayElemAt:["$maxChild.maxChild",0]},
+                    maxOccupancy:{$arrayElemAt:["$maxOccupancy.maxOccupancy",0]},
                     roomTypeName: { $arrayElemAt: ["$roomType.roomType", 0] },
                     numberOfRooms: { $arrayElemAt: ["$numberOfRooms.numberOfRooms", 0] },
+                    generalAmenities: {
+                        $filter: {
+                            input: "$generalAmenities",
+                            as: "amenity",
+                            cond: { $eq: ["$$amenity.isSelected", "true"] }
+                        }
+                    },
                     _id: 0,
                 },
             },
         ]);
-
+      
         if (!roomTypes || roomTypes.length === 0) {
             return res.status(400).json({ message: "No room types found", statuscode: 400 });
         }
@@ -158,10 +183,50 @@ const fetchRoomTypesHandler = async (req, res) => {
 
         for (const roomType of roomTypes) {
             const roomInventory = await inventory.findOne({ roomTypeId: roomType.roomTypeId });
+
+                 //rateType
+                 let rateType = [];
+                   // Find rateType records that match the roomTypeId
+            const rateTypesMatchingRoomTypeId = await rateTypeModel.find({
+                roomTypeId: roomType.roomTypeId // Match roomTypeId
+                
+            });
+
+               // Fetch 'name' from the matching rateType records
+               for (const rate of rateTypesMatchingRoomTypeId) {
+                const ratePlanDetails = await ratPlanModel.find({
+                    rateTypeId: rate.rateTypeId ,// Match rateTypeId from rateTypeModel
+                 //   startDate: { $lte: endDate }, // Check if ratePlan startDate is less than or equal to endDate
+                  //  endDate: { $gte: startDate } // Check if ratePlan endDate is greater than or equal to startDate
+                });
+
+                const ratePlans = ratePlanDetails.map(rateDetail => ({
+                    ratePlanName: rateDetail.ratePlanName[0].ratePlanName,
+                    ratePlanId:rateDetail.ratePlanId,
+                    value:rateDetail.value[0].value,
+                    percentage:rateDetail.percentage[0].percentage,
+                    startDate:rateDetail.startDate[0].startDate,
+                    endDate:rateDetail.endDate[0].endDate,
+                    mealsIncluded:rateDetail.mealsIncluded[0].mealNames
+                    // Include other fields from rateDetail if needed
+                }));
+
+                rateType.push({
+                    name: rate.name[0].name, // Assuming you want the first 'name' in the array
+                    rateTypeId:rate.rateTypeId,
+                    refundable:rate.refundable[0].refundable,
+                    taxIncluded:rate.taxIncluded[0].taxIncluded,
+                    basePrice:rate.basePrice[0].basePrice,
+                    ratePlans: ratePlans // Include fetched ratePlanName array
+                   // modifiedDate: rate.name[0].modifiedDate // Assuming 'modifiedDate' from the same array element
+                });
+            }
+
+
+            //roomImage
             const roomTypeImages = await roomTypeImage.findOne({ propertyId, roomTypeId: roomType.roomTypeId });
 
             let images = []; // Define images variable here
-
             if (roomTypeImages && roomTypeImages.roomTypeImages) {
                 images = roomTypeImages.roomTypeImages
                     .filter(image => image.displayStatus === '1') // Filter images by displayStatus
@@ -169,6 +234,7 @@ const fetchRoomTypesHandler = async (req, res) => {
                         image: image.image,
                     }));
             }
+
 
             if (roomInventory) {
                 const { addedInventory, blockedInventory } = roomInventory.manageInventory;
@@ -216,19 +282,37 @@ const fetchRoomTypesHandler = async (req, res) => {
                 }
 
                 calculatedData.push({
-                    roomTypeId: roomType.roomTypeId,
-                    roomTypeName: roomType.roomTypeName,
-                    numberOfRooms: roomType.numberOfRooms,
+                    roomTypeId: roomType.roomTypeId || '',
+                    baseRate:roomType.baseRate || '',
+                    baseAdult:roomType.baseAdult || '',
+                    baseChild:roomType.baseChild || '',
+                    maxAdult:roomType.maxAdult || '',
+                    maxChild:roomType.maxChild || '',
+                    maxOccupancy:roomType.maxOccupancy || '',
+                    roomTypeName: roomType.roomTypeName || '',
+                    numberOfRooms: roomType.numberOfRooms || '',
                     minAvailable,
+                    amenities:roomType.generalAmenities,
                     images: images || [],
+                    rateType: rateType || []
+                   
                 });
             } else {
                 calculatedData.push({
-                    roomTypeId: roomType.roomTypeId,
-                    roomTypeName: roomType.roomTypeName,
-                    numberOfRooms: roomType.numberOfRooms,
-                    minAvailable: roomType.numberOfRooms,
+                    roomTypeId: roomType.roomTypeId || '',
+                    baseRate:roomType.baseRate || '',
+                    baseAdult:roomType.baseAdult || '',
+                    baseChild:roomType.baseChild || '',
+                    maxAdult:roomType.maxAdult || '',
+                    maxChild:roomType.maxChild || '',
+                    maxOccupancy:roomType.maxOccupancy || '',
+                    roomTypeName: roomType.roomTypeName || '',
+                    numberOfRooms: roomType.numberOfRooms || '',
+                    minAvailable: roomType.numberOfRooms || '',
+                    amenities:roomType.generalAmenities,
                     images: images || [], 
+                    rateType: rateType || []
+                  
                 });
             }
         }

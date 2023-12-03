@@ -38,6 +38,13 @@ io.on('connection', (socket) => {
     });
 });
 
+
+//usersignUp
+const signup = require('./routers/userAccount/userSignup.js')
+const otpVerification = require('./routers/userAccount/otpVerificationRouter.js')
+const userDetails = require('./routers/userAccount/userDetailRouter')
+
+
 //accountCreation
 const registration = require('./routers/accountCreation/signUpRouter');
 const login = require('./routers/accountCreation/loginRouter');
@@ -93,6 +100,7 @@ const propertyByCity = require('./routers/Property/getPropertyByCityRouter')
 const addPropertyReview = require('./routers/Property/postRatingsRouter')
 const getPropertyReview = require('./routers/Property/getReviewsOfPropertyRouter')
 const editPropertyReview = require('./routers/Property/editReviewRouter')
+const randomProperty = require('./routers/Property/fetchRandomProperty.js')
 
 //const hotelImages = require('./routers/Onboarding/pacthLogoAndCoverPhoto')
 const propertyCity = require('./routers/Onboarding/fetchCityOfPropertyRouter')
@@ -136,6 +144,13 @@ const grossrevenue = require("./routers/Report/totalGrossRevenueRouter")
 const avgrate = require("./routers/Report/avgSellingPriceRouter")
 const roomReport = require("./routers/Report/roomAndRatePlanReportRouter")
 
+
+
+//signup
+app.use(signup)
+app.use(otpVerification)
+app.use(userDetails)
+
 //accountCreation
 app.use(login);
 app.use(logout);
@@ -174,6 +189,7 @@ app.use(propertyByCity)
 app.use(addPropertyReview)
 app.use(editPropertyReview)
 app.use(getPropertyReview)
+app.use(randomProperty)
 
 //room
 app.use(fetchRoomTypeList)
